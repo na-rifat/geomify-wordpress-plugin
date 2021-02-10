@@ -1,0 +1,196 @@
+/* Global and fonts */
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap");
+:root {
+    --geomify-font: "Noto Sans JP", sans-serif;
+}
+#content {
+    min-height: 40vh;
+}
+/* Navigation menu part */
+.geomify-nav {
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+}
+.geomify-nav > div,
+.geomify-nav > div > div,
+.geomify-nav > div > div > nav,
+.geomify-nav > div > div > nav > div > ul,
+.geomify-nav > div > div > nav > div > ul > li {
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+}
+.geomify-nav li a {
+    text-transform: uppercase;
+    font-size: 0.8em;
+    color: var(--link-color);
+    transition: var(--geomify-transition);
+    height: 100%;
+}
+.geomify-nav li :hover {
+    color: var(--link-hover-color) !important;
+}
+.sub-menu {
+    background-color: var(--background) !important;
+}
+
+.geomify-header {
+    display: inline-flex;
+    width: 100%;
+    height: 51.797px;
+    background-color: var(--background);
+    align-items: center;
+    position: relative;
+    justify-content: space-between;
+}
+
+.geomify-header-left-bar,
+.geomify-header-right-bar {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    height: 100%;
+}
+.geomify-logo a {
+    color: var(--logo-color) !important;
+}
+.geomify-logo {
+    margin-left: 20px;
+    margin-right: 40px;
+}
+
+.geomify-download-button {
+    color: #fff !important;
+    background-color: var(--btn1-background-color);
+}
+.geomify-download-button:hover {
+    background-color: var(--btn1-hover-background-color);
+}
+
+.geomify-head-button {
+    text-transform: uppercase;
+    display: inline-flex;
+    font-size: 0.7em;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 0 20px;
+    cursor: pointer;
+    transition: var(--geomify-transition);
+    color: var(--color);
+}
+.geomify-head-button:hover {
+    color: var(--hover-color);
+}
+.geomify-head-button i {
+    margin: 0 8px;
+    font-size: 1.5em;
+}
+
+.geomify-button-ico {
+    padding: 0 10px;
+}
+
+/* Footer part */
+.footer-row-1,
+.footer-row-2 {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px 0;
+    font-family: var(--geomify-font);
+    font-size: 0.9em;
+}
+.geomify-footer {
+    height: 433.891px;
+    background-color: var(--background);
+    padding: 0 70px;
+}
+.footer-sub-row.footer-social i {
+    color: var(--color);
+    font-size: 1.5em;
+    margin: 0 5px;
+    transition: var(--geomify-transition);
+}
+.footer-sub-row.footer-social i:hover {
+    color: var(--link-hover-color);
+}
+.footer-sub-row {
+    display: flex;
+    flex-flow: row;
+}
+.footer-sub-row .footer-sub-col {
+    margin-right: 30px;
+}
+
+.footer-sub-row a {
+    color: var(--color);
+    transition: var(--geomify-transition);
+}
+.footer-sub-row a:hover {
+    color: var(--link-hover-color);
+}
+
+.footer-row-1 {
+    border-bottom: 1px solid rgb(59, 59, 59);
+}
+.footer-sub-row {
+    padding: 5px 0;
+}
+.jump-to-top {
+    border: 2px solid var(--color);
+    padding: 10px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--color);
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: var(--geomify-transition);
+    float: right;
+    margin: 30px 0;
+}
+.jump-to-top:hover {
+    border: 2px solid var(--link-hover-color);
+    color: var(--link-hover-color);
+}
+.copy-right-text {
+    color: var(--link-color);
+    font-size: 0.8em;
+}
+.jump-sec .jump-to-top {
+    margin-left: calc(100% - 45px);
+}
+.ft-bt-ico {
+    color: white;
+    font-size: 1.5em;
+}
+/* Buttons style */
+.btn1 {
+    display: inline-block;
+    padding: 8px 20px;
+    cursor: pointer;
+    font-size: 0.8em;
+    background-color: var(--btn1-background-color);
+    transition: var(--geomify-transition);
+    color: var(--btn1-color);
+}
+.btn1:hover {
+    background-color: var(--btn1-hover-background-color);
+}
+.btn2 {
+}
+.btn2:hover {
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+/* Defaults colors and styles */
+.background {
+    background-color: var(--background);
+}
+.background-light {
+    background-color: var(--background-light);
+}
