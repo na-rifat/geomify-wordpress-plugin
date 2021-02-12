@@ -11,3 +11,8 @@ function copyright() {
     let cyear = new Date().getFullYear();
     $(`.copy-right-text`).html(`Copyright &copy; ${cyear} Geomify`);
 }
+
+/**
+ * Elementor widgets functions
+ */
+

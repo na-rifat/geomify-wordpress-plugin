@@ -1,0 +1,58 @@
+/* Elementor widgets styles */
+
+.geomify-ew-button {
+    display: inline-flex;
+
+    padding: 10px 35px;
+    text-transform: uppercase;
+    font-weight: 600;
+    background-color: white;
+    color: black;
+    transition: var(--geomify-transition);
+    width: 300px;
+    justify-content: center;
+    align-items: center;
+}
+.g-filled {
+    background-color: cyan;
+    border: 2px solid cyan;
+}
+.g-filled:hover {
+    background-color: transparent;
+}
+.g-borderd {
+    border: 2px solid cyan;
+    background-color: transparent;
+}
+.g-borderd:hover {
+    background-color: cyan;
+}
+
+/* Advertisement|Trial */
+.advertisement__label-heading {
+    padding: 0.5rem 1.25rem;
+    background-color: #03657f;
+    color: #fff;
+    width: 100%;
+    font-weight: 800;
+    font-size: 1.5rem;
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+    display: inline-flex;
+    width: 50%;
+}
+
+.advertisement__content__heading {
+    font-weight: 500;
+    font-size: 2.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.advertisement__content {
+    padding: 1rem;
+    background-color: #fff;
+    color: #6d6d6d;
+    font-size: 2rem;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}

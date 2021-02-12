@@ -21,6 +21,12 @@
  *
  *
  *
+ *
+ *
+ *
+ *
+ *
+ *
  * @package           PluginPackage
  *
  * @author            Rafalo tech
@@ -49,6 +55,7 @@ class geomify {
         $this->define_constants();
 
         add_action( 'plugins_loaded', [$this, 'init'] );
+        add_action( 'elementor/elements/categories_registered', [$this, 'register_elementor_categories'] );
     }
 
     /**
@@ -61,11 +68,14 @@ class geomify {
         $templates  = new Templates();
         $shortcodes = new Shortcodes();
         $assets     = new Assets();
+        $widgets    = new Widgets\Manager();
         // Assignment
         $shortcodes->templates = $templates;
 
         // Initialization
         $shortcodes->init();
+
+        add_action( 'elementor/widgets/widgets_registered', [$widgets, 'register_elementor_widgets'], 99 );
     }
 
     /**
@@ -75,20 +85,13 @@ class geomify {
      */
     public function register_elementor_categories( $element_manager ) {
         $element_manager->add_category(
+            'geomify',
             [
-                
+                'title' => __( 'Geomify', 'geomify' ),
+                'icon'  => 'fab fa-google',
             ]
         );
         return $element_manager;
-    }
-
-    /**
-     * Initializes elementor widgets for
-     *
-     * @return void
-     */
-    public function init_elementor_widgets() {
-
     }
 
     /**

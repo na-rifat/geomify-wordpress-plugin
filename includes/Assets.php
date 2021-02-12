@@ -33,8 +33,9 @@ class Assets {
      */
     public function get_scripts() {
         return [
-            'geomify-admin-script'    => jsfile( 'admin', ['jquery'] ),
-            'geomify-frontend-script' => jsfile( 'frontend', ['jquery'] ),
+            'geomify-admin-script'    => jsfile( 'admin', ['jquery', 'elementor-frontend'] ),
+            'geomify-frontend-script' => jsfile( 'frontend', ['jquery', 'elementor-frontend'] ),
+            'geomify-widgets-script'  => jsfile( 'widgets', ['jquery'] ),
         ];
     }
 
@@ -47,6 +48,7 @@ class Assets {
         return [
             'geomify-admin-styles'    => cssfile( 'admin' ),
             'geomify-frontend-styles' => cssfile( 'frontend' ),
+            'geomify-widgets-styles'  => cssfile( 'widgets' ),
             'geomify-fontawesome'     => [
                 'src'     => 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css',
                 'version' => '5.15.2',
@@ -113,6 +115,7 @@ class Assets {
             wp_enqueue_script( 'geomify-admin-script' );
         } else {
             wp_enqueue_style( 'geomify-frontend-styles' );
+            wp_enqueue_style( 'geomify-widgets-styles' );
             wp_enqueue_script( 'geomify-frontend-script' );
         }
     }
