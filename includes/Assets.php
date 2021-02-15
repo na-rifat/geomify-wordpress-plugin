@@ -147,7 +147,7 @@ class Assets {
             'link-hover-color'            => '#ccc',
             'text-color'                  => '#fff',
             // Background
-            'background'                  => 'rgb(1, 41, 75)',
+            'background'                  => 'rgb(3, 30, 43)',
             'background-light'            => 'rgb(1, 63, 117)',
         ];
 

@@ -195,3 +195,7 @@
     background-color: var(--background-light);
 }
 
+/* Defaults */
+.full-section{
+    height: 100%;
+}
