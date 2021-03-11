@@ -33,9 +33,9 @@ class Assets {
      */
     public function get_scripts() {
         return [
-            'geomify-admin-script'    => jsfile( 'admin', ['jquery', 'elementor-frontend'] ),
-            'geomify-frontend-script' => jsfile( 'frontend', ['jquery', 'elementor-frontend'] ),
-            'geomify-widgets-script'  => jsfile( 'widgets', ['jquery'] ),
+            'geomify-admin-script'    => geomify_jsfile( 'admin', ['jquery', 'elementor-frontend'] ),
+            'geomify-frontend-script' => geomify_jsfile( 'frontend', ['jquery', 'elementor-frontend'] ),
+            'geomify-widgets-script'  => geomify_jsfile( 'widgets', ['jquery'] ),
         ];
     }
 
@@ -46,9 +46,9 @@ class Assets {
      */
     public function get_styles() {
         return [
-            'geomify-admin-styles'    => cssfile( 'admin' ),
-            'geomify-frontend-styles' => cssfile( 'frontend' ),
-            'geomify-widgets-styles'  => cssfile( 'widgets' ),
+            'geomify-admin-styles'    => geomify_cssfile( 'admin' ),
+            'geomify-frontend-styles' => geomify_cssfile( 'frontend' ),
+            'geomify-widgets-styles'  => geomify_cssfile( 'widgets' ),
             'geomify-fontawesome'     => [
                 'src'     => 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css',
                 'version' => '5.15.2',

@@ -31,7 +31,7 @@
 .geomify-nav li :hover {
     color: var(--link-hover-color) !important;
 }
-.sub-menu {
+.geomify-header .sub-menu {
     background-color: var(--background) !important;
 }
 
@@ -196,6 +196,22 @@
 }
 
 /* Defaults */
-.full-section{
+.full-section {
     height: 100%;
+}
+
+@media only screen and (max-width: 768px) {
+    .geomify-logo a {
+        font-size: 0.6em;
+        white-space: nowrap;
+    }
+    .geomify-logo .site-title {
+        display: flex;
+    }
+    .geomify-header-right-bar {
+        display: none;
+    }
+    .geomify-nav{
+        display: none;
+    }
 }

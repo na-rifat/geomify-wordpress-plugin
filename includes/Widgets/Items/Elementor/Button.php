@@ -22,6 +22,10 @@ class Button extends Base {
         return ['geomify'];
     }
 
+    public function get_keywords() {
+        return ['geomify', 'button', 'geomify button'];
+    }
+
     /**
      * Registers controls for
      *
@@ -30,13 +34,14 @@ class Button extends Base {
     protected function _register_controls() {
 
         $this->start_controls_section(
-            'settings_section',
+            'contents section',
             [
                 'label' => __( 'Settings', 'geomify' ),
                 'tab'   => Controls::TAB_CONTENT,
             ]
         );
 
+        // Caption
         $this->add_control(
             'caption',
             [
@@ -48,6 +53,7 @@ class Button extends Base {
             ]
         );
 
+        // Url
         $this->add_control(
             'url',
             [
@@ -63,24 +69,35 @@ class Button extends Base {
             ]
         );
 
-        $this->add_control(
-            'type',
+        $this->end_controls_section();
+
+        $this->start_controls_section(
+            'style_settings',
             [
-                'label'       => __( 'Style', 'geomify' ),
-                'type'        => Controls::SELECT,
-                'default'     => 'filled',
-                'options'     => [
-                    'filled'  => __( 'Filled', 'geomify' ),
-                    'borderd' => __( 'Borderd', 'geomify' ),
-                ],
-                'description' => __( 'Style type of the button', 'geomify' ),
+                'label' => __( 'Styles', 'geomify' ),
+                'tab'   => Controls::TAB_CONTENT,
             ]
         );
 
+        // $this->add_control(
+        //     'fill_style',
+        //     [
+        //         'label'       => __( 'Fill style', 'geomify' ),
+        //         'type'        => Controls::SELECT,
+        //         'default'     => 'filled',
+        //         'options'     => [
+        //             'filled'  => __( 'Filled', 'geomify' ),
+        //             'borderd' => __( 'Borderd', 'geomify' ),
+        //         ],
+        //         'description' => __( 'Style type of the button', 'geomify' ),
+        //     ]
+        // );
+
+        // Text color
         $this->add_control(
-            'color',
+            'text_color',
             [
-                'label'     => __( 'Color', 'geomify' ),
+                'label'     => __( 'Text color', 'geomify' ),
                 'type'      => \Elementor\Controls_Manager::COLOR,
                 'default'   => '#fff',
                 'selectors' => [
@@ -90,9 +107,9 @@ class Button extends Base {
         );
 
         $this->add_control(
-            'hover_color',
+            'texthover_color',
             [
-                'label'     => __( 'Hover color', 'geomify' ),
+                'label'     => __( 'Text hover color', 'geomify' ),
                 'type'      => \Elementor\Controls_Manager::COLOR,
                 'default'   => '#000',
                 'selectors' => [
@@ -101,10 +118,36 @@ class Button extends Base {
             ]
         );
 
+        // Background color
+
+        $this->add_control(
+            'background_color',
+            [
+                'label'     => __( 'Background color', 'geomify' ),
+                'type'      => Controls::COLOR,
+                'default'   => '#00FFFF',
+                'selectors' => [
+                    '{{WRAPPER}} a' => 'background-color: {{VALUE}}',
+                ],
+            ]
+        );
+        $this->add_control(
+            'background_hover_color',
+            [
+                'label'     => __( 'Background hover color', 'geomify' ),
+                'type'      => Controls::COLOR,
+                'default'   => '#00FFFF',
+                'selectors' => [
+                    '{{WRAPPER}} a:hover' => 'background-color: {{VALUE}}',
+                ],
+            ]
+        );
+
+        // Size section
         $this->add_responsive_control(
             'width',
             [
-                'label'           => __( 'Slider', 'geomify' ),
+                'label'           => __( 'Width', 'geomify' ),
                 'type'            => Controls::SLIDER,
                 'size_units'      => ['px', 'rem', 'em', '%'],
                 'range'           => [
@@ -145,6 +188,106 @@ class Button extends Base {
         );
 
         $this->add_responsive_control(
+            'vertical_padding',
+            [
+                'label'           => __( 'Vertical padding', 'geomify' ),
+                'type'            => Controls::SLIDER,
+                'devices'         => ['mobile', 'tablet', 'desktop'],
+                'unit'            => ['px', 'em'],
+                'range'           => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 400,
+                    ],
+                    'em' => [
+                        'min' => 0,
+                        'max' => 50,
+                    ],
+                ],
+                'mobile_default'  => [
+                    'unit' => 'px',
+                    'size' => 15,
+                ],
+                'tablet_default'  => [
+                    'unit' => 'px',
+                    'size' => 15,
+                ],
+                'desktop_default' => [
+                    'unit' => 'px',
+                    'size' => 15,
+                ],
+                'selectors'       => [
+                    '{{WRAPPER}} a' => 'padding-top: {{SIZE}}{{UNIT}}; padding-bottom: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'horizontal_padding',
+            [
+                'label'           => __( 'Horizontal padding', 'geomify' ),
+                'type'            => Controls::SLIDER,
+                'devices'         => ['mobile', 'tablet', 'desktop'],
+                'unit'            => ['px', 'em'],
+                'range'           => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 100,
+                    ],
+                    'em' => [
+                        'min' => 0,
+                        'max' => 20,
+                    ],
+                ],
+                'mobile_default'  => [
+                    'unit' => 'px',
+                    'size' => 50,
+                ],
+                'tablet_default'  => [
+                    'unit' => 'px',
+                    'size' => 50,
+                ],
+                'desktop_default' => [
+                    'unit' => 'px',
+                    'size' => 50,
+                ],
+                'selectors'       => [
+                    '{{WRAPPER}} a' => 'padding-right: {{SIZE}}{{UNIT}}; padding-left: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'border_radius',
+            [
+                'label'          => __( 'Border radius', 'geomify' ),
+                'type'           => Controls::SLIDER,
+                'units'          => ['px', 'em', '%'],
+                'devices'        => ['mobile', 'tablet', 'desktop'],
+                'range'          => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 30,
+                    ],
+                    'em' => [
+                        'min' => 0,
+                        'max' => 10,
+                    ],
+                    '%'  => [
+                        'min' => 0,
+                        'max' => 100,
+                    ],
+                ],
+                'mobile_default' => [
+                    'unit' => 'px',
+                    'size' => 3,
+                ],
+                'selectors'      => [
+                    '{{WRAPPER}} a' => 'border-radius: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+        $this->add_responsive_control(
             'alignment',
             [
                 'label'           => __( 'Alignment', 'geomify' ),
@@ -173,6 +316,7 @@ class Button extends Base {
             ],
 
         );
+
         $this->end_controls_section();
     }
 
@@ -183,17 +327,25 @@ class Button extends Base {
      */
     protected function render() {
         $s = $this->get_settings_for_display();
-        $c = __( $s['caption'], 'geomifiy' );
 
-        $this->add_inline_editing_attributes( 'caption', 'basic' );
+        $this->add_inline_editing_attributes( 'caption' );
+
         $this->add_render_attribute(
             'caption',
             [
-                'class'  => [$s['type'] == 'filled' ? "geomify-ew-button g-filled" : "geomify-ew-button g-borderd"],
+                'class'  => 'geomify-button',
+                'href'   => $s['url']['url'],
                 'target' => $s['url']['is_external'] == 'on' ? '_blank' : '_self',
             ]
         );
+
         $attr = $this->get_render_attribute_string( 'caption' );
+
+        $element = sprintf( '<a %s >%s</a>',
+            $attr,
+            $s['caption'] );
+
+        echo $element;
 
         // $this->add_inline_editing_attributes( 'color', 'basic' );
         // $this->add_render_attribute(
@@ -204,7 +356,7 @@ class Button extends Base {
         // );
         // $color = $this->get_render_attribute_string( 'color' );
 
-        echo "<a href='{$s['url']['url']}' {$attr}>{$c}</a>";
+        // echo "<a href='{$s['url']['url']}' {$attr}>{$c}</a>";
     }
 
     protected function _content_template() {

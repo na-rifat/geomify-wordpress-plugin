@@ -1,72 +1,39 @@
 /* Elementor widgets styles */
-.geomify-ew-button {
+.geomify-button {
     display: inline-flex;
-    padding: 10px 35px;
     text-transform: uppercase;
     font-weight: 600;
     background-color: white;
     color: black;
     transition: var(--geomify-transition);
-    /* width: 300px; */
     justify-content: center;
     align-items: center;
-    border-radius: 3px;
 }
 
-.g-filled {
+/* .geomify-button-filled {
     background-color: cyan;
-    border: 2px solid cyan;
 }
-.g-filled:hover {
+.geomify-button:hover {
     background-color: transparent;
 }
-.g-borderd {
+.geomify-button {
     border: 2px solid cyan;
     background-color: transparent;
 }
 .g-borderd:hover {
     background-color: cyan;
-}
+} */
 
 /* Hover colors */
-.geomify-hover-white:hover {
+/* .geomify-hover-white:hover {
     color: #fff !important;
 }
 .geomify-hover-black:hover {
     color: #000 !important;
-}
-.geomify-hover-cyan:hover {
+} */
+/* .geomify-hover-cyan:hover {
     color: cyan !important;
-}
-/* Advertisement|Trial */
-.advertisement__label-heading {
-    padding: 0.5rem 1.25rem;
-    background-color: #03657f;
-    color: #fff;
-    width: 100%;
-    font-weight: 800;
-    font-size: 1.5rem;
-    border-top-left-radius: 0.75rem;
-    border-top-right-radius: 0.75rem;
-    display: inline-flex;
-    width: 50%;
-}
-
-.advertisement__content__heading {
-    font-weight: 500;
-    font-size: 2.5rem;
-    margin-bottom: 1.25rem;
-}
-
-.advertisement__content {
-    padding: 1rem;
-    background-color: #fff;
-    color: #6d6d6d;
-    background-color: rgb(4, 42, 61);
-    font-size: 2rem;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-}
+} */
 
 /* Pano effect */
 .geomify-pano-effect {
@@ -118,15 +85,14 @@
 }
 
 .geomify-video-button-container .link-button:hover {
-    background-color: cyan!important;
+    background-color: cyan !important;
 }
 
-.geomify-video-button-container .video-button{
+.geomify-video-button-container .video-button {
     font-size: 1.2em;
     text-transform: uppercase;
-    font-weight: 600;    
-    
+    font-weight: 600;
 }
-.geomify-video-button-container .sub-description{
-    font-size: .8em;
+.geomify-video-button-container .sub-description {
+    font-size: 0.8em;
 }

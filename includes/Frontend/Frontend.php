@@ -1,6 +1,6 @@
 <?php
 
-namespace geomify;
+namespace geomify\Frontend;
 
 class Frontend{
     function __construct()
