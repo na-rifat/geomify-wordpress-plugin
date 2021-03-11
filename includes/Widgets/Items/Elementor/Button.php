@@ -34,7 +34,7 @@ class Button extends Base {
     protected function _register_controls() {
 
         $this->start_controls_section(
-            'contents section',
+            'content_section',
             [
                 'label' => __( 'Settings', 'geomify' ),
                 'tab'   => Controls::TAB_CONTENT,
@@ -72,26 +72,12 @@ class Button extends Base {
         $this->end_controls_section();
 
         $this->start_controls_section(
-            'style_settings',
+            'styles',
             [
                 'label' => __( 'Styles', 'geomify' ),
                 'tab'   => Controls::TAB_CONTENT,
             ]
         );
-
-        // $this->add_control(
-        //     'fill_style',
-        //     [
-        //         'label'       => __( 'Fill style', 'geomify' ),
-        //         'type'        => Controls::SELECT,
-        //         'default'     => 'filled',
-        //         'options'     => [
-        //             'filled'  => __( 'Filled', 'geomify' ),
-        //             'borderd' => __( 'Borderd', 'geomify' ),
-        //         ],
-        //         'description' => __( 'Style type of the button', 'geomify' ),
-        //     ]
-        // );
 
         // Text color
         $this->add_control(
@@ -99,7 +85,7 @@ class Button extends Base {
             [
                 'label'     => __( 'Text color', 'geomify' ),
                 'type'      => \Elementor\Controls_Manager::COLOR,
-                'default'   => '#fff',
+                'default'   => '#000',
                 'selectors' => [
                     '{{WRAPPER}} a' => 'color: {{VALUE}}',
                 ],
@@ -111,7 +97,7 @@ class Button extends Base {
             [
                 'label'     => __( 'Text hover color', 'geomify' ),
                 'type'      => \Elementor\Controls_Manager::COLOR,
-                'default'   => '#000',
+                'default'   => '#fff',
                 'selectors' => [
                     '{{WRAPPER}} a:hover' => 'color: {{VALUE}};',
                 ],
@@ -153,7 +139,7 @@ class Button extends Base {
                 'range'           => [
                     'px'  => [
                         'min' => 0,
-                        'max' => 400,
+                        'max' => 600,
                     ],
                     '%'   => [
                         'min' => 0,
@@ -182,7 +168,7 @@ class Button extends Base {
                     'size' => 100,
                 ],
                 'selectors'       => [
-                    '{{WRAPPER}} a' => 'width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} a' => 'min-width: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
@@ -258,13 +244,44 @@ class Button extends Base {
         );
 
         $this->add_responsive_control(
+            'border_width',
+            [
+                'label'           => __( 'Border width', 'geomify' ),
+                'type'            => Controls::SLIDER,
+                'units'           => ['px'],
+                'devices'         => ['mobile', 'tablet', 'desktop'],
+                'range'           => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 10,
+                    ],
+                ],
+                'mobile_default'  => [
+                    'unit' => 'px',
+                    'size' => 2,
+                ],
+                'tablet_default'  => [
+                    'unit' => 'px',
+                    'size' => 2,
+                ],
+                'desktop_default' => [
+                    'unit' => 'px',
+                    'size' => 2,
+                ],
+                'selectors'       => [
+                    '{{WRAPPER}} a' => 'border-radius: {{SIZE}}{{UNIT}}',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
             'border_radius',
             [
-                'label'          => __( 'Border radius', 'geomify' ),
-                'type'           => Controls::SLIDER,
-                'units'          => ['px', 'em', '%'],
-                'devices'        => ['mobile', 'tablet', 'desktop'],
-                'range'          => [
+                'label'           => __( 'Border radius', 'geomify' ),
+                'type'            => Controls::SLIDER,
+                'units'           => ['px', 'em', '%'],
+                'devices'         => ['mobile', 'tablet', 'desktop'],
+                'range'           => [
                     'px' => [
                         'min' => 0,
                         'max' => 30,
@@ -278,11 +295,19 @@ class Button extends Base {
                         'max' => 100,
                     ],
                 ],
-                'mobile_default' => [
+                'mobile_default'  => [
                     'unit' => 'px',
                     'size' => 3,
                 ],
-                'selectors'      => [
+                'tablet_default'  => [
+                    'unit' => 'px',
+                    'size' => 3,
+                ],
+                'desktop_default' => [
+                    'unit' => 'px',
+                    'size' => 3,
+                ],
+                'selectors'       => [
                     '{{WRAPPER}} a' => 'border-radius: {{SIZE}}{{UNIT}};',
                 ],
             ]
@@ -316,8 +341,8 @@ class Button extends Base {
             ],
 
         );
-
         $this->end_controls_section();
+
     }
 
     /**
@@ -326,6 +351,7 @@ class Button extends Base {
      * @return void
      */
     protected function render() {
+
         $s = $this->get_settings_for_display();
 
         $this->add_inline_editing_attributes( 'caption' );
@@ -346,17 +372,6 @@ class Button extends Base {
             $s['caption'] );
 
         echo $element;
-
-        // $this->add_inline_editing_attributes( 'color', 'basic' );
-        // $this->add_render_attribute(
-        //     'color',
-        //     [
-        //         'style' => "color: {$s['color']}",
-        //     ]
-        // );
-        // $color = $this->get_render_attribute_string( 'color' );
-
-        // echo "<a href='{$s['url']['url']}' {$attr}>{$c}</a>";
     }
 
     protected function _content_template() {
