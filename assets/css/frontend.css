@@ -211,7 +211,12 @@
     .geomify-header-right-bar {
         display: none;
     }
-    .geomify-nav{
+    .geomify-nav {
         display: none;
     }
+}
+
+.card-image-holder {
+    height: 100%;
+    width: 100%;
 }

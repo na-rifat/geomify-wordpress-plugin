@@ -63,7 +63,10 @@ class Assets {
      */
     public function get_localize() {
         return [
-            'geomify-admin-script' => [
+            'geomify-admin-script'    => [
+                'ajax_url' => admin_url( 'admin-ajax.php' ),
+            ],
+            'geomify-frontend-script' => [
                 'ajax_url' => admin_url( 'admin-ajax.php' ),
             ],
         ];
@@ -147,8 +150,9 @@ class Assets {
             'link-hover-color'            => '#ccc',
             'text-color'                  => '#fff',
             // Background
-            'background'                  => 'rgb(3, 30, 43)',
+            'background'                  => '#212221',
             'background-light'            => 'rgb(1, 63, 117)',
+            'cyan'                        => '#1181B2',
         ];
 
         $vars = '';

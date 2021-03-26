@@ -38,12 +38,18 @@
 /* Pano effect */
 .geomify-pano-effect {
     overflow: hidden;
-    border-radius: 10px;
+    height: 100%;
 }
+.geomify-pano-effect > * {
+    height: 100%;
+}
+
 .geomify-pano-effect img {
+    height: 100% !important;
+    width: auto;
     animation: pano;
     transform: scale(1.5, 1.5);
-    animation-duration: 15s;
+    animation-duration: 25s;
     animation-iteration-count: infinite;
 }
 @keyframes pano {

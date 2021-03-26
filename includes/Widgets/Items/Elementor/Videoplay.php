@@ -142,7 +142,7 @@
                     'selectors'       => [
                         '{{WRAPPER}} .link-button' => 'align-self: {{VALUE}}',
                     ],
-                ],
+                ]
 
             );
 
@@ -211,7 +211,7 @@
                     'selectors'       => [
                         '{{WRAPPER}} .video-button' => 'align-self: {{VALUE}}',
                     ],
-                ],
+                ]
 
             );
             $this->end_controls_section();
@@ -268,8 +268,7 @@
                     'selectors'       => [
                         '{{WRAPPER}} .sub-description' => 'align-self: {{VALUE}}',
                     ],
-                ],
-
+                ]
             );
             $this->end_controls_section();
         }
@@ -307,9 +306,9 @@
 <div class="geomify-video-button-container">
     <a href="<?php echo $s['button_url']['url'] ?>"
         <?php echo $this->get_render_attribute_string( 'button_caption' ) ?>><?php echo $s['button_caption'] ?></a>
-    <div <?php echo $this->get_render_attribute_string( 'video_caption' ) ?>><?php echo $s['video_caption'] ?> <i
+    <div         <?php echo $this->get_render_attribute_string( 'video_caption' ) ?>><?php echo $s['video_caption'] ?> <i
             class="far fa-play-circle"></i> </div>
-    <div <?php echo $this->get_render_attribute_string( 'sub_description' ) ?>><?php echo $s['sub_description'] ?></div>
+    <div         <?php echo $this->get_render_attribute_string( 'sub_description' ) ?>><?php echo $s['sub_description'] ?></div>
 </div>
 <?php
     }

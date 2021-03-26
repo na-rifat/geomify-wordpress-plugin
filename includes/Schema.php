@@ -19,7 +19,7 @@ class Schema {
      */
     public function __build() {
         $this->allowed_ajax_shortcodes = [
-            'plant_and_process_contact_form'
+            '[contact-form-7 id="593" title="Plant & Process"]',
         ];
     }
 

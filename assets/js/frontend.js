@@ -1,6 +1,6 @@
 (function ($) {
     $(document).ready(function (e) {
-        let me = new geomify();
+        let me = new geomifyMain();
         me.initialize();
     });
 })(jQuery);
@@ -8,11 +8,13 @@
 /**
  * Handles Geomify scripting functions
  */
-class geomify {
+class geomifyMain {
     construct() {
         this.ajax_url = goemify.ajax_url;
         this.went_wrong = geomify.went.wrong;
         this.$ = jQuery;
+        this.self = this;
+        this.elements.plantProcessContactButton = $(`#plant-process-contact`);
     }
     /**
      * Jumps to top of the page
@@ -79,8 +81,11 @@ class geomify {
 
     buttonActions() {
         this.jumpToTop();
-        this.$(`.plant-process-form`).on(`click`, function (e) {
-            this.getShortcode(`[contact-form-7 id="593" title="Plant & Process"]`);
+        this.plantProcessContactButton.on(`click`, function (e) {
+            e.preventDefault();
+            this.getShortcode(
+                `[contact-form-7 id="593" title="Plant & Process"]`
+            );
         });
     }
 

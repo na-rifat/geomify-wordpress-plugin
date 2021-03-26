@@ -111,7 +111,7 @@ class Button extends Base {
             [
                 'label'     => __( 'Background color', 'geomify' ),
                 'type'      => Controls::COLOR,
-                'default'   => '#00FFFF',
+                'default'   => '#1181B2',
                 'selectors' => [
                     '{{WRAPPER}} a' => 'background-color: {{VALUE}}',
                 ],
@@ -122,10 +122,43 @@ class Button extends Base {
             [
                 'label'     => __( 'Background hover color', 'geomify' ),
                 'type'      => Controls::COLOR,
-                'default'   => '#00FFFF',
+                'default'   => '#1181B2',
                 'selectors' => [
                     '{{WRAPPER}} a:hover' => 'background-color: {{VALUE}}',
                 ],
+            ]
+        );
+
+        $this->add_control(
+            'border_color',
+            [
+                'label'     => __( 'Border color', 'geomify' ),
+                'type'      => Controls::COLOR,
+                'default'   => '#1181B2',
+                'selectors' => [
+                    '{{WRAPPER}} a' => 'border-color: {{VALUE}}',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'border_hover_color',
+            [
+                'label'     => __( 'Border hover color', 'geomify' ),
+                'type'      => Controls::COLOR,
+                'default'   => '#1181B2',
+                'selectors' => [
+                    '{{WRAPPER}} a:hover' => 'border-color: {{VALUE}}',
+                ],
+            ]
+        );
+
+        $this->add_group_control(
+            \Elementor\Group_Control_Typography::get_type(),
+            [
+                'name'     => 'content_typography',
+                'label'    => __( 'Typography', 'plugin-domain' ),
+                'selector' => '{{WRAPPER}} a',
             ]
         );
 
@@ -269,7 +302,7 @@ class Button extends Base {
                     'size' => 2,
                 ],
                 'selectors'       => [
-                    '{{WRAPPER}} a' => 'border-radius: {{SIZE}}{{UNIT}}',
+                    '{{WRAPPER}} a' => 'border-width: {{SIZE}}{{UNIT}}',
                 ],
             ]
         );
@@ -312,6 +345,25 @@ class Button extends Base {
                 ],
             ]
         );
+
+        $this->add_control(
+            'border_type',
+            [
+                'label'     => __( 'Border type', 'geomify' ),
+                'type'      => Controls::SELECT,
+                'default'   => 'solid',
+                'options'   => [
+                    'solid'  => __( 'Solid', 'geomify' ),
+                    'dashed' => __( 'Dashed', 'geomify' ),
+                    'dotted' => __( 'Dotted', 'geomify' ),
+                    'none'   => __( 'None', 'geomify' ),
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} a' => 'border-style: {{VALUE}};',
+                ],
+            ]
+        );
+
         $this->add_responsive_control(
             'alignment',
             [
@@ -338,8 +390,7 @@ class Button extends Base {
                 'selectors'       => [
                     '{{WRAPPER}}' => 'text-align: {{VALUE}}',
                 ],
-            ],
-
+            ]
         );
         $this->end_controls_section();
 

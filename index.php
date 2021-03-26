@@ -15,7 +15,9 @@
  * Text Domain:       geomify
  * License:           GPL v2 or later
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * 
+ *
+ *
+ *
  * @package           PluginPackage
  *
  * @author            Rafalo tech
@@ -24,6 +26,11 @@
  */
 
 namespace geomify;
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 require_once "vendor/autoload.php";
 
 /**
