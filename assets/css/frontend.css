@@ -220,3 +220,20 @@
     height: 100%;
     width: 100%;
 }
+
+.banner-menu {
+    position: relative;
+    z-index: 300;
+    overflow: hidden;
+}
+.banner-menu::after {
+    content: "";
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.35);
+    height: 100%;
+    width: 100%;
+    top: 0;
+    backdrop-filter: blur(20px);
+    box-shadow: rgb(0 0 0 / 50%) 5px 5px 5px;
+    border-radius: 5px;
+}

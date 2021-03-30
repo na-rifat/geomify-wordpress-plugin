@@ -151,7 +151,7 @@ class Assets {
             'text-color'                  => '#fff',
             // Background
             'background'                  => '#212221',
-            'background-light'            => 'rgb(1, 63, 117)',
+            'background-light'            => '#FFFFFF',
             'cyan'                        => '#1181B2',
         ];
 

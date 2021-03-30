@@ -40,12 +40,11 @@
     overflow: hidden;
     height: 100%;
 }
-.geomify-pano-effect > * {
-    height: 100%;
+.geomify-pano-effect * {
+    height: 100% !important;
 }
 
-.geomify-pano-effect img {
-    height: 100% !important;
+.geomify-pano-effect img {    
     width: auto;
     animation: pano;
     transform: scale(1.5, 1.5);
