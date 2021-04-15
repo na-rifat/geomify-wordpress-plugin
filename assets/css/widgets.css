@@ -10,60 +10,6 @@
     align-items: center;
 }
 
-/* .geomify-button-filled {
-    background-color: cyan;
-}
-.geomify-button:hover {
-    background-color: transparent;
-}
-.geomify-button {
-    border: 2px solid cyan;
-    background-color: transparent;
-}
-.g-borderd:hover {
-    background-color: cyan;
-} */
-
-/* Hover colors */
-/* .geomify-hover-white:hover {
-    color: #fff !important;
-}
-.geomify-hover-black:hover {
-    color: #000 !important;
-} */
-/* .geomify-hover-cyan:hover {
-    color: cyan !important;
-} */
-
-/* Pano effect */
-.geomify-pano-effect {
-    overflow: hidden;
-    height: 100%;
-}
-.geomify-pano-effect * {
-    height: 100% !important;
-}
-
-.geomify-pano-effect img {    
-    width: auto;
-    animation: pano;
-    transform: scale(1.5, 1.5);
-    animation-duration: 25s;
-    animation-iteration-count: infinite;
-}
-@keyframes pano {
-    40% {
-        transform: scale(1, 1);
-    }
-    60% {
-        transform: scale(1, 1);
-    }
-    100% {
-        transform: scale(1.5, 1.5);
-    }
-}
-
-/* Pano effect end */
 /* Default styles */
 .geomify-block {
     height: 100%;
@@ -101,3 +47,13 @@
 .geomify-video-button-container .sub-description {
     font-size: 0.8em;
 }
+
+
+/* Compare table */
+.geomify-compare-table-wrapper tr  > *:not(:first-child){
+    text-align: center;
+}
+.geomify-compare-table-wrapper .ico-na{
+    font-size: .8em;
+}
+/* Compare table ended */

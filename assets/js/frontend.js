@@ -94,3 +94,15 @@ class geomifyMain {
         this.copyright();
     }
 }
+
+(function ($) {
+    $(document).on(`scroll`, function (e) {
+        if ($(this).scrollTop() == 0) {
+            // Top of the page
+            $(`.geomify-main-header`).removeClass(`floating`);
+        } else {
+            // Scrolling down the page
+            $(`.geomify-main-header`).addClass(`floating`);
+        }
+    });
+})(jQuery);

@@ -222,18 +222,48 @@
 }
 
 .banner-menu {
-    position: relative;
-    z-index: 300;
-    overflow: hidden;
-}
-.banner-menu::after {
-    content: "";
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.35);
-    height: 100%;
-    width: 100%;
-    top: 0;
     backdrop-filter: blur(20px);
-    box-shadow: rgb(0 0 0 / 50%) 5px 5px 5px;
     border-radius: 5px;
+    box-shadow: rgb(0 0 0 / 50%) 5px 5px 5px;
+    background-color: rgba(81, 167, 249, 0.35);
 }
+
+.section-shadow {
+    /* box-shadow: 0 1px 5px 1px #cccccc; */
+    box-shadow: 0 6px 4px -4px #cccccc;
+    z-index: 1;
+}
+
+.floating .start-free-button a {
+    color: #51a7f9 !important;
+    background-color: transparent !important;
+}
+
+/* Pano effect */
+.geomify-pano-effect {
+    overflow: hidden;
+    height: 100%;
+}
+.geomify-pano-effect * {
+    height: 100% !important;
+}
+
+.geomify-pano-effect img {    
+    width: auto;
+    animation: pano;
+    transform: scale(1.5, 1.5);
+    animation-duration: 25s;
+    animation-iteration-count: infinite;
+}
+@keyframes pano {
+    40% {
+        transform: scale(1, 1);
+    }
+    60% {
+        transform: scale(1, 1);
+    }
+    100% {
+        transform: scale(1.5, 1.5);
+    }
+}
+/* Pano effect end */
