@@ -14,11 +14,15 @@
             <?php
                 foreach ( $s['packages'] as $package ) {
                 ?>
+                <tr>
             <td><?php _e( $package['feature_title'] )?></td>
             <?php
-               echo geomify_compare_table_rows( $package );
-                }
-            ?>
+                echo geomify_compare_table_rows( $package );
+                ?>
+                    </tr>
+               <?php
+                   }
+               ?>
         </tbody>
     </table>
 </div>

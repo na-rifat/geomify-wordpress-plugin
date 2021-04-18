@@ -1,8 +1,9 @@
+"use strict";
 class Button extends elementorModules.frontend.handlers.Base {
     getDefaultSettings() {
         return {
             selectors: {
-                button: `.geomify-ew-button`,
+                button: `.geomify-video-button`,
             },
         };
     }
@@ -15,12 +16,29 @@ class Button extends elementorModules.frontend.handlers.Base {
     }
 
     bindEvents() {
-        this.elements.$button.on(`click`, this.showAlert.bind(this));
+        this.elements.$button.on(
+            `click`,
+            this.playVideo.bind(this.elements.$button)
+        );
     }
 
-    showAlert() {
-        alert(123123);
-        // alert(jQuery(this).text());
+    playVideo() {
+        let self = this;
+        let video_source_type = self.data(`video-source-type`);
+        let url = self.data(`video-url`);
+        let player = ``;
+
+        switch (video_source_type) {
+            case `youtube`:
+                player = `<iframe src="${url}"></iframe>"`;
+                break;
+            case `self_hosted`:
+                player = `<video><source src="${url}" type="video/mp4"></video>`;
+                break;
+            default:
+                break;
+        }
+        lightBox(`<div class="geomify-lightbox-video">${player}</div>`);
     }
 }
 
@@ -32,7 +50,7 @@ jQuery(window).on(`elementor/frontend/init`, () => {
     };
 
     elementorFrontend.hooks.addAction(
-        `frontend/element_ready/geomify_button.default`,
+        `frontend/element_ready/geomify_video_button.default`,
         addHandler
     );
 });

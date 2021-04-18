@@ -1,4 +1,5 @@
 <?php
+defined( 'ABSPATH' ) or die( 'You can\'t access to this file' );
 /**
  * This files contains all important functions for geomify wp plugin
  */
@@ -231,5 +232,16 @@ if ( ! function_exists( 'geomify_compare_table_rows' ) ) {
         }
 
         return $result;
+    }
+}
+
+if ( ! function_exists( 'geomify_y2embed' ) ) {
+    function geomify_y2embed( $string ) {
+        return preg_replace(
+            "/\s*[a-zA-Z\/\/:\.]*youtu(be.com\/watch\?v=|.be\/)([a-zA-Z0-9\-_]+)([a-zA-Z0-9\/\*\-\_\?\&\;\%\=\.]*)/i",
+            "https://www.youtube.com/embed/$2",
+            $string
+        );
+
     }
 }

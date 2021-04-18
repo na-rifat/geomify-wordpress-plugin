@@ -1,6 +1,7 @@
 <?php
 
 namespace geomify;
+use geomify\Schema\Schema as Schema;
 
 class Ajax {
 
@@ -33,7 +34,7 @@ class Ajax {
      */
     public function get_shortcode() {
 
-        if ( ! in_array( geomify_var( 'shortcode' ), Schema::get_static( 'allowed_shortcodes' ) ) ) {
+        if ( ! in_array( geomify_var( 'shortcode' ), Schema::get( 'allowed_shortcodes' ) ) ) {
             wp_send_json_error(
                 [
                     'msg' => __( 'Requested shortcode isn\'t allowed for use from AJAX', 'geomify' ),

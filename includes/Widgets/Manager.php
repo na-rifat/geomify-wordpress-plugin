@@ -15,5 +15,6 @@ class Manager {
         \Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Items\Elementor\Button() );
         \Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Items\Elementor\Videoplay() );
         \Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Items\Elementor\Compare_table() );
+        \Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Items\Elementor\Video_button() );
     }
 }

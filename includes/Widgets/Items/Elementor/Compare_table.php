@@ -3,7 +3,6 @@
 namespace geomify\Widgets\Items\Elementor;
 
 use Elementor\Controls_Manager as Controls;
-use Elementor\Core\Schemes\Color;
 use Elementor\Repeater as Repeater;
 use Elementor\Widget_Base as Base;
 
@@ -18,7 +17,7 @@ class Compare_table extends Base {
     }
 
     public function get_icon() {
-        return 'eicon-button';
+        return 'eicon-table';
     }
 
     public function get_categories() {

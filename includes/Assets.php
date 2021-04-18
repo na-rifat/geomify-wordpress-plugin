@@ -33,9 +33,9 @@ class Assets {
      */
     public function get_scripts() {
         return [
-            'geomify-admin-script'    => geomify_jsfile( 'admin', ['jquery', 'elementor-frontend'] ),
-            'geomify-frontend-script' => geomify_jsfile( 'frontend', ['jquery', 'elementor-frontend'] ),
-            'geomify-widgets-script'  => geomify_jsfile( 'widgets', ['jquery'] ),
+            'geomify-admin-script'    => geomify_jsfile( 'admin', ['jquery'] ),
+            'geomify-frontend-script' => geomify_jsfile( 'frontend', ['jquery'] ),
+            'geomify-widgets-script'  => geomify_jsfile( 'widgets', ['jquery', 'elementor-frontend'] ),
         ];
     }
 
