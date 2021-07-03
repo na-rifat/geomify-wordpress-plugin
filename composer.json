@@ -10,7 +10,9 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "stripe/stripe-php": "^7.80"
+    },
     "autoload": {
         "psr-4": {
             "geomify\\": "./includes"            

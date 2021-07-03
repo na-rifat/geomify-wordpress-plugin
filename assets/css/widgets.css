@@ -68,3 +68,72 @@
 }
 
 /* Video button ended */
+
+/* Price card */
+.geomify-price-card .price-card-row {
+    display: inline-block;
+    width: 100%;
+    height: auto;
+    padding: 10px 0;
+}
+.geomify-price-card h2,
+.geomify-price-card h4,
+.geomify-price-card p {
+    margin: 0;
+}
+.geomify-price-card .package-image {
+    height: 100px;
+    width: auto;
+}
+.geomify-price-card .package-button {
+    display: inline-block;
+}
+.geomify-price-card .price-card-row:nth-child(2) {
+    padding-bottom: 0;
+}
+.geomify-price-card .price-card-row:nth-child(3) {
+    padding-top: 0;
+}
+/* Price card end */
+
+/* Dashboard menu */
+.geomify-dashboard-menu {
+    display: flex;
+}
+.geomify-dashboard-menu ul {
+    display: flex;
+    flex-flow: column;
+    list-style-type: none;
+}
+.geomify-dashboard-menu a img {
+    height: 30px;
+    width: auto;
+    margin-right: 10px;
+    filter: invert(1);
+}
+.geomify-dashboard-menu a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 8px 30px;
+    background-color: #1181b2;
+    border: 2px solid #1181b2;
+    color: white;
+    /* transition: var(--geomify-transition); */
+    transition: all 0.3s ease-in;
+}
+
+.geomify-dashboard-menu a:hover,
+.geomify-dashboard-menu a.active-item {
+    border: 2px solid white;
+}
+
+
+/* Dashboard menu end */
+
+
+/* Iframe */
+.geomify-iframe #wpadminbar{
+    display: none;
+}

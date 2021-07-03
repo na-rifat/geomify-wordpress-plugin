@@ -3,6 +3,9 @@
 :root {
     --geomify-font: "Noto Sans JP", sans-serif;
 }
+html {
+    scroll-behavior: smooth;
+}
 html,
 body {
     height: 100%;
@@ -13,7 +16,11 @@ body {
 /* Navigation menu part */
 .geomify-nav {
     height: 100%;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
     display: inline-flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
 }
 .geomify-nav > div,
@@ -22,13 +29,19 @@ body {
 .geomify-nav > div > div > nav > div > ul,
 .geomify-nav > div > div > nav > div > ul > li {
     height: 100%;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
     display: inline-flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
 }
 .geomify-nav li a {
     text-transform: uppercase;
     font-size: 0.8em;
     color: var(--link-color);
+    -webkit-transition: var(--geomify-transition);
+    -o-transition: var(--geomify-transition);
     transition: var(--geomify-transition);
     height: 100%;
 }
@@ -40,18 +53,28 @@ body {
 }
 
 .geomify-header {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
     display: inline-flex;
     width: 100%;
     height: 51.797px;
     background-color: var(--background);
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     position: relative;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
     justify-content: space-between;
 }
 
 .geomify-header-left-bar,
 .geomify-header-right-bar {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
     display: inline-flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     position: relative;
     height: 100%;
@@ -74,13 +97,21 @@ body {
 
 .geomify-head-button {
     text-transform: uppercase;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
     display: inline-flex;
     font-size: 0.7em;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
     height: 100%;
     padding: 0 20px;
     cursor: pointer;
+    -webkit-transition: var(--geomify-transition);
+    -o-transition: var(--geomify-transition);
     transition: var(--geomify-transition);
     color: var(--color);
 }
@@ -99,7 +130,11 @@ body {
 /* Footer part */
 .footer-row-1,
 .footer-row-2 {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
     justify-content: space-between;
     padding: 30px 0;
     font-family: var(--geomify-font);
@@ -114,13 +149,20 @@ body {
     color: var(--color);
     font-size: 1.5em;
     margin: 0 5px;
+    -webkit-transition: var(--geomify-transition);
+    -o-transition: var(--geomify-transition);
     transition: var(--geomify-transition);
 }
 .footer-sub-row.footer-social i:hover {
     color: var(--link-hover-color);
 }
 .footer-sub-row {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row;
     flex-flow: row;
 }
 .footer-sub-row .footer-sub-col {
@@ -129,6 +171,8 @@ body {
 
 .footer-sub-row a {
     color: var(--color);
+    -webkit-transition: var(--geomify-transition);
+    -o-transition: var(--geomify-transition);
     transition: var(--geomify-transition);
 }
 .footer-sub-row a:hover {
@@ -142,21 +186,31 @@ body {
     padding: 5px 0;
 }
 .jump-to-top {
-    padding: 10px;
+    padding: 5px;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
     display: inline-flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
     color: color;
     background-color: white;
     border: 3px solid black;
     font-size: 1.5em;
     cursor: pointer;
+    -webkit-transition: var(--geomify-transition);
+    -o-transition: var(--geomify-transition);
     transition: var(--geomify-transition);
     margin: 30px 0;
     position: fixed;
-    bottom: 20px;
+    bottom: 0;
     right: 20px;
     z-index: 999;
+    -webkit-box-shadow: 0 0 5px black;
+    box-shadow: 0 0 5px black;
 }
 .jump-to-top:hover {
     /* border: 2px solid var(--link-hover-color);
@@ -180,6 +234,8 @@ body {
     cursor: pointer;
     font-size: 0.8em;
     background-color: var(--btn1-background-color);
+    -webkit-transition: var(--geomify-transition);
+    -o-transition: var(--geomify-transition);
     transition: var(--geomify-transition);
     color: var(--btn1-color);
 }
@@ -214,6 +270,8 @@ body {
         white-space: nowrap;
     }
     .geomify-logo .site-title {
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
     }
     .geomify-header-right-bar {
@@ -230,14 +288,17 @@ body {
 }
 
 .banner-menu {
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border-radius: 5px;
+    -webkit-box-shadow: rgb(0 0 0 / 50%) 5px 5px 5px;
     box-shadow: rgb(0 0 0 / 50%) 5px 5px 5px;
     background-color: rgba(81, 167, 249, 0.35);
 }
 
 .section-shadow {
     /* box-shadow: 0 1px 5px 1px #cccccc; */
+    -webkit-box-shadow: 0 6px 4px -4px #cccccc;
     box-shadow: 0 6px 4px -4px #cccccc;
     z-index: 1;
 }
@@ -258,19 +319,41 @@ body {
 
 .geomify-pano-effect img {
     width: auto;
+    -webkit-animation: pano;
     animation: pano;
+    -webkit-transform: scale(1.5, 1.5);
+    -ms-transform: scale(1.5, 1.5);
     transform: scale(1.5, 1.5);
+    -webkit-animation-duration: 25s;
     animation-duration: 25s;
+    -webkit-animation-iteration-count: infinite;
     animation-iteration-count: infinite;
 }
-@keyframes pano {
+@-webkit-keyframes pano {
     40% {
+        -webkit-transform: scale(1, 1);
         transform: scale(1, 1);
     }
     60% {
+        -webkit-transform: scale(1, 1);
         transform: scale(1, 1);
     }
     100% {
+        -webkit-transform: scale(1.5, 1.5);
+        transform: scale(1.5, 1.5);
+    }
+}
+@keyframes pano {
+    40% {
+        -webkit-transform: scale(1, 1);
+        transform: scale(1, 1);
+    }
+    60% {
+        -webkit-transform: scale(1, 1);
+        transform: scale(1, 1);
+    }
+    100% {
+        -webkit-transform: scale(1.5, 1.5);
         transform: scale(1.5, 1.5);
     }
 }
@@ -343,106 +426,1010 @@ body {
 
 /* Lightbox end */
 
-/* New lightbox */
-.geomify-lightbox-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100vw;
-    background: rgba(0, 0, 0, 0.821);
-    z-index: 999999;
+/* Accordion */
+.geomify-accordion .elementor-accordion-item:first-child {
+    display: none;
 }
-.geomify-lightbox {
-    z-index: 999999;
-    position: absolute;
-    left: 7.5rem;
-    right: 7.5rem;
-    top: 5rem;
-    height: calc(100vh - 10rem);
-    box-shadow: 0 0 1000px black;
-    background-color: var(--background);
-    padding: 0 15px;
-    border: 1px solid white;
-    border-radius: 15px;
-    min-width: 20vw;
-    max-width: 80vw;
-    margin-left: auto;
-    margin-right: auto;
+.geomify-accordion .elementor-accordion-item:nth-child(2) {
+    border-top: 1px solid #d4d4d4 !important;
 }
+.geomify-accordion .elementor-tab-title {
+    text-align: center;
+}
+.geomify-accordion .elementor-tab-title span {
+    float: none !important;
+}
+.geomify-accordion .elementor-tab-content p {
+    text-align: center;
+}
+/* Accordion end */
 
-.geomify-lightbox > * {
+/* Contact forms */
+.geomify-input-form .geomify-input-50 {
+    width: calc(50% - 10px);
+}
+.geomify-input-form .geomify-input-group {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+}
+.geomify-input-form input,
+.geomify-input-form textarea {
+    border: 2px solid var(--cyan);
+}
+.geomify-input-form br {
+    display: none;
+}
+.geomify-input-form .wpcf7-form-control-wrap:not(:last-child),
+.geomify-input-form .geomify-input-group {
+    margin-bottom: 10px;
+}
+.geomify-cf7-btn {
+    display: none;
+}
+/* Contact forms end */
+
+/* Multi step form */
+
+.geomify-ms-input-wrapper > * {
     display: inline-block;
     width: 100%;
+    padding: 0.5em !important;
+    border: 1px solid var(--cyan) !important;
 }
-.geomify-lightbox .geomify-lightbox-topbar {
-    position: relative;
+.geomify-ms-input-group.pair-group {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    align-items: flex-end;
 }
-.geomify-lightbox .geomify-lightbox-content {
-    height: calc(100% - 30px);
-    overflow-x: auto;
+.geomify-ms-input-group.pair-group > * {
+    width: calc(50% - 5px);
 }
-.geomify-lightbox .lightbox-close {
-    background-color: #cccccc;
+.geomify-ms-input-group {
+    margin: 10px 0;
+}
+.geomify-ms-bottombar-item {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+}
+.geomify-ms-bottombar-item .geomify-ms-button > div {
+    padding: 5px 60px;
     color: white;
-    height: 30px;
-    width: 30px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    position: absolute;
-    z-index: 999999;
+    font-size: 1em;
+    font-weight: 500;
+    border: 2px solid var(--cyan);
+    background: var(--cyan);
+    border-radius: 2px;
     cursor: pointer;
-    border: 1px solid var(--background);
+    -webkit-transition: var(--geomify-transition);
+    -o-transition: var(--geomify-transition);
     transition: var(--geomify-transition);
 }
 
-.geomify-lightbox .lightbox-close:hover {
-    background-color: #5a5a5a;
-    color: red;
-}
-
-@media only screen and (max-width: 768px) {
-    .geomify-lightbox .lightbox-close {
-        right: 30px;
-        top: 30px;
-    }
-}
-@media only screen and (min-width: 769px) {
-    .geomify-lightbox .lightbox-close {
-        right: -30px;
-        top: -30px;
-    }
-}
-/* New lightbox end */
-
-/* Lightbox video */
-.geomify-lightbox-video {
-    min-width: 60vw;
+.geomify-ms-form-wrapper {
+    display: inline-block;
     height: 100%;
-}
-
-.geomify-lightbox-video iframe,
-.geomify-lightbox-video video {
     width: 100%;
-    height: calc(100% - 35px);
+    position: relative;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    /* align-items: center; */
 }
-.geomify-lightbox-content::-webkit-scrollbar {
-    width: 6px;
-}
-
-/* Track */
-.geomify-lightbox-content::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-/* Handle */
-.geomify-lightbox-content::-webkit-scrollbar-thumb {
-    background: #888;
+.geomify-ms-form-wrapper > * {
+    display: inline-block;
+    width: 100%;
 }
 
-/* Handle on hover */
-.geomify-lightbox-content::-webkit-scrollbar-thumb:hover {
-    background: #555;
+.geomify-ms-form-wrapper .geomify-ms-step:not(:first-child),
+.geomify-ms-form-wrapper
+    .geomify-ms-bottombar
+    .geomify-ms-bottombar-item:not(:first-child) {
+    display: none;
 }
+.geomify-ms-form-wrapper .geomify-ms-topbar {
+    display: flex;
+}
+.geomify-ms-form-wrapper .geomify-ms-topbar .geomify-ms-topbar-item {
+    height: 5px;
+    background: #aaa;
+    width: 40px;
+}
+.geomify-ms-form-wrapper .active-item-indicator {
+    transition: all 0.3s linear;
+    background: #ffffff !important;
+}
+.geomify-ms-form-wrapper
+    .geomify-ms-topbar
+    .geomify-ms-topbar-item:not(:last-child) {
+    margin-right: 5px;
+}
+.geomify-ms-form-wrapper label {
+    border: none !important;
+    padding: 10px 0 0 0;
+}
+.geomify-ms-form-wrapper .geomify-ms-required-title {
+    color: var(--cyan);
+    border-bottom: 2px solid white;
+    padding: 25px 0 5px 0;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+/* Multi step form end */
+
+/* Loading logo animation */
+.brand-loading-invert {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+}
+.brand-loading-invert img {
+    height: 35% !important;
+    width: auto;
+    animation: brand_loading;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    filter: invert(1);
+}
+.brand-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.brand-loading img {
+    height: 50% !important;
+    width: auto;
+    animation: brand_loading;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+@keyframes brand_loading {
+    0% {
+        transform: scale(1, 1);
+    }
+    50% {
+        transform: scale(1.2, 1.2);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+/* Dashboard styles
+Author: Nura Alam Rifat
+*/
+
+/* Project views */
+.geomify-project-views {
+    width: 100%;
+    padding: 30px;
+}
+.geomify-project-views .pv-header {
+    width: 100%;
+    border-bottom: 2px solid #1181b2;
+}
+.pv-tab-key {
+    text-transform: uppercase;
+    padding: 8px 20px;
+    background-color: #1181b2;
+    color: white;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8em;
+}
+.pv-tab-key i {
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+.pv-header {
+    display: flex;
+    justify-content: space-between;
+}
+.pv-body {
+    position: relative;
+}
+.pv-header .header-item:nth-child(2) {
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+.pv-header p {
+    margin: 0;
+    font-size: 0.8em;
+}
+.geomify-project-views > * {
+    margin: 10px 0;
+}
+.add-new-pv {
+    padding: 8px 30px;
+    background-color: #51a7f9;
+    color: white;
+    border: 2px solid #51a7f9;
+    border-radius: 2px;
+    font-size: 0.8em;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: var(--geomify-transition);
+}
+.add-new-pv:hover {
+    background-color: transparent;
+    color: #51a7f9;
+}
+
+.new-pv-header {
+    display: flex;
+    justify-content: space-around;
+}
+
+.new-pv-header img {
+    filter: invert(1);
+    height: 150px !important;
+    width: auto;
+}
+.new-pv-header h2 {
+    font-size: 1.5em;
+    color: green;
+    font-weight: 600;
+}
+.new-pv-header h5 {
+    font-size: 0.8em;
+    font-weight: 700;
+    color: black;
+}
+.new-project-view {
+    padding: 30px;
+    box-shadow: 0px 0px 3px 3px rgba(0, 128, 0, 0.562);
+    max-width: 500px;
+    background-color: white;
+    position: relative;
+}
+.new-pv-holder {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.507);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+.new-pv-close-button {
+    position: absolute;
+    padding: 0;
+    top: -10px;
+    right: -10px;
+    height: 30px;
+    width: 30px;
+    border: 2px solid green;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: var(--geomify-transition);
+    z-index: 9;
+}
+.new-pv-close-button:hover {
+    background-color: #ccc;
+}
+
+.new-pv-success {
+    position: absolute;
+    display: inline-flex;
+    top: 0;
+    left: 0;
+    background-color: white;
+}
+
+.pv-items a .project-view-item-col:first-child {
+    width: 200px;
+}
+
+.pv-items {
+    display: flex;
+    flex-flow: column;
+}
+.pv-items a {
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 60px;
+    margin-top: -1px;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    color: black;
+    transition: var(--geomify-transition);
+    cursor: pointer;
+    padding: 30px;
+}
+.pv-items a:hover {
+    background-color: #51a7f9;
+    color: white;
+}
+
+.pv-items a img {
+    height: 40px;
+    width: auto;
+}
+.project-view-item-col {
+    width: 100%;
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+}
+.project-view-item-col:last-child {
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+/* Project views end */
+
+/* Dashboard styles end */
+
+/* Gtab */
+
+.gtab-header {
+    width: 100%;
+}
+.gtab-header.bottom-line {
+    border-bottom: 2px solid #1181b2;
+}
+.gtab-tab-key {
+    text-transform: uppercase;
+    padding: 8px 20px;
+    background-color: #1181b2;
+    color: white;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8em;
+}
+.gtab-tab-key i {
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+.gtab-header {
+    display: flex;
+    justify-content: space-between;
+}
+.gtab-body {
+    position: relative;
+}
+.gtab-header .header-item:nth-child(2) {
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+.gtab-header p {
+    margin: 0;
+    font-size: 0.8em;
+}
+.gtab-header h2 {
+    margin: 0;
+}
+
+.gtab-holder {
+    padding: 30px;
+    overflow: hidden;
+    z-index: 2;
+}
+.gtab-holder > *:not(:first-child):not(:last-child) {
+    margin: 15px 0;
+}
+.gtab-key-1 {
+    display: flex;
+    flex-flow: row;
+}
+.gtab-key-1 .key-item {
+    padding: 5px 10px;
+    border-bottom: 2px solid #ccc;
+    width: 90px;
+    font-size: 0.7em;
+    color: black;
+    text-transform: uppercase;
+    text-align: center;
+    transition: var(--geomify-transition);
+    cursor: pointer;
+}
+.gtab-key-1 .key-item.active-key,
+.gtab-key-1 .key-item:hover {
+    border-bottom: 2px solid #51a7f9;
+}
+.gtab-key-1 .key-item:not(:last-child) {
+    margin-right: 4px;
+}
+.gtab-key-1 .key-item.active-item {
+    border-bottom: 2px solid #51a7f9;
+}
+.gtab-item:not(.active-item) {
+    display: none;
+    position: absolute;
+    left: -100%;
+    z-index: -1;
+}
+.gtab-item {
+    z-index: 1;
+}
+/* Gtab end */
+
+/* Porfile seciton */
+.profile-section .profile-row form {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+}
+.profile-section .profile-col {
+    width: 100%;
+}
+.profile-section .profile-col-50 {
+    width: calc(100% - 100px) !important;
+}
+.profile-section .profile-col.button-col {
+    max-width: 200px;
+    align-items: flex-end;
+    justify-content: center;
+    display: flex;
+    padding: 10px;
+}
+.profile-section .profile-col.button-col .save-ac-info {
+    padding: 8px 40px;
+    border-radius: 0;
+}
+.profile-section .profile-col.button-col .save-ac-info i {
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+.profile-section .profile-row {
+    margin: 30px 0;
+    padding: 30px 0;
+    border-bottom: 2px solid #ccc;
+}
+/* Profile section end */
+
+/* Random styles */
+.geomify-cf7-form.wpcf7-response-output {
+    font-size: 1.2em;
+}
+
+/* Random styles end */
+
+/* Dashboard tutorials */
+.tutorials-search-box {
+    display: flex;
+    flex: 3 1;
+}
+.tutorials-search-box select {
+    font-size: 13px;
+    padding: 5px 15px;
+    border: 2px solid #51a7f9;
+    border-right: none;
+    border-radius: 0;
+}
+.filter-tutorials {
+    background-color: #51a7f9;
+    border: 2px solid #51a7f9;
+    color: white;
+    font-size: 13px;
+    padding: 5px 40px;
+    text-align: center;
+    transition: var(--geomify-transition);
+    cursor: pointer;
+}
+.filter-tutorials:hover {
+    color: #51a7f9;
+    background-color: transparent;
+}
+.geomify-tutorials-list {
+    display: flex;
+    flex: 50 50;
+    justify-content: space-around;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.geomify-tutorials-list > * {
+    max-width: calc(50% - 40px);
+    position: relative;
+    margin: 20px;
+
+    /* display: inline-flex;
+    justify-content: center;
+    align-items: center; */
+}
+.tutorial-item > div:first-child {
+    border: 2px solid #51a7f9;
+}
+.geomify-tutorials-list > * a {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ccc;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    text-shadow: 0px 0px 2px black;
+    font-weight: 600;
+}
+/* Dashboard tutorials end */
+
+/* Registration step */
+.registration-step .submission-section,
+.user-activation .submission-section {
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
+    align-items: center;
+    padding: 20px 0;
+}
+.registration-step .geomify-form-submit-btn {
+    text-transform: uppercase;
+    font-size: 0.9em;
+    font-weight: 600;
+    padding: 8px 50px;
+}
+.registration-step .geomify-form-submit-btn:hover {
+    color: white !important;
+}
+.registration-step .geomify-empty-input {
+    font-weight: 600;
+    font-size: 0.8em;
+}
+.registration-step .submission-section a {
+    color: white;
+    font-size: 0.8em;
+    padding: 8px 0;
+}
+.registration-success {
+    border: 2px solid #51a7f9;
+    text-align: center;
+    background-color: white;
+    font-size: 0.9em;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    flex-flow: column;
+}
+.registration-success h3 {
+    font-weight: 600;
+    font-size: 2em;
+}
+.reset-create-space-form {
+    background-color: white !important;
+    color: #51a7f9;
+}
+.reset-create-space-form:hover {
+    color: white !important;
+    background-color: #51a7f9 !important;
+}
+.registration-success p,
+.registration-success span {
+    font-size: 0.8em;
+}
+
+/* Registration step end */
+
+/* Show hide password */
+.show-hide-password-section {
+    display: flex;
+    align-items: center;
+}
+.show-hide-password-section > * {
+    cursor: pointer;
+}
+.show-hide-password-section > *:not(:last-child) {
+    margin-right: 15px;
+}
+/* Show hide password end */
+
+/* Payment */
+.payment-holder {
+    min-width: 250px;
+    max-width: 250px;
+    min-height: 425px;
+}
+.payment-method-list {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.payment-method-list .method-item {
+    padding: 0 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: flex-start;
+    flex-flow: column;
+    min-width: 120px;
+    cursor: pointer;
+    transition: all 0.3s linear;
+}
+.payment-method-list .method-item:not(:last-child) {
+    margin-right: 10px;
+}
+.payment-method-list .method-item.active-item {
+    border: 1px solid black;
+}
+.payment-method-list .method-item:hover {
+    border: 1px solid black;
+}
+.payment-method-list .method-title {
+    font-size: 14px;
+}
+.method-option .payment-input-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row;
+}
+.method-option .payment-input-group > * {
+    width: 100%;
+}
+.method-option:not(.active-item) {
+    display: none;
+}
+.method-option.active-item {
+    display: block;
+}
+
+.payment-holder strong {
+    font-weight: 500;
+    font-size: 12px;
+}
+.payment-holder .have-expiry > *:nth-child(1),
+.payment-holder .have-expiry > *:nth-child(2) {
+    width: 30%;
+}
+.payment-holder .have-expiry > *:nth-child(3) {
+    width: calc(40% + 3px);
+}
+.payment-logo {
+    height: 150px;
+    width: auto;
+}
+.payment-row {
+    display: flex;
+    justify-content: flex-start;
+}
+.payment-header h2 {
+    font-size: 22px;
+    font-weight: 600;
+}
+.payment-header h4 {
+    font-size: 12px;
+    font-weight: 600;
+}
+.payment-box input {
+    border-radius: 0;
+    padding: 8px 15px;
+    font-size: 12px;
+}
+.payment-box input::placeholder {
+    font-size: 11px;
+}
+#card_number {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+#expire_month {
+    border-bottom-left-radius: 5px;
+}
+#cvc {
+    border-bottom-right-radius: 5px;
+}
+#expire_month,
+#expire_year,
+#cvc {
+    margin-top: -1px;
+}
+#expire_year,
+#cvc {
+    margin-left: -1px;
+}
+.upgrade-success .success-header {
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
+    align-items: center;
+}
+.success-header h6 {
+    color: #555;
+    font-size: 12px;
+    font-weight: 500;
+}
+.success-header h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: black;
+}
+table.invoice-info {
+    border: none;
+}
+table.invoice-info td {
+    border: none;
+    font-size: 12px;
+}
+table.invoice-info tr td:first-child {
+    text-align: left;
+    color: #555;
+    font-weight: 400;
+}
+table.invoice-info tr td:last-child {
+    text-align: right;
+    color: black;
+    font-weight: 500;
+}
+.invoice-buttons > *:first-child {
+    background-color: white !important;
+    color: var(--cyan) !important;
+}
+.invoice-buttons > * :first-child:hover {
+    background-color: var(--cyan);
+    color: white;
+}
+.invoice-buttons {
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row;
+}
+.invoice-buttons > * {
+    font-size: 12px;
+    padding: 8px 15px;
+}
+.InvoiceThumbnail {
+    position: relative;
+}
+.InvoiceThumbnail-successMark {
+    position: absolute;
+    bottom: 35px;
+    right: 25px;
+}
+.InvoiceThumbnail path {
+    fill: rgb(10, 161, 10);
+}
+.upgrade-confirmation-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: black;
+}
+.upgrade-buttons {
+    display: flex;
+    flex-flow: column;
+}
+.upgrade-buttons > * {
+    padding: 8px 10px;
+    font-size: 12px;
+    text-align: center;
+}
+.upgrade-buttons > *:nth-child(2) {
+    background: white !important;
+    color: var(--cyan);
+    margin-top: 5px;
+}
+.upgrade-buttons > *:nth-child(2):hover {
+    background: var(--cyan) !important;
+    color: white !important ;
+}
+/* Payment end */
+
+/* File upload */
+.upgrade-not-complete {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+.gtab-key-2 .key-item {
+    width: 100px;
+    text-align: left;
+    text-transform: none;
+}
+.file-description {
+    color: black;
+    font-size: 12px;
+}
+.file-upload-submit-btn,
+.start-file-upload-session {
+    padding: 6px 20px;
+    font-size: 12px;
+}
+.geomify-file-uploader {
+    border: 2px solid #51a7f9;
+    padding: 100px 50px;
+    margin: 30px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+}
+.file-upload-form .thanks-section {
+    border: 2px solid #51a7f9;
+    padding: 30px;
+    margin: 30px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+    text-align: center;
+}
+.file-upload-form .thanks-section h6 {
+    font-size: 12px;
+    font-weight: 600;
+}
+.file-upload-form .thanks-section p {
+    font-size: 12px;
+    font-weight: 400;
+}
+.choose-file {
+}
+.file-upload-form .agreement-section {
+    font-size: 12px;
+}
+/* File upload end */
+/* Pv tab */
+.pv-tab-key:not(.active-item) {
+    font-size: 8px;
+    font-weight: 500;
+}
+.pv-tab-key.active-item {
+    font-size: 11px;
+}
+.pv-tab-key:not(:first-child) {
+    margin-left: 5px;
+}
+.pv-tab-key {
+    cursor: pointer;
+}
+.pv-tab-key-list {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+.tab-item:not(.active-item) {
+    display: none;
+}
+.pv-titles .title-item:not(.active-item) {
+    display: none;
+}
+/* Pv tab end */
+
+/* Home button */
+.home-button-holder {
+    display: flex;
+    justify-content: space-around;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 600px;
+}
+.home-button-item {
+    font-size: 12px;
+    font-weight: 500;
+    /* text-shadow: 0 0 1px #fff; */
+}
+/* Home button end */
+
+/* Newsletter */
+.ns-input-group {
+    display: inline-flex;
+    margin: 4px 0;
+    border: 1px solid #51a7f9;
+    width: 100%;
+}
+.ns-input-group input[type="email"]::placeholder {
+    font-size: 14px;
+    color: #555;
+}
+.ns-input-group input[type="email"] {
+    font-size: 14px;
+    background-color: white;
+    flex: 70%;
+}
+.ns-input-group input[type="submit"] {
+    background-color: #51a7f9;
+    border-radius: 0;
+    text-transform: uppercase;
+    font-size: 14px;
+    transition: 0.3s all linear;
+    flex: 30%;
+}
+.ns-input-group input[type="submit"]:hover {
+    background-color: white;
+    color: #51a7f9;
+}
+
+/* Newsletter end */
+
+/* Quotes */
+
+.center-button-holder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.geomify-lightbox .get-quote-holder {
+    min-width: 700px;
+    max-width: 40vw;
+}
+.geomify-border-btn {
+    border: 2px solid #51a7f9;
+    color: #51a7f9;
+    padding: 6px 20px;
+    cursor: pointer;
+    transition: 0.3s all linear;
+}
+.geomify-border-btn:hover {
+    background-color: #51a7f9;
+    color: white;
+}
+
+.quote-success {
+    border: 2px solid #51a7f9;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    padding: 20px;
+}
+.quote-success h2 {
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+}
+.quote-success p {
+    font-size: 14px;
+    margin: 10px 0;
+    text-align: center;
+}
+/* Quotes end */
+
+/* Partner programs */
+.elementor.elementor-3382,
+.elementor.elementor-2311,
+.elementor.elementor-2305 {
+    max-width: 30vw;
+    min-width: 500px;
+}
+
+/* Partner programs end */
+
+/* Privacy policy */
+.privacy-tab .elementor-tab-content {
+    padding: 100px 30px !important;
+}
+
+/* Privacy policy end */

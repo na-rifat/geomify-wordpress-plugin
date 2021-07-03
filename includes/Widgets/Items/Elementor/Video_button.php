@@ -2,6 +2,8 @@
 
 namespace geomify\Widgets\Items\Elementor;
 
+defined( 'ABSPATH' ) or exit;
+
 use Elementor\Controls_Manager as Controls;
 use Elementor\Widget_Base as Base;
 

@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'geomify\\' => array($baseDir . '/includes'),
+    'Stripe\\' => array($vendorDir . '/stripe/stripe-php/lib'),
 );

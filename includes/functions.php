@@ -245,3 +245,111 @@ if ( ! function_exists( 'geomify_y2embed' ) ) {
 
     }
 }
+
+// Post views management
+function geomify_get_post_view() {
+    $count = get_post_meta( get_the_ID(), 'post_views_count', true );
+    return "$count views";
+}
+
+function geomify_set_post_view() {
+    $key     = 'post_views_count';
+    $post_id = get_the_ID();
+    $count   = (int) get_post_meta( $post_id, $key, true );
+    $count++;
+    update_post_meta( $post_id, $key, $count );
+}
+
+function geomify_posts_column_views( $columns ) {
+    $columns['post_views'] = 'Views';
+    return $columns;
+}
+
+function geomify_posts_custom_column_views( $column ) {
+    if ( $column === 'post_views' ) {
+        echo geomify_get_post_view();
+    }
+}
+
+add_filter( 'manage_posts_columns', 'geomify_posts_column_views' );
+add_action( 'manage_posts_custom_column', 'geomify_posts_custom_column_views' );
+
+if ( ! function_exists( 'geomify_color_value' ) ) {
+    /**
+     * Hex encoded color value
+     *
+     * @param  string   $value
+     * @return string
+     */
+    function geomify_color_value( $value ) {
+        if ( strpos( $value, 'value' ) !== FALSE ) {
+            $value = str_replace( ')', '', str_replace( '(', '', str_replace( 'value', '', $value ) ) );
+            $value = explode( ', ', $value );
+            $hex   = sprintf( "#%02x%02x%02x", $value[0], $value[1], $value[2] );
+
+            return $hex;
+        } else {
+            $hex = $value;
+            if ( strlen( $hex ) == 4 ) {
+                $hex = '#' . str_replace( '#', '', $hex ) . str_replace( '#', '', $hex );
+            }
+
+            return $hex;
+        }
+    }
+}
+
+if ( ! function_exists( 'geomify_brand_logo' ) ) {
+    /**
+     * Get a image file url
+     *
+     * @return string
+     */
+    function geomify_brand_logo() {
+        echo geomify_imgfile( 'logo.png' );
+    }
+}
+
+if ( ! function_exists( 'geo_sanit' ) ) {
+    function geo_sanit( $value ) {
+        if ( $value == null or empty( $value ) ) {
+            return __( 'null', GTD );
+        }
+
+        return $value;
+    }
+}
+
+if ( ! function_exists( 'geomify_annual_price' ) ) {
+    function geomify_annual_price( $monthly_price ) {
+        return $monthly_price * 12;
+    }
+}
+
+if ( ! function_exists( 'geomify_monthly_price' ) ) {
+    function geomify_monthly_price( $annual_price ) {
+        return $annual_price / 12;
+    }
+}
+
+if ( ! function_exists( 'geomify_cesium_icon' ) ) {
+    function geomify_cesium_icon( $width = 50, $height = 50 ) {
+        return sprintf(
+            '<img src="%s" alt="Cesium icon" style="width: %spx; height: %spx;" />',
+            geomify_imgfile( 'cesium_icon.png' ),
+            $width,
+            $height
+        );
+    }
+}
+
+if ( ! function_exists( 'geomify_osm_icon' ) ) {
+    function geomify_osm_icon( $width = 50, $height = 50 ) {
+        return sprintf(
+            '<img src="%s" alt="OSM icon" style="width: %spx; height: %spx;" />',
+            geomify_imgfile( 'osm_icon.png' ),
+            $width,
+            $height
+        );
+    }
+}

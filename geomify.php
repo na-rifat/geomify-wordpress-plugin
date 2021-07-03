@@ -21,6 +21,28 @@
  *
  *
  *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
  * @package           PluginPackage
  *
  * @author            Rafalo tech
@@ -29,6 +51,9 @@
  */
 
 namespace geomify;
+
+use geomify\Admin\Admin;
+use geomify\Processor\User;
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -53,8 +78,12 @@ class geomify {
     function __construct() {
         $this->define_constants();
 
+        register_activation_hook( __FILE__, '\geomify\Activation::create_datatables' );
+        register_activation_hook( __FILE__, '\geomify\Activation::create_folders' );
+
         add_action( 'plugins_loaded', [$this, 'init'] );
         add_action( 'elementor/elements/categories_registered', [$this, 'register_elementor_categories'] );
+
     }
 
     /**
@@ -64,18 +93,30 @@ class geomify {
      */
     public function init() {
         // Creation
-        $templates  = new Templates();
-        $shortcodes = new Shortcodes();
-        $assets     = new Assets();
+        $templates  = new Processor\Templates();
+        $shortcodes = new Processor\Shortcodes();
+        $assets     = new Processor\Assets();
         $widgets    = new Widgets\Manager();
         $theme      = new Theme();
+        $redirect   = new Processor\Redirect();
+        $user       = new User();
+        $stripe     = new Processor\Geomify_stripe();
         // Assignment
         $shortcodes->templates = $templates;
+
+        if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+            $ajax = new Processor\Ajax();
+        }
+
+        if ( is_admin() ) {
+            $admin = new Admin();
+        }
 
         // Initialization
         $shortcodes->init();
 
         add_action( 'elementor/widgets/widgets_registered', [$widgets, 'register_elementor_widgets'], 99 );
+
     }
 
     /**
@@ -122,22 +163,36 @@ class geomify {
      * @return void
      */
     public function define_constants() {
+        $basedir = wp_upload_dir()['basedir'];
+        $baseurl = wp_upload_dir()['baseurl'];
+
         define( 'GEOMIFY', __FILE__ );
 
         define( 'GEOMIFY_URL', plugins_url( '', GEOMIFY ) );
         define( 'GEOMIFY_PATH', __DIR__ );
 
         define( 'GEOMIFY_ASSETS_PATH', GEOMIFY_PATH . "//assets/" );
-        define( 'GEOMIFY_CSS_PATH', GEOMIFY_ASSETS_PATH . "//css" );
-        define( 'GEOMIFY_JS_PATH', GEOMIFY_ASSETS_PATH . "//js" );
-        define( 'GEOMIFY_IMG_PATH', GEOMIFY_ASSETS_PATH . "//img" );
+        define( 'GEOMIFY_CSS_PATH', GEOMIFY_ASSETS_PATH . "/css" );
+        define( 'GEOMIFY_JS_PATH', GEOMIFY_ASSETS_PATH . "/js" );
+        define( 'GEOMIFY_IMG_PATH', GEOMIFY_ASSETS_PATH . "/img" );
+        define( 'GEOMIFY_TUTORIALS_PATH', $basedir . '/geomify/tutorials/' );
+        define( 'GEOMIFY_TUTORIALS_URL', $baseurl . '/geomify/tutorials/' );
+        define( 'GEOMIFY_FILES_DIR', $basedir . '/geomify/files/' );
+        define( 'GEOMIFY_FILES_URL', $baseurl . '/geomify/files/' );
 
-        define( 'GEOMIFY_ASSETS_URL', GEOMIFY_URL . "//assets/" );
-        define( 'GEOMIFY_CSS_URL', GEOMIFY_ASSETS_URL . "//css" );
-        define( 'GEOMIFY_JS_URL', GEOMIFY_ASSETS_URL . "//js" );
-        define( 'GEOMIFY_IMG_URL', GEOMIFY_ASSETS_URL . "//img" );
+        define( 'GEOMIFY_ASSETS_URL', GEOMIFY_URL . "/assets/" );
+        define( 'GEOMIFY_CSS_URL', GEOMIFY_ASSETS_URL . "/css/" );
+        define( 'GEOMIFY_JS_URL', GEOMIFY_ASSETS_URL . "/js/" );
+        define( 'GEOMIFY_IMG_URL', GEOMIFY_ASSETS_URL . "/img/" );
 
-        define( 'GEOMIFY_TEMPLATES_PATH', GEOMIFY_PATH . "//templates/" );
+        define( 'GEOMIFY_TEMPLATES_PATH', GEOMIFY_PATH . "/templates/" );
+
+        define( 'GEOMIFY_TEXT_DOMAIN', 'geomify' );
+        define( 'GTD', GEOMIFY_TEXT_DOMAIN );
+        define( 'GEOMIFY_RESOURCE_PATH', GEOMIFY_PATH . '/includes/resources/' );
+
+        define( 'GEOMIFY_SITE_URL', site_url() );
+
     }
 
     /**

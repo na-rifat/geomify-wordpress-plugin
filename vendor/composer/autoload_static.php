@@ -15,12 +15,20 @@ class ComposerStaticInit4ed9a59cf650ee48f60c5607f7bc0a64
         array (
             'geomify\\' => 8,
         ),
+        'S' => 
+        array (
+            'Stripe\\' => 7,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
         'geomify\\' => 
         array (
             0 => __DIR__ . '/../..' . '/includes',
+        ),
+        'Stripe\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stripe/stripe-php/lib',
         ),
     );
 

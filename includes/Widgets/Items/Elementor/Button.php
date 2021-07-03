@@ -1,6 +1,9 @@
 <?php
 
 namespace geomify\Widgets\Items\Elementor;
+
+defined( 'ABSPATH' ) or exit;
+
 use Elementor\Controls_Manager as Controls;
 use Elementor\Widget_Base as Base;
 
@@ -69,6 +72,22 @@ class Button extends Base {
             ]
         );
 
+        $this->add_control(
+            'button_id',
+            [
+                'label' => __( 'ID', GTD ),
+                'type'  => Controls::TEXT,
+            ]
+        );
+
+        $this->add_control(
+            'button_classes',
+            [
+                'label' => __( 'Classes', GTD ),
+                'type'  => Controls::TEXT,
+            ]
+        );
+
         $this->end_controls_section();
 
         $this->start_controls_section(
@@ -111,7 +130,7 @@ class Button extends Base {
             [
                 'label'     => __( 'Background color', 'geomify' ),
                 'type'      => Controls::COLOR,
-                'default'   => '#1181B2',
+                'default'   => '#51A7F9',
                 'selectors' => [
                     '{{WRAPPER}} a' => 'background-color: {{VALUE}}',
                 ],
@@ -122,7 +141,7 @@ class Button extends Base {
             [
                 'label'     => __( 'Background hover color', 'geomify' ),
                 'type'      => Controls::COLOR,
-                'default'   => '#1181B2',
+                'default'   => '#51A7F9',
                 'selectors' => [
                     '{{WRAPPER}} a:hover' => 'background-color: {{VALUE}}',
                 ],
@@ -134,7 +153,7 @@ class Button extends Base {
             [
                 'label'     => __( 'Border color', 'geomify' ),
                 'type'      => Controls::COLOR,
-                'default'   => '#1181B2',
+                'default'   => '#51A7F9',
                 'selectors' => [
                     '{{WRAPPER}} a' => 'border-color: {{VALUE}}',
                 ],
@@ -146,7 +165,7 @@ class Button extends Base {
             [
                 'label'     => __( 'Border hover color', 'geomify' ),
                 'type'      => Controls::COLOR,
-                'default'   => '#1181B2',
+                'default'   => '#51A7F9',
                 'selectors' => [
                     '{{WRAPPER}} a:hover' => 'border-color: {{VALUE}}',
                 ],
@@ -225,15 +244,15 @@ class Button extends Base {
                 ],
                 'mobile_default'  => [
                     'unit' => 'px',
-                    'size' => 15,
+                    'size' => 10,
                 ],
                 'tablet_default'  => [
                     'unit' => 'px',
-                    'size' => 15,
+                    'size' => 10,
                 ],
                 'desktop_default' => [
                     'unit' => 'px',
-                    'size' => 15,
+                    'size' => 10,
                 ],
                 'selectors'       => [
                     '{{WRAPPER}} a' => 'padding-top: {{SIZE}}{{UNIT}}; padding-bottom: {{SIZE}}{{UNIT}};',
@@ -410,8 +429,9 @@ class Button extends Base {
         $this->add_render_attribute(
             'caption',
             [
-                'class'  => 'geomify-button',
-                'href'   => $s['url']['url'],
+                'id'     => $s['button_id'],
+                'class'  => 'geomify-button ' . $s['button_classes'],
+                'href'   => do_shortcode( $s['url']['url'] ),
                 'target' => $s['url']['is_external'] == 'on' ? '_blank' : '_self',
             ]
         );
@@ -420,7 +440,7 @@ class Button extends Base {
 
         $element = sprintf( '<a %s >%s</a>',
             $attr,
-            $s['caption'] );
+            do_shortcode( $s['caption'] ) );
 
         echo $element;
     }

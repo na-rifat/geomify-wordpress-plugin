@@ -1,0 +1,37 @@
+.geomify-admin-lightbox {
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.582);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.geomify-admin-lightbox {
+    background-color: #fff;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0 5px 0 #51a7f9;
+}
+
+/* Tutorials list */
+.tutorials-list table {
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+.tutorials-list tr {
+    border: 1px solid #ccc;
+}
+.tutorials-list th,
+.tutorials-list td {
+    padding: 10px 20px;
+}
+.tutorials-list tr td:last-child {
+    min-width: 50px;
+    display: inline-flex;
+    justify-content: space-around;
+}
+/* Tutorials list end */

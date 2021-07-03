@@ -2,6 +2,8 @@
 
 namespace geomify\Widgets\Items\Elementor;
 
+defined( 'ABSPATH' ) or exit;
+
 use Elementor\Controls_Manager as Controls;
 use Elementor\Repeater as Repeater;
 use Elementor\Widget_Base as Base;
@@ -349,7 +351,7 @@ class Compare_table extends Base {
                         'package_basic'       => 'disabled',
                         'package_facilitator' => 'disabled',
                         'package_creator'     => 'disabled',
-                        'package_enterprise'  => 'disabled',
+                        'package_enterprise'  => 'disabled', 
                     ],
                 ],
                 'title_field' => '{{{ feature_title }}}',
