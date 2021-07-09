@@ -349,6 +349,14 @@ class Price_card extends Base {
             ]
         );
 
+        $this->add_control(
+            'button_classes',
+            [
+                'label' => __( 'Button classes', GTD ),
+                'type'  => Controls::TEXT,
+            ]
+        );
+
         $this->add_group_control(
             \Elementor\Group_Control_Border::get_type(),
             [
@@ -588,7 +596,7 @@ class Price_card extends Base {
         $this->add_render_attribute(
             'button_title',
             [
-                'class'  => 'package-button',
+                'class'  => 'package-button ' . $s['button_classes'],
                 'href'   => $s['button_url']['url'],
                 'target' => $s['button_url']['is_external'] ? '_blank' : '_self',
             ]

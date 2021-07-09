@@ -1,3 +1,6 @@
+var geomifyUserFiles = new FormData();
+var geomifyUserFilesArray = [];
+var gTabIn = 0;
 (function ($) {
     $(document).ready(function (e) {
         custom_cf7_submission();
@@ -18,12 +21,10 @@
         getQuote();
         partnerProgramsApply();
         educationalApply();
-
-        $(`#educational-institue-form`).on(`click`, function (e) {
-            e.preventDefault();
-
-            getShortcode('[elementor-template id="2305"]');
-        });
+        dragnDropUploader();
+        uploadUserFile();
+        dltPm();
+        startBasicForm();
     });
 })(jQuery);
 
@@ -98,8 +99,14 @@ function multiStepForm() {
         `.geomify-ms-bottombar-item:last-child > div:nth-child(2)`
     );
 
+    steps.eq(0).addClass(`acitve`);
+
     nextButton.on(`click`, function (e) {
         e.preventDefault();
+
+        if (geomifyValidateFields(steps.eq(current)) == false) {
+            return;
+        }
 
         // Moving steps
         steps.eq(current).slideUp(200, function (e) {
@@ -205,7 +212,7 @@ function newPv() {
     let $ = jQuery;
 
     // Popup
-    $(`.add-new-pv`).on(`click`, function (e) {      
+    $(`.add-new-pv`).on(`click`, function (e) {
         $.ajax({
             type: "POST",
             url: geomify.ajax_url,
@@ -215,7 +222,6 @@ function newPv() {
             },
             dataType: `JSON`,
             success: function (response) {
-                console.log(response);
                 if (response.success) {
                     $(`body`).append(response.data.form);
                 }
@@ -564,6 +570,12 @@ function handlePayment() {
         if ($(this).hasClass(`active-item`)) {
             return;
         }
+
+        if (options.eq($(this).index()).html().trim().length == 0) {
+            alert(`Not available!`);
+            return;
+        }
+
         $(`.payment-method-list .active-item`).toggleClass(`active-item`);
         $(`.method-option.active-item`).toggleClass(`active-item`);
 
@@ -662,22 +674,11 @@ function handleProjectViews() {
 function handleFileUpload() {
     let $ = jQuery;
     let parent = $(`.file-upload-section`);
+    let tabs = parent.find(`.gtab-item`);
     let nextBtn = $(`.file-upload-submit-btn`);
     let keys = parent.find(`.key-item`);
-    let tabs = parent.find(`.gtab-item`);
     let startBtn = parent.find(`.start-file-upload-session`);
-    let fileChooser = $(`.choose-file`);
     let start = 0;
-
-    fileChooser.on(`click`, function (e) {
-        e.preventDefault();
-
-        let chooser = document.createElement(`input`);
-        chooser.type = `file`;
-        chooser.name = `geomify_file[]`;
-        chooser.id = `geomify_file`;
-        chooser.click();
-    });
 
     startBtn.on(`click`, function (e) {
         tabs.eq(0).toggleClass(`active-item`);
@@ -691,13 +692,20 @@ function handleFileUpload() {
 
         let currentIndex = start;
         let nextIndex = currentIndex + 1;
-        start = nextIndex;
+
+        if (geomifyValidateFields($(this).parents("form"), "red") == false) {
+            return;
+        }
+
+        if (nextIndex == 3) {
+            return;
+        }
 
         if (nextIndex == 4) {
             return;
         }
 
-        nextBtn.eq(0).css({ "background-color": `red` });
+        // nextBtn.eq(0).css({ "background-color": `red` });
         if (tabs.eq(currentIndex).find(`form`).length == 0) {
             tabs.eq(nextIndex).toggleClass(`active-item`);
             tabs.eq(nextIndex - 1).toggleClass(`active-item`);
@@ -707,6 +715,8 @@ function handleFileUpload() {
             tabs.eq(nextIndex - 1).toggleClass(`active-item`);
             keys.eq(nextIndex).toggleClass(`active-item`);
         }
+        start = nextIndex;
+        gTabIn = nextIndex;
     });
 }
 
@@ -732,5 +742,392 @@ function educationalApply() {
 
     $(`.educational-apply`).on(`click`, function (e) {
         getShortcode("[elementor-template id=2305]");
+    });
+}
+
+function dragnDropUploader() {
+    let $ = jQuery;
+    var dropArea = $(".geomify-file-uploader"),
+        drpa = document.querySelector(".geomify-file-uploader");
+    (button = dropArea.find(".choose-file")),
+        (input = document.createElement("input"));
+    input.name = "files[]";
+    input.id = "files";
+    input.type = "file";
+    if (drpa == null) {
+        return;
+    }
+
+    let files_input = $(`#files`);
+
+    let file;
+
+    button.on(`click`, () => {
+        input.click();
+    });
+
+    files_input.on("change", function () {
+        this.files.forEach((file) => {
+            addFileToQue(file);
+        });
+        dropArea.classList.add("active");
+    });
+
+    dropArea.on("dragover", (event) => {
+        event.preventDefault();
+        dropArea.addClass(`active`);
+        // dropArea.classList.add("active");
+    });
+
+    dropArea.on("dragleave", () => {
+        dropArea.removeClass(`active`);
+        // dropArea.classList.remove("active");
+    });
+
+    drpa.drop = (event) => {
+        event.preventDefault();
+        event.dataTransfer.files.forEach((file) => {
+            addFileToQue(file);
+        });
+        dropArea.classList.remove("active");
+    };
+}
+
+function addFileToQue(file) {
+    let $ = jQuery;
+    let queHolder = $(`.file-que`);
+    let fileName =
+        file.name.length > 12
+            ? file.name.slice(0, 8) +
+              "..." +
+              file.name.split(".")[file.name.split(".").length - 1]
+            : file.name;
+
+    queHolder.append(`
+    <div class="que-row">
+        <div class="que-col">
+            FILE: ${fileName}
+        </div>
+        <div class="que-col">
+            <div class="prgs-holder">
+                <div class="prgs-row">
+                    <div class="prgs-col">
+                        Upload progress
+                    </div>
+                    <div class="prgs-col prc-col">
+                            <div class="upload-prc">0</div>%
+                    </div>
+                </div>
+                <div class="prgs-row">
+                    <div class="prgs-col">
+                        <div class="prgs-prc">
+                            <div class="current-prc"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="que-col">
+            <div class="dlt-que"><i class="fas fa-trash-alt"></i></div>
+        </div>
+    </div>
+`);
+
+    geomifyUserFilesArray.push(file);
+
+    $(`.dlt-que i`)
+        .unbind(`click`)
+        .on(`click`, function (e) {
+            if (confirm(`Are you sure to delete this file`)) {
+                $(this)
+                    .parents(`.que-row`)
+                    .css({
+                        backgroundColor: `red`,
+                    })
+                    .slideUp(500, function (e) {
+                        $(this).remove();
+                    });
+
+                geomifyUserFilesArray[$(this).parents(`.que-row`).index()] =
+                    undefined;
+            }
+        });
+}
+
+function uploadUserFile() {
+    let $ = jQuery;
+    let parent = $(`.file-upload-section`);
+    let btn = parent.find(`.file-upload-submit-btn.final-submission`);
+    let forms = $(`.file-upload-section form`);
+    let formData = ``;
+
+    btn.on(`click`, function (e) {
+        e.preventDefault();
+
+        if ($(`#i_hearby`).prop("checked") == false) {
+            alert(`Please accept agreement`);
+            return;
+        }
+
+        $(this).unbind(`click`);
+
+        for (let i = 0; i < forms.length; i++) {
+            let dt = forms.eq(i).serialize();
+            formData += dt.length > 0 ? dt + "&" : dt;
+        }
+
+        formData += `action=file_info_submit&nonce=file_info_submit_nonce`;
+
+        $.ajax({
+            type: "POST",
+            url: geomify.ajax_url,
+            data: formData,
+            dataType: "JSON",
+            success: function (response) {
+                if (response.success) {
+                    beginFileUpload();
+                }
+            },
+            error: function (res) {},
+            complete: function (res) {},
+        });
+    });
+}
+
+function beginFileUpload() {
+    let $ = jQuery;
+
+    geomifyUserFilesArray.forEach((file, index) => {
+        if (file == undefined) {
+            return;
+        }
+
+        let data = new FormData();
+        let row = $(`.que-row`).eq(index);
+        let prcVisual = row.find(`.current-prc`);
+        let dltBtn = row.find(`i`);
+        let prcText = row.find(`.upload-prc`);
+
+        data.append("file", file);
+        data.append("action", "upload_geo_files");
+        data.append("nonce", geomify.upload_geo_files_nonce);
+
+        $.ajax({
+            xhr: function () {
+                var xhr = new window.XMLHttpRequest();
+
+                xhr.upload.addEventListener(
+                    "progress",
+                    function (evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = evt.loaded / evt.total;
+                            percentComplete = parseInt(percentComplete * 100);
+                            prcVisual.css({
+                                width: percentComplete + `%`,
+                            });
+                            prcText.text(percentComplete);
+                        }
+                    },
+                    false
+                );
+
+                return xhr;
+            },
+            type: "POST",
+            url: geomify.ajax_url,
+            data,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.success) {
+                    dltBtn.remove();
+                } else {
+                    geomifyMessage(response.data.msg, `failed`);
+                }
+
+                if (index == geomifyUserFilesArray.length - 1) {
+                    let tparent = $(`.file-upload-section`);
+                    let tabs = tparent.find(`.gtab-item`);
+                    let keys = tparent.find(`.key-item`);
+
+                    let currentIndex = gTabIn;
+                    let nextIndex = currentIndex + 1;
+
+                    if (tabs.eq(currentIndex).find(`form`).length == 0) {
+                        tabs.eq(nextIndex).toggleClass(`active-item`);
+                        tabs.eq(nextIndex - 1).toggleClass(`active-item`);
+                        keys.eq(nextIndex).toggleClass(`active-item`);
+                    } else {
+                        tabs.eq(nextIndex).toggleClass(`active-item`);
+                        tabs.eq(nextIndex - 1).toggleClass(`active-item`);
+                        keys.eq(nextIndex).toggleClass(`active-item`);
+                    }
+                    gTabIn = nextIndex;
+                }
+            },
+            error: function (res) {},
+            complete: function (res) {},
+        });
+    });
+}
+
+function dltPm() {
+    let $ = jQuery;
+
+    $(`.dlt-pm`).on(`click`, function (e) {
+        if (confirm(`Are you sure to remove this payment method?`) == false) {
+            return;
+        }
+        let self = $(this);
+        let parent = self.parents(".billing-method-item");
+        let pmId = parent.data("id");
+
+        $.ajax({
+            type: "POST",
+            url: geomify.ajax_url,
+            data: {
+                action: `remove_pm`,
+                nonce: geomify.remove_pm_nonce,
+                id: pmId,
+            },
+            dataType: "JSON",
+            success: function (response) {
+                if (response.success) {
+                    parent
+                        .css({
+                            backgroundColor: `red`,
+                        })
+                        .slideUp(500, function (e) {
+                            $(this).remove();
+                        });
+                } else {
+                    geomifyMessage(response.data.msg, `failed`);
+                }
+            },
+        });
+    });
+}
+
+function editPv() {
+    let $ = jQuery;
+
+    $(`.edit-pv`).on(`click`, function (e) {
+        e.preventDefault();
+
+        let parent = $(this).parents(`a`);
+        let id = parent.data(`id`);
+
+        $.ajax({
+            type: "POST",
+            url: geomify.ajax_url,
+            data: {
+                action: `edit_pv_form`,
+                id,
+            },
+            dataType: "JSON",
+            success: function (response) {
+                if (response.success) {
+                    $(`body`).append(response.data.form);
+                }
+            },
+        });
+    });
+}
+
+function dltPv() {
+    let $ = jQuery;
+
+    $(`.dlt-pv`).on(`click`, function (e) {
+        e.preventDefault();
+
+        if (confirm(`Are you sure to delete this item?`) == false) {
+            return;
+        }
+
+        let parent = $(this).parents(`a`);
+        let id = parent.data(`id`);
+
+        $.ajax({
+            type: "POST",
+            url: geomify.ajax_url,
+            data: {
+                action: `dlt_pv`,
+                nonce: geomify.dlt_pv_nonce,
+                id,
+            },
+            dataType: `JSON`,
+            success: function (response) {
+                if (response.success) {
+                    parent
+                        .css({
+                            backgroundColor: `red`,
+                        })
+                        .slideUp(500, function (e) {
+                            parent.remove();
+                        });
+                } else {
+                    geomifyMessage(response.data.msg, `failed`);
+                }
+            },
+        });
+    });
+}
+
+function startBasicForm() {
+    let $ = jQuery;
+    let btn = $(`.start-basic`);
+
+    btn.on(`click`, function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: geomify.ajax_url,
+            data: {
+                action: `start_basic_form`,
+                nonce: geomify.start_basic_form_nonce,
+            },
+            dataType: "JSON",
+            success: function (response) {
+                console.clear();
+                console.log(response);
+                if (response.success) {
+                    lightBox(response.data.form);
+                } else {
+                    geomifyMessage(response.data.msg, `failed`);
+                }
+            },
+        });
+    });
+}
+
+function startBasic() {
+    let $ = jQuery;
+    let parent = $(`.start-basic-holder`);
+    let form = parent.find(`form`);
+
+    form.on(`submit`, function (e) {
+        e.preventDefault();
+        if (geomifyValidateFields(form, `red`) == false) {
+            return;
+        }
+
+        let data = $(this).serialize();
+        data += `&action=start_basic&nonce=${geomify.start_basic_nonce}`;
+
+        $.ajax({
+            type: "POST",
+            url: geomify.ajax_url,
+            data,
+            dataType: "JSON",
+            success: function (response) {
+                console.log(response);
+                if (response.success) {
+                    parent.html(response.data.page);
+                } else {
+                    geomifyMessage(response.data.msg, `failed`);
+                }
+            },
+        });
     });
 }

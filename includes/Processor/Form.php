@@ -142,6 +142,11 @@ class Form {
         return sprintf( '<form action="#" method="POST">%s</div></form>', $this->element );
     }
 
+    /**
+     * Echo version of get()
+     *
+     * @return void
+     */
     public function _get() {
         echo $this->get();
     }

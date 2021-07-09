@@ -1,5 +1,5 @@
 <?php
-    $fields = \geomify\Schema\Schema::get( 'file_upload_contact' );
+    $fields = \geomify\Schema\Schema::get( 'geo_files_info' );
     $fields = \geomify\Processor\Processor::add_name_to_inputs( $fields );
     $input  = new \geomify\Processor\Input();
 ?>
@@ -15,7 +15,7 @@
             $input::create_field( $fields['address1'] );
             $input::create_field( $fields['address2'] );
             $input::create_field_pair( $fields['zip'], $fields['city'] );
-            $input::create_field( $fields['country'] );
+            $input::create_field( $fields['user_country'] );
         ?>
         <div class="geomify-form-submit-btn file-upload-submit-btn"> <i class="fas fa-sign-in-alt"></i>SAVE & NEXT</div>
     </form>

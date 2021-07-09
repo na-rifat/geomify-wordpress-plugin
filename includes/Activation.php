@@ -18,6 +18,8 @@ class Activation {
         CRUD::create_datatable( 'enterprise_quotes', 'enterprise_quotes' );
         CRUD::create_datatable( 'partner_programs_request', 'partner_programs_request' );
         CRUD::create_datatable( 'educational_institutes_requests', 'educational_institutes_requests' );
+        CRUD::create_datatable( 'geo_files_info', 'geo_files_info' );
+        CRUD::create_datatable( 'geo_files', 'geo_files' );
     }
 
     public static function create_folders() {
@@ -26,6 +28,7 @@ class Activation {
         $folders = [
             $upload_dir . '/geomify/tutorials',
             $upload_dir . '/geomify/files',
+            $upload_dir . '/geomify/files/geo-files',
         ];
 
         foreach ( $folders as $folder ) {

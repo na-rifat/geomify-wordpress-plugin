@@ -53,7 +53,7 @@ function lightBox(content = ``, top = ``, bottom = ``) {
     $(`.geomify-lightbox`).parent().remove();
 
     let el = `<div class="geomify-lightbox-container">
-        <div class="geomify-lightbox">         
+        <div class="geomify-lightbox geo-scroll">         
         <div class="lightbox-close">X</div>
         ${content}
         </div>
@@ -91,14 +91,13 @@ function getShortcode(shortcode) {
             action: `get_shortcode`,
             shortcode,
         },
-        // dataType: "JSON",
+        dataType: "JSON",
         success: function (res) {
             console.log(res);
-            // return;
             if (res.success) {
                 lightBox(res.data.shortcode);
             } else {
-                alert(res.data.msg);
+                geomifyMessage(res.data.msg, `failed`);
             }
         },
         error: function (res) {

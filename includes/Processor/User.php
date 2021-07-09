@@ -85,7 +85,7 @@ class User {
     }
 
     public static function is_current_user_admin() {
-        if ( in_array( 'Administrator', self::current_user_roles() ) ) {
+        if ( in_array( 'administrator', self::current_user_roles() ) ) {
             return true;
         }
 
@@ -120,8 +120,15 @@ class User {
         return get_user_meta( self::current_user_id(), $key, $single );
     }
 
+    /**
+     * Get stripe customer id
+     *
+     * Create customer on empty id
+     *
+     * @return string
+     */
     public static function stripe_customer_id() {
-        $stripe_user_id = self::get_meta( 'stripe_customer_id' );
+        $stripe_customer_id = self::get_meta( 'stripe_customer_id' );
 
         if ( empty( $stripe_customer_id ) ) {
             $stripe_customer_id = Gstripe::create_customer(
@@ -131,15 +138,40 @@ class User {
                     'name'        => self::name(),
                 ]
             )->id;
+
+            self::set_meta( 'stripe_customer_id', $stripe_customer_id );
         }
 
-        return $stripe_user_id;
+        return $stripe_customer_id;
     }
 
+    /**
+     * Get stripe subscription id
+     *
+     * Create free subscription on empty id
+     *
+     * @return string
+     */
     public static function stripe_subscription_id() {
-        return self::get_meta( 'stripe_subscription_id' );
+        $stripe_subscription_id = self::get_meta( 'stripe_subscription_id' );
+
+        if ( empty( $stripe_subscription_id ) ) {
+            $stripe_subscription_id = Gstripe::create_subscription(
+                self::stripe_customer_id(),
+                Gstripe::package( 'free' )
+            )->id;
+
+            self::set_meta( 'stripe_subscription_id', $stripe_subscription_id );
+        }
+
+        return $stripe_subscription_id;
     }
 
+    /**
+     * Intialize/Create stripe account for current user
+     *
+     * @return void
+     */
     public static function initialize_stripe() {
         $stripe_customer_id = Gstripe::create_customer(
             [
@@ -156,11 +188,153 @@ class User {
         self::set_meta( 'stripe_subscriptions', ['free'] );
     }
 
+    /**
+     * Return latest invoice of current user
+     *
+     * @return array|object
+     */
     public static function latest_stripe_invoice() {
         $stripe_subscription_id = self::get_meta( 'stripe_subscription_id' );
         $latest_invoice_id      = Gstripe::get_subscription( $stripe_subscription_id )->latest_invoice;
 
         return Gstripe::invoices()->retrieve( $latest_invoice_id );
+    }
+
+    /**
+     * Return current user subscriptions object
+     *
+     * @return array|object
+     */
+    public static function stripe_subscriptions() {
+        return Gstripe::get_subscription( self::stripe_subscription_id() )->items->data;
+    }
+
+    /**
+     * Return caption of current user subscriptions
+     *
+     * @return array
+     */
+    public static function stripe_subscriptions_caption() {
+        $subs     = self::stripe_subscriptions();
+        $packages = Gstripe::reverted_packages_uc();
+        $result   = [];
+
+        foreach ( $subs as $sub ) {
+            $result[$sub->price->id] = $packages[$sub->price->id];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Return stripe payment methods of current user
+     *
+     * @return mixed
+     */
+    public static function stripe_payment_methods() {
+        return Gstripe::stripe()->paymentMethods->all(
+            [
+                'customer' => self::stripe_customer_id(),
+                'type'     => 'card',
+            ]
+        )->data;
+    }
+
+    public static function stripe_payment_methods_caption() {
+        $methods = self::stripe_payment_methods();
+        $result  = [];
+
+        foreach ( $methods as $method ) {
+            $result[] = [
+                'id'         => $method->id,
+                'brand'      => ucwords( $method->card->brand ),
+                'last4'      => $method->card->last4,
+                'exp_month'  => $method->card->exp_month,
+                'exp_year'   => $method->card->exp_year,
+                'type'       => ucwords( $method->type ),
+                'created_at' => $method->created,
+            ];
+        }
+
+        return $result;
+    }
+
+    public static function all_subscriptions() {
+        static $items = false;
+
+        if ( $items == false ) {
+            $items  = self::stripe_subscriptions_caption();
+            $result = [];
+            foreach ( $items as $key => $value ) {
+                $result[] = strtolower( $value );
+            }
+        } else {
+            $result = $items;
+        }
+
+        return $result;
+    }
+
+    public static function have_sub( $name ) {
+        return in_array( $name, self::all_subscriptions() == null ? [] : self::all_subscriptions() );
+    }
+
+    public static function have_subscription( $name ) {
+        switch ( $name ) {
+            case 'free':
+                if ( self::have_sub( 'free' )
+                    && ! self::have_sub( 'basic' )
+                    && ! self::have_sub( 'facilitator' )
+                    && ! self::have_sub( 'creator' )
+                    && ! self::have_sub( 'enterprise' )
+                ) {
+                    return true;
+                }
+
+                break;
+            case 'basic':
+                if ( ! self::have_sub( 'free' )
+                    && self::have_sub( 'basic' )
+                    && ! self::have_sub( 'facilitator' )
+                    && ! self::have_sub( 'creator' )
+                    && ! self::have_sub( 'enterprise' )
+                ) {
+                    return true;
+                }
+                break;
+            case 'facilitator':
+                if ( ! self::have_sub( 'free' )
+                    && ! self::have_sub( 'basic' )
+                    && self::have_sub( 'facilitator' )
+                    && ! self::have_sub( 'creator' )
+                    && ! self::have_sub( 'enterprise' )
+                ) {
+                    return true;
+                }
+                break;
+            case 'creator':
+                if ( ! self::have_sub( 'free' )
+                    && ! self::have_sub( 'basic' )
+                    && ! self::have_sub( 'facilitator' )
+                    && self::have_sub( 'creator' )
+                    && ! self::have_sub( 'enterprise' )
+                ) {
+                    return true;
+                }
+                break;
+            case 'enterprise':
+                if ( ! self::have_sub( 'free' )
+                    && ! self::have_sub( 'basic' )
+                    && ! self::have_sub( 'facilitator' )
+                    && ! self::have_sub( 'creator' )
+                    && self::have_sub( 'enterprise' )
+                ) {
+                    return true;
+                }break;
+            default:
+                return false;
+                break;
+        }
     }
 
 }

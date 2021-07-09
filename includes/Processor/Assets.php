@@ -78,6 +78,8 @@ class Assets {
                 'delete_tutorial_nonce'     => wp_create_nonce( 'delete_tutorial' ),
             ],
             'geomify-frontend-script' => [
+                'site_url'                          => site_url(),
+                'is_user_logged'                    => User::is_logged(),
                 'ajax_url'                          => admin_url( 'admin-ajax.php' ),
                 'logo_url'                          => GEOMIFY_ASSETS_URL . '/img/logo.png',
                 'went_wrong'                        => __( 'Something went wrong', 'geomify' ),
@@ -95,6 +97,13 @@ class Assets {
                 'stripe_payment_nonce'              => wp_create_nonce( 'stripe_payment' ),
                 'stripe_upgrade_nonce'              => wp_create_nonce( 'stripe_upgrade' ),
                 'submit_enterprise_quote_nonce'     => wp_create_nonce( 'submit_enterprise_quote' ),
+                'file_info_submit_nonce'            => wp_create_nonce( 'file_info_submit' ),
+                'upload_geo_files_nonce'            => wp_create_nonce( 'upload_geo_files' ),
+                'remove_pm_nonce'                   => wp_create_nonce( 'remove_pm' ),
+                'dlt_pv_nonce'                      => wp_create_nonce( 'dlt_pv' ),
+                'update_pv_nonce'                   => wp_create_nonce( 'update_pv' ),
+                'start_basic_form_nonce'                   => wp_create_nonce( 'start_basic_form' ),
+                'start_basic_nonce'                   => wp_create_nonce( 'start_basic' ),
             ],
         ];
     }

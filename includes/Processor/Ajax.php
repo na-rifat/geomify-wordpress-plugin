@@ -42,26 +42,23 @@ class Ajax {
         geomify_ajax( 'submit_enterprise_quote', [$this, 'submit_enterprise_quote'] );
         geomify_ajax( 'partner_programs_request_submit', [$this, 'partner_programs_request_submit'] );
         geomify_ajax( 'educational_institues_apply_submit', [$this, 'educational_institues_apply_submit'] );
+        geomify_ajax( 'file_info_submit', [$this, 'file_info_submit'] );
+        geomify_ajax( 'upload_geo_files', [$this, 'upload_geo_files'] );
+        geomify_ajax( 'remove_pm', [$this, 'remove_pm'] );
+        geomify_ajax( 'dlt_pv', [$this, 'dlt_pv'] );
+        geomify_ajax( 'edit_pv_form', [$this, 'edit_pv_form'] );
+        geomify_ajax( 'update_pv', [$this, 'update_pv'] );
+        geomify_ajax( 'start_basic_form', [$this, 'start_basic_form'] );
+        geomify_ajax( 'start_basic', [$this, 'start_basic'] );
 
     }
 
     /**
-     * Returns shortcodes to ajax request
+     * Returns shortcodes through ajax request
      *
      * @return void
      */
     public function get_shortcode() {
-        // echo 'test';
-
-        // if ( ! in_array( geomify_var( 'shortcode' ), Schema::get( 'allowed_shortcodes' ) ) ) {
-        //     wp_send_json_error(
-        //         [
-        //             'msg' => __( 'Requested shortcode isn\'t allowed for use from AJAX', 'geomify' ),
-        //         ]
-        //     );
-        //     exit;
-        // }
-
         wp_send_json_success(
             [
                 'shortcode' => do_shortcode( geomify_var( 'shortcode' ) ),
@@ -71,10 +68,20 @@ class Ajax {
         exit;
     }
 
+    /**
+     * Educational institue apply form
+     *
+     * @return void
+     */
     public function education_institue_form() {
         echo do_shortcode( $_POST['shortcode'] );
     }
 
+    /**
+     * New project view form/page
+     *
+     * @return void
+     */
     public function get_new_pv_form() {
         if ( ! wp_verify_nonce( $_POST['nonce'], 'get_new_pv_form' ) ) {
             wp_send_json_error(
@@ -93,11 +100,25 @@ class Ajax {
         exit;
     }
 
+    /**
+     * Create a new project view
+     *
+     * @return void
+     */
     public function new_pv() {
         if ( ! wp_verify_nonce( $_POST['nonce'], 'new_pv' ) ) {
             wp_send_json_error(
                 [
                     'message' => __( 'Invalid token!', GTD ),
+                ]
+            );
+            exit;
+        }
+
+        if ( ! User::is_current_user_admin() ) {
+            wp_send_json_error(
+                [
+                    'msg' => __( "You're not an Admin!" ),
                 ]
             );
             exit;
@@ -128,6 +149,11 @@ class Ajax {
         exit;
     }
 
+    /**
+     * Return project viiews list
+     *
+     * @return void
+     */
     public function get_pv() {
         if ( ! wp_verify_nonce( $_POST['nonce'], 'get_pv' ) ) {
             wp_send_json_error(
@@ -146,6 +172,11 @@ class Ajax {
         exit;
     }
 
+    /**
+     * New tutorial page/form
+     *
+     * @return void
+     */
     public function new_tutorial_page() {
         if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'new_tutorial_page' ) ) {
             wp_send_json_error(
@@ -164,6 +195,11 @@ class Ajax {
         exit;
     }
 
+    /**
+     * Create a new tutorial
+     *
+     * @return void
+     */
     public function new_tutorial() {
         $file_info = File::get_info(
             $_FILES['file'],
@@ -205,6 +241,11 @@ class Ajax {
 
     }
 
+    /**
+     * Get tutorial list for admin
+     *
+     * @return void
+     */
     public function get_admin_tutorials() {
         if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'get_admin_tutorials' ) ) {
             wp_send_json_error(
@@ -223,6 +264,11 @@ class Ajax {
         exit;
     }
 
+    /**
+     * Delete a tutorial
+     *
+     * @return void
+     */
     public function delete_tutorial() {
         if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'delete_tutorial' ) ) {
             wp_send_json_error(
@@ -247,6 +293,11 @@ class Ajax {
         exit;
     }
 
+    /**
+     * Return tutorials for user dashboard
+     *
+     * @return void
+     */
     public function get_dashboard_tutorial_list() {
         if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'get_dashboard_tutorial_list' ) ) {
             wp_send_json_error(
@@ -265,6 +316,11 @@ class Ajax {
         exit;
     }
 
+    /**
+     * Create a free subscription
+     *
+     * @return void
+     */
     public function create_space() {
         if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'create_space' ) ) {
             wp_send_json_error(
@@ -276,7 +332,7 @@ class Ajax {
         }
 
         $user_email = geomify_var( 'email' );
-        $user_name  = explode( '@', $user_email )[0];
+        $user_name  = geo_unique_username( $user_email );
         $time       = time();
 
         $userdata = [
@@ -302,12 +358,16 @@ class Ajax {
         update_user_meta( $user_id, 'activated', false );
         update_user_meta( $user_id, 'activation_key', $activation_id );
 
+        geo_session();
+        $_SESSION['aurl'] = site_url( '/dashboard/activation?action=activate-account&user=' . $user_id . '&key=' . $activation_id );
+
         wp_mail(
             $user_email,
             'Account activation email',
-            sprintf( '<a href="%s">Activate account now</a>', site_url( '/dashboard/activation?action=activate-account&user=' . $user_id . '&key=' . $activation_id ) ),
+            Templates::get( 'email/header' ) . Templates::get( 'email/account-activate' ) . Templates::get( 'email/footer' ),
             [
                 'Content-Type: text/html; charset=UTF-8',
+                sprintf( 'From: %s <admin@geomify.com>', get_bloginfo( 'name' ) ),
             ] );
 
         wp_send_json_success(
@@ -318,6 +378,11 @@ class Ajax {
         exit;
     }
 
+    /**
+     * Activate an user from emailed activation link
+     *
+     * @return void
+     */
     public function activate_user_finally() {
         if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'activate_user_finally' ) ) {
             wp_send_json_error(
@@ -380,6 +445,11 @@ class Ajax {
         exit;
     }
 
+    /**
+     * Not in use!
+     *
+     * @return void
+     */
     public function get_registration_form() {
         if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'get_registration_form' ) ) {
             wp_send_json_error(
@@ -398,6 +468,13 @@ class Ajax {
         exit;
     }
 
+    /**
+     * Save user account informations
+     *
+     * Save from my profile section in user dashboard
+     *
+     * @return void
+     */
     public function save_ac_info() {
         if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'save_ac_info' ) ) {
             wp_send_json_error(
@@ -427,7 +504,7 @@ class Ajax {
 
         }
 
-        update_user_meta( User::current_user_id(), $package_name, Processor::merge_package_info( geomify_var( 'package' ), $values ) );
+        // update_user_meta( User::current_user_id(), $package_name, Processor::merge_package_info( geomify_var( 'package' ), $values ) );
 
         wp_send_json_success(
             [
@@ -439,6 +516,11 @@ class Ajax {
         exit;
     }
 
+    /**
+     * Subscription package update page
+     *
+     * @return void
+     */
     public function upgrade_license_page() {
 
         if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'upgrade_license_page' ) ) {
@@ -450,21 +532,6 @@ class Ajax {
             exit;
         }
 
-        wp_send_json_error(
-            [
-                'msg' =>   Gstripe::create_customer(
-                    [
-                        'email'       => User::email(),
-                        'description' => 'Subscriber',
-                        'name'        => User::name(),
-                    ]
-                ),
-                // 'msg' =>  Gstripe::is_current_user_have_pm(),
-            ]
-        );
-        exit;
-
-        // wp_send_json_error($package);exit;
         if ( ! Gstripe::is_current_user_have_pm() ) {
             wp_send_json_success(
                 [
@@ -474,58 +541,23 @@ class Ajax {
             exit;
         }
 
-        wp_send_json_error(
-            [
-                'msg' => 'I got you',
-            ]
-        );
-        exit;
         wp_send_json_success(
             [
                 'form' => Templates::get( 'payment/upgrade' ),
             ]
         );
         exit;
-
-        // wp_send_json_error(
-        //     [
-        //         Gstripe::update_subscription(
-        //             [
-        //                 'stripe_id'    => '',
-        //                 'subscription' => Gstripe::packages()[$package_name],
-        //             ]
-        //         ),
-        //     ]
-        // );exit;
-
-        // $subscription_id = json_decode(
-        //     json_encode(
-        //         Gstripe::update_subscription(
-        //             [
-        //                 'stripe_id'    => '',
-        //                 'subscription' => Gstripe::packages()[$package_name],
-        //             ]
-        //         )
-        //     )
-        // );
-
-        // $old_subscriptions    = User::current_user_meta( 'stripe_subscriptions' );
-        // $old_subscription_ids = User::current_user_meta( 'stripe_subscription_id' );
-
-        // $old_subscription_ids[$package_name] = $subscription_id;
-        // $old_subscriptions[$package_name]    = true;
-
-        // update_user_meta( User::current_user_id(), 'stripe_subscriptions', $old_subscriptions );
-        // update_user_meta( User::current_user_id(), 'stripe_subscription_ids', $old_subscription_ids );
-
-        // wp_send_json_success(
-        //     [
-        //         'msg' => __( 'Plan upgraded', GTD ),
-        //     ]
-        // );
-        exit;
     }
 
+    /**
+     * Stripe payment gateway
+     *
+     * Stripe subscription upgrade
+     *
+     * Stripe payment form/page
+     *
+     * @return void
+     */
     public function stripe_payment() {
         if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'stripe_payment' ) ) {
             wp_send_json_error(
@@ -538,8 +570,8 @@ class Ajax {
         $package_name           = geomify_var( 'package_name' );
         $package                = Schema::get( 'packages' )[$package_name];
         $type                   = geomify_var( 'type' );
-        $stripe_customer_id     = User::get_meta( 'stripe_customer_id' );
-        $stripe_subscription_id = User::get_meta( 'stripe_subscription_id' );
+        $stripe_customer_id     = User::stripe_customer_id();
+        $stripe_subscription_id = User::stripe_subscription_id();
         $success                = true;
 
         switch ( $type ) {
@@ -607,6 +639,11 @@ class Ajax {
         exit;
     }
 
+    /**
+     * Upgrade subscription package through ajax
+     *
+     * @return void
+     */
     public function stripe_upgrade() {
         if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'stripe_upgrade' ) ) {
             wp_send_json_error(
@@ -660,6 +697,11 @@ class Ajax {
         exit;
     }
 
+    /**
+     * Enterprise quote submission
+     *
+     * @return void
+     */
     public function submit_enterprise_quote() {
         if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'submit_enterprise_quote' ) ) {
             wp_send_json_error(
@@ -693,6 +735,11 @@ class Ajax {
         );exit;
     }
 
+    /**
+     * Partner programs request submission
+     *
+     * @return void
+     */
     public function partner_programs_request_submit() {
 
         if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'partner_programs_request_submit' ) ) {
@@ -730,6 +777,11 @@ class Ajax {
         exit;
     }
 
+    /**
+     * Educational institues apply submission
+     *
+     * @return void
+     */
     public function educational_institues_apply_submit() {
         if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'educational_institues_apply_submit' ) ) {
             wp_send_json_error(
@@ -764,4 +816,318 @@ class Ajax {
         );
         exit;
     }
+
+    /**
+     * Geo files info submit section
+     *
+     * Insert data from frontend for geo_files_info table
+     *
+     * @return void
+     */
+    public function file_info_submit() {
+        if ( wp_verify_nonce( geomify_var( 'nonce' ), 'file_info_submit_nonce' ) ) {
+            wp_send_json_error(
+                [
+                    'msg' => __( 'Invalid token!' ),
+                ]
+            );
+            exit;
+        }
+
+        $inserted = CRUD::create_from_post(
+            'geo_files_info',
+            [
+                'created_at' => time(),
+                'user_id'    => User::id(),
+            ]
+        );
+
+        if ( is_wp_error( $inserted ) ) {
+            wp_send_json_error(
+                [
+                    'msg' => $inserted->get_error_message(),
+                ]
+            );
+            exit;
+        }
+
+        $_SESSION['file_info_id'] = $inserted;
+
+        wp_send_json_success(
+            [
+                'msg' => __( 'File submission created' ),
+            ]
+        );
+        exit;
+
+    }
+
+    /**
+     * User file upload management
+     *
+     * @return void
+     */
+    public function upload_geo_files() {
+        if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'upload_geo_files' ) || ! isset( $_SESSION['file_info_id'] ) ) {
+            wp_send_json_error(
+
+                [
+                    'a'   => isset( $_SESSION['file_info_id'] ),
+                    'b'   => wp_verify_nonce( geomify_var( 'nonce' ), 'upload_geo_files' ),
+                    'msg' => __( 'Invalid token!' ),
+                ]
+            );
+            exit;
+        }
+
+        $file_info = File::get_info(
+            $_FILES['file'],
+            [
+                'dir' => GEOMIFY_FILES_DIR . 'geo-files/',
+                'url' => GEOMIFY_FILES_URL . 'geo-files/',
+            ]
+        );
+
+        $inserted = CRUD::create(
+            'geo_files',
+            [
+                'file_url'    => $file_info['url'],
+                'file_path'   => $file_info['dir'],
+                'file_info'   => serialize( $file_info ),
+                'uploaded_at' => time(),
+                'geo_id'      => $_SESSION['file_info_id'],
+            ]
+        );
+
+        if ( is_wp_error( $inserted ) ) {
+            wp_send_json_error(
+                [
+                    'msg' => $inserted->get_error_message(),
+                ]
+            );
+            exit;
+        }
+
+        $sc = move_uploaded_file( $file_info['tmp_name'], $file_info['dir'] );
+
+        wp_send_json_success(
+            [
+                'msg' => __( 'File uploaded' ),
+                'sc'  => $_FILES['file'],
+            ]
+        );
+        exit;
+
+    }
+
+    /**
+     * Removes a payment method through ajax request
+     *
+     * @return void
+     */
+    public function remove_pm() {
+        if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'remove_pm' ) ) {
+            wp_send_json_error(
+                [
+                    'msg' => __( 'Invalid token!' ),
+                ]
+            );
+            exit;
+        }
+
+        Gstripe::detach_payment_method( $_POST['id'] );
+
+        wp_send_json_success(
+            [
+                'msg' => 'Payment method removed',
+            ]
+        );
+        exit;
+    }
+
+    /**
+     * Delete a project view
+     *
+     * @return void
+     */
+    public function dlt_pv() {
+        if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'dlt_pv' ) ) {
+            wp_send_json_error(
+                [
+                    'msg' => __( 'Invalid token' ),
+                ]
+            );
+            exit;
+        }
+
+        CRUD::delete(
+            'project_views',
+            $_POST['id']
+        );
+
+        wp_send_json_success(
+            [
+                'msg' => __( 'Project view deleted' ),
+            ]
+        );
+        exit;
+    }
+
+    /**
+     * Edit project view form
+     *
+     * @return void
+     */
+    public function edit_pv_form() {
+        wp_send_json_success(
+            [
+                'form' => Templates::get( 'dashboard/project-views/edit' ),
+            ]
+        );
+        exit;
+    }
+
+    /**
+     * Update edited project view
+     *
+     * @return void
+     */
+    public function update_pv() {
+        if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'update_pv' ) ) {
+            wp_send_json_error(
+                [
+                    'msg' => __( 'Invalid token!' ),
+                ]
+            );
+            exit;
+        }
+
+        $updated = CRUD::update_from_post( 'project_views', isset( $_POST['id'] ) ? $_POST['id'] : 0 );
+
+        if ( is_wp_error( $updated ) ) {
+            wp_send_json_error(
+                [
+                    'msg' => $updated->get_error_message(),
+                ]
+            );
+            exit;
+        }
+
+        wp_send_json_success(
+            [
+                'msg' => __( 'Project view updated' ),
+            ]
+        );
+        exit;
+    }
+
+    public function start_basic_form() {
+        if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'start_basic_form' ) ) {
+            wp_send_json_error(
+                [
+                    'msg' => __( 'Invalid token!' ),
+                ]
+            );
+            exit;
+        }
+
+        $_POST['package_name'] = 'basic';
+
+        // For logged in user
+        if ( User::is_logged() ) {
+            if ( User::have_subscription( 'basic' ) ) {
+                wp_send_json_error(
+                    [
+                        'You\'ve already subscribed to basic',
+                    ]
+                );
+                exit;
+            }
+            // If user haven't payment method added
+            if ( ! Gstripe::is_current_user_have_pm() ) {
+                wp_send_json_success(
+                    [
+                        'form' => Templates::get( 'payment/pay' ),
+                    ]
+                );
+                exit;
+            }
+
+            // If user have payment method added
+            wp_send_json_success(
+                [
+                    'form' => Templates::get( 'payment/upgrade' ),
+                ]
+            );
+            exit;
+        }
+
+        // If user isn't logged in
+
+        wp_send_json_success(
+            [
+                'form' => Templates::get( 'payment/start-basic' ),
+            ]
+        );
+        exit;
+    }
+
+    public function start_basic() {
+        if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'start_basic' ) ) {
+            wp_send_json_error(
+                [
+                    'msg' => __( 'Invalid token!' ),
+                ]
+            );
+            exit;
+        }
+
+        extract( $_POST );
+
+        $user_name = geo_unique_username( $email );
+        $time      = time();
+
+        $userdata = [
+            'user_login' => $user_name,
+            'user_email' => $email,
+            'first_name' => $first_name,
+            'last_name'  => $last_name,
+        ];
+
+        if ( email_exists( $email ) ) {
+            wp_send_json_error(
+                [
+                    'msg' => __( "You've already signed up!", GTD ),
+                ]
+            );
+            exit;
+        }
+
+        $user_id = wp_insert_user( $userdata );
+
+        $activation_id = $user_id . $time * 2;
+
+        update_user_meta( $user_id, 'activated', false );
+        update_user_meta( $user_id, 'activation_key', $activation_id );
+
+        geo_session();
+        $_SESSION['aurl'] = site_url( '/dashboard/activation?action=activate-account&user=' . $user_id . '&key=' . $activation_id );
+
+        wp_mail(
+            $email,
+            'Account activation email',
+            Templates::get( 'email/header' ) . Templates::get( 'email/account-activate' ) . Templates::get( 'email/footer' ),
+            [
+                'Content-Type: text/html; charset=UTF-8',
+                sprintf( 'From: %s <admin@geomify.com>', get_bloginfo( 'name' ) ),
+            ] );
+
+        wp_send_json_success(
+            [
+                'page' => Templates::get( 'payment/start-basic-success' ),
+            ]
+        );
+
+    }
+
 }

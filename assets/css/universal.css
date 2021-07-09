@@ -135,7 +135,16 @@
     width: 100%;
     padding: 0.5em !important;
     border: 1px solid var(--cyan) !important;
+    outline: none;
 }
+
+.geomify-form-input-wrapper > input:focus,
+.geomify-form-input-wrapper > select:focus,
+.geomify-form-input-wrapper > textarea:focus {
+    /* box-shadow: 0 0 1px 2px #51a7f9; */
+    box-shadow: 0 0 3px rgb(35 173 255);
+}
+
 .geomify-form-input-group.pair-group {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -300,7 +309,7 @@
 
 /* Geomify message */
 .geomify-message-holder {
-    z-index: 9999;
+    z-index: 999999999;
     position: fixed;
     bottom: 30px;
     left: 30px;
@@ -348,6 +357,7 @@
     align-items: center;
     background-color: rgba(0, 0, 0, 0.712);
     z-index: 999999;
+    backdrop-filter: blur(20px);
 }
 .lightbox-close {
     /* position: absolute;
@@ -397,3 +407,30 @@
 /* Payment */
 
 /* Payment end */
+
+/* Custom scrollbar */
+
+.geo-scroll::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #f5f5f5;
+    border-radius: 10px;
+}
+
+.geo-scroll::-webkit-scrollbar {
+    width: 10px;
+    background-color: #f5f5f5;
+}
+
+.geo-scroll::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0.44, rgb(122, 153, 217)),
+        color-stop(0.72, rgb(73, 125, 189)),
+        color-stop(0.86, rgb(28, 58, 148))
+    );
+}
+
+/* Custom scroll bar */

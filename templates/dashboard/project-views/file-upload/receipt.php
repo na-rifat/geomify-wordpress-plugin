@@ -1,5 +1,5 @@
 <?php
-    $fields = \geomify\Schema\Schema::get( 'file_upload_contact' );
+    $fields = \geomify\Schema\Schema::get( 'geo_files_info' );
     $fields = \geomify\Processor\Processor::add_name_to_inputs( $fields );
     $input  = new \geomify\Processor\Input();
 ?>

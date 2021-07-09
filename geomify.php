@@ -17,32 +17,6 @@
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  *
  *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
  * @package           PluginPackage
  *
  * @author            Rafalo tech
@@ -92,6 +66,10 @@ class geomify {
      * @return void
      */
     public function init() {
+        if ( session_status() == PHP_SESSION_NONE ) {
+            session_start();
+        }
+
         // Creation
         $templates  = new Processor\Templates();
         $shortcodes = new Processor\Shortcodes();

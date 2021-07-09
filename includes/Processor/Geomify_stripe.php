@@ -31,67 +31,104 @@ class Geomify_stripe {
         $this->stripe       = new StripeClient( $this->api['secret_key'] );
         $this->subscription = new Subscription();
 
-        $this->init_stripe();
     }
 
+    /**
+     * Create instance
+     *
+     * @return mixed
+     */
     public static function stripe() {
         $self = new self();
 
         return $self->stripe;
     }
 
+    /**
+     * Return all subscriptions
+     *
+     * @return array|object
+     */
     public static function subscription() {
         return self::stripe()->subscriptions;
     }
 
+    /**
+     * Retrieve all customers
+     *
+     * @return array|object
+     */
     public static function customers() {
         return self::stripe()->customers;
     }
 
+    /**
+     * Retrieve all payment methods
+     *
+     * @return array|object
+     */
     public static function payment_methods() {
         return self::stripe()->paymentMethods;
     }
 
+    /**
+     * Retrieve all invoices
+     *
+     * @return array|object
+     */
     public static function invoices() {
         return self::stripe()->invoices;
     }
 
+    /**
+     * Return package id => name
+     *
+     * @return array
+     */
     public static function packages() {
         $self = new self();
 
         return $self->packages;
     }
 
-    public function init_stripe() {
-        // $this->stripe::setApiKey( $this->api['secret_key'] );
-        // $this->stripe::setAppInfo( 'Geomify Stripe API', '1.0.0', 'https://rafalotech.com/wp/plugins/geomify' );
+    /**
+     * Printed package name => id
+     *
+     * @return array
+     */
+    public static function reverted_packages() {
+        $pk     = self::packages();
+        $result = [];
+
+        foreach ( $pk as $key => $val ) {
+            $result[$val] = $key;
+        }
+
+        return $result;
     }
 
-    // public static function create_customer( $atts ) {
-    //     $self = new self();
+    /**
+     * Uppercase printed package name => id
+     *
+     * @return array
+     */
+    public static function reverted_packages_uc() {
+        $pk = self::reverted_packages();
 
-    //     return $self->stripe->customers->create(
-    //         [
-    //             'description'    => 'Subscriber customer',
-    //             'email'          => $atts['email'],
-    //             'payment_method' => 'pm_card_visa',
-    //         ]
-    //     );
-    // }
+        foreach ( $pk as $key => $val ) {
+            $pk[$key] = ucwords( $val );
+        }
 
-    // public static function create_subscription( $atts ) {
-    //     $self = new self();
+        return $pk;
+    }
 
-    //     return $self->stripe->subscriptions->create(
-    //         [
-    //             'customer' => $atts['stripe_id'],
-    //             'items'    => [
-    //                 ['price' => $atts['subscription']],
-    //             ],
-    //         ]
-    //     );
-    // }
-
+    /**
+     * Upgrade a subscription
+     *
+     * @param  string         $subscription_id
+     * @param  string         $price
+     * @return object|array
+     */
     public static function update_subscription( $subscription_id, $price ) {
         return self::subscription()->update(
             $subscription_id,
@@ -103,6 +140,13 @@ class Geomify_stripe {
         );
     }
 
+    /**
+     * Create a subscription for customer
+     *
+     * @param  string         $customer_id
+     * @param  string         $price
+     * @return object|array
+     */
     public static function create_subscription( $customer_id, $price ) {
         return self::subscription()->create(
             [
@@ -114,14 +158,33 @@ class Geomify_stripe {
         );
     }
 
+    /**
+     * Retrieve a subscription object
+     *
+     * @param  string         $id
+     * @return object|array
+     */
     public static function get_subscription( $id ) {
         return self::subscription()->retrieve( $id );
     }
 
+    /**
+     * Delete a subscription in stripe
+     *
+     * @param  string         $id
+     * @return object|array
+     */
     public static function cancel_subscription( $id ) {
         return self::subscription()->cancel( $id );
     }
 
+    /**
+     * Update customer infoin stripe
+     *
+     * @param  string         $id
+     * @param  array          $atts
+     * @return object|array
+     */
     public static function update_customer( $id, $atts ) {
         return self::customers()->update(
             $id,
@@ -129,34 +192,83 @@ class Geomify_stripe {
         );
     }
 
+    /**
+     * Create a customer in stripe
+     *
+     * @param  array          $atts
+     * @return object|array
+     */
     public static function create_customer( $atts ) {
         return self::customers()->create( $atts );
     }
 
+    /**
+     * Retrieve a customer object from stripe
+     *
+     * @param  string         $id
+     * @return object|array
+     */
     public static function get_customer( $id ) {
         return self::customers()->retrieve( $id );
     }
 
+    /**
+     * Delete a customer form stripe
+     *
+     * @param  string         $id
+     * @return object|array
+     */
     public static function delete_customer( $id ) {
         return self::customers()->delete( $id );
     }
 
+    /**
+     * Create payment method for customer
+     *
+     * @param  array          $atts
+     * @return object|array
+     */
     public static function create_payment_method( $atts ) {
         return self::payment_methods()->create( $atts );
     }
 
+    /**
+     * Retrieve an added payment method object
+     *
+     * @param  string         $id
+     * @return object|array
+     */
     public static function get_payment_method( $id ) {
         return self::payment_methods()->retrieve( $id );
     }
 
+    /**
+     * Attach a payment method with customer account in stripe
+     *
+     * @param  string         $id
+     * @param  string         $customer_id
+     * @return object|array
+     */
     public static function attach_payment_method( $id, $customer_id ) {
         return self::payment_methods()->attach( $id, ['customer' => $customer_id] );
     }
 
+    /**
+     * Detach a payment method from an customer in stripe
+     *
+     * @param  string         $id
+     * @return object|array
+     */
     public static function detach_payment_method( $id ) {
         return self::payment_methods()->detach( $id );
     }
 
+    /**
+     * Check if current user have payment method added or not
+     *
+     * @param  string    $type
+     * @return boolean
+     */
     public static function is_current_user_have_pm( $type = 'card' ) {
         $customer_id = User::stripe_customer_id();
 
@@ -166,7 +278,6 @@ class Geomify_stripe {
                 'type'     => $type,
             ]
         );
-        // wp_send_json_error($methods);exit;
 
         if ( empty( $methods->data ) ) {
             return false;
@@ -175,12 +286,26 @@ class Geomify_stripe {
         return true;
     }
 
+    /**
+     * Return a price id of package
+     *
+     * @param  string   $name
+     * @return string
+     */
     public static function package( $name = 'free' ) {
         return self::packages()[$name];
     }
 
+    /**
+     * Retrieve an invoice from stripe
+     *
+     * @param  string         $id
+     * @return object|array
+     */
     public static function get_invoice( $id ) {
         return self::invoices()->retrieve( $id );
     }
+
+    
 
 }

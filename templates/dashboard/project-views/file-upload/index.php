@@ -21,18 +21,19 @@
         <br>
     </div>
     <div class="gtab-body">
-        <div class="gtab-item">
+       <div class="gtab-item">
             <?php include 'contact.php'?>
         </div>
         <div class="gtab-item">
             <?php include 'description.php'?>
         </div>
+        
         <div class="gtab-item">
             <?php include 'files.php'?>
         </div>
         <div class="gtab-item">
             <?php include 'receipt.php'?>
-        </div>
+        </div>       
     </div>
     <div class="geomify-form-submit-btn start-file-upload-session" data-step="-1">
         <i class="fas fa-sign-in-alt"></i> <span class="uppercase">Get started</span>

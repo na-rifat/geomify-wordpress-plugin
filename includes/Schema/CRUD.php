@@ -48,8 +48,9 @@ class CRUD {
         return self::DB()->insert_id;
     }
 
-    public static function create( $table_name, $schema_name, $data ) {
-        $format = Data::generate_data_col_type( $schema_name );
+    public static function create( $table_name, $data ) {
+        $format     = Data::generate_data_col_type( $table_name );
+        $table_name = self::prefix() . $table_name;
 
         $insert_id = self::DB()->insert(
             $table_name,
@@ -90,20 +91,20 @@ class CRUD {
         );
     }
 
-    // public static function retrieve( $table_name, $single = false ) {
-    //     if ( $single == false ) {
-    //         return self::DB()->get_results(
-    //             "SELECT * FROM {$table_name}"
-    //         );
-    //     } else {
-    //         return self::DB()->get_row(
-    //             "SELECT * FROM {$table_name}"
-    //         );
-    //     }
-    // }
+    public static function get_row( $table_name, $id, $id_col_name = 'id') {
+        $table_name = self::prefix() . $table_name;
 
-    public static function update( $table_name, $schema_name, $data, $data_type, $id, $id_col_name ) {
-        $format = Data::generate_data_col_type( $schema_name );
+        return self::DB()->get_row(
+            self::DB()->prepare(
+                "SELECT * FROM {$table_name} WHERE {$id_col_name}=%s", $_POST['id']
+            )
+        );
+    }
+
+    public static function update( $table_name, $data, $id, $id_col_name = 'id' ) {
+        $schema_name = $table_name;
+        $table_name  = self::prefix() . $table_name;
+        $format      = Data::generate_data_col_type( $schema_name );
 
         self::DB()->update(
             $table_name,
@@ -111,6 +112,26 @@ class CRUD {
             $format,
             [$id_col_name => $id]
         );
+    }
+
+    public static function update_from_post( $table_name, $id, $id_col_name = 'id' ) {
+        $schema_name = $table_name;
+        $table_name  = self::prefix() . $table_name;
+        $format      = Data::generate_data_col_type( $schema_name );
+        $data        = Processor::collect_posted_data( $schema_name );        
+
+        $updated = self::DB()->update(
+            $table_name,
+            $data,
+            [$id_col_name => $id],
+            $format
+        );
+
+        if ( ! $updated ) {
+            return new \WP_Error( 'update-failed', __( 'Failed to update', GTD ) );
+        }
+
+        return $updated;
     }
 
     public static function delete( $table_name, $id, $id_col_name = 'id' ) {
@@ -145,7 +166,8 @@ class CRUD {
     }
 
     public static function generate_datatable_schema( $table_name, $schema_name, $primary_key = 'id' ) {
-        $schema          = Schema::get( $schema_name );
+        $schema = Schema::get( $schema_name );
+
         $prefix          = CRUD::DB()->prefix;
         $charset_collate = CRUD::DB()->get_charset_collate();
 
@@ -170,7 +192,7 @@ class CRUD {
     public static function database_single_field_schema( $field_name, $schema ) {
         $schema = self::merge_single_field_schema( $schema );
 
-        $null = $schema['required'] == true ? 'NOT NULL' : 'DEFAULT NULL';
+        $null = 'DEFAULT NULL';
 
         return "`{$field_name}` {$schema['data_type']} {$null}, ";
     }

@@ -34,7 +34,7 @@ class File {
         $result['ext']          = strtolower( explode( '.', $file['name'] )[sizeof( explode( '.', $file['name'] ) ) - 1] );
         $result['name']         = explode( '.', $file['name'] )[0];
         $result['storage_name'] = wp_unique_filename( $atts['dir'], $result['name'] . '.' . $result['ext'] );
-        $result['dir']          = $atts['dir'] . $result['storage_name'];
+        $result['dir']          = str_replace( '\\', '/', $atts['dir'] . $result['storage_name'] );
         $result['url']          = $atts['url'] . $result['storage_name'];
         $result['uploaded_at']  = time();
 

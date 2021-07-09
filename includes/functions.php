@@ -353,3 +353,36 @@ if ( ! function_exists( 'geomify_osm_icon' ) ) {
         );
     }
 }
+
+if ( ! function_exists( 'geo_session' ) ) {
+    function geo_session() {
+        if ( session_status() == PHP_SESSION_NONE ) {
+            session_start();
+        }
+    }
+}
+
+if ( ! function_exists( 'geo_unique_username' ) ) {
+    function geo_unique_username( $username ) {
+
+        $username = explode( '@', $username )[0];
+
+        $username = sanitize_user( $username );
+
+        static $i;
+        if ( null === $i ) {
+            $i = 1;
+        } else {
+            $i++;
+        }
+        if ( ! username_exists( $username ) ) {
+            return $username;
+        }
+        $new_username = sprintf( '%s-%s', $username, $i );
+        if ( ! username_exists( $new_username ) ) {
+            return $new_username;
+        } else {
+            return call_user_func( __FUNCTION__, $username );
+        }
+    }
+}

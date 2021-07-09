@@ -57,40 +57,50 @@ class Schema {
 
         $this->schema['educational_institutes_requests'] = [
             'educational_institue' => [
-                'label' => __( 'Educational institue', $domain ),
+                'label'    => __( 'Educational institue', $domain ),
+                'required' => true,
             ],
             'location'             => [
-                'label'   => __( 'Location', $domain ),
-                'type'    => 'select',
-                'options' => Processor::txtfile2array( GEOMIFY_RESOURCE_PATH . 'countries.txt' ),
+                'label'    => __( 'Location', $domain ),
+                'type'     => 'select',
+                'options'  => Processor::txtfile2array( GEOMIFY_RESOURCE_PATH . 'countries.txt' ),
+                'required' => true,
             ],
             'street_address'       => [
-                'label' => __( 'Street address', $domain ),
+                'label'    => __( 'Street address', $domain ),
+                'required' => true,
             ],
             'zip_code'             => [
-                'label' => __( 'Zip code', $domain ),
+                'label'    => __( 'Zip code', $domain ),
+                'required' => true,
             ],
             'city'                 => [
-                'label' => __( 'City', $domain ),
+                'label'    => __( 'City', $domain ),
+                'required' => true,
             ],
             'contact_first'        => [
                 'label'       => __( 'Institution Contact', $domain ),
                 'placeholder' => __( 'First', $domain ),
+                'required'    => true,
             ],
             'contact_last'         => [
                 'label'       => __( 'Last', $domain ),
                 'placeholder' => __( 'Last', $domain ),
+                'required'    => true,
             ],
             'email'                => [
                 'label'       => __( 'Email', $domain ),
                 'placeholder' => __( 'Institution email', $domain ),
+                'required'    => true,
             ],
             'mobile'               => [
                 'label'       => __( 'Mobile phone', $domain ),
                 'placeholder' => __( 'Country code + mobile or direct number', $domain ),
+                'required'    => true,
             ],
             'time'                 => [
-                'label' => __( 'Time' ),
+                'label'    => __( 'Time' ),
+                'required' => true,
             ],
         ];
 
@@ -127,6 +137,7 @@ class Schema {
                 'placeholder' => __( '00563', $domain ),
                 'type'        => 'number',
                 'data_type'   => 'bigint',
+                'hidden'      => true,
             ],
         ];
 
@@ -625,81 +636,103 @@ class Schema {
             ],
         ];
 
-        $this->schema['file_upload_contact'] = [
-            'first_name' => [
+        $this->schema['geo_files_info'] = [
+            'first_name'   => [
                 'label'       => __( 'First name', $domain ),
                 'placeholder' => __( 'First name', $domain ),
+                'required'    => true,
             ],
-            'last_name'  => [
+            'last_name'    => [
                 'label'       => __( 'Last name', $domain ),
                 'placeholder' => __( 'Last name', $domain ),
+                'required'    => true,
+
             ],
-            'user_email' => [
+            'user_email'   => [
                 'label'       => __( 'User email', $domain ),
                 'placeholder' => __( 'User email', $domain ),
                 'type'        => 'email',
+                'required'    => true,
+
             ],
-            'mobile'     => [
+            'mobile'       => [
                 'label'       => __( 'Mobile', $domain ),
                 'placeholder' => __( 'Mobile (i.e +45 number', $domain ),
+                'required'    => true,
+
             ],
-            'company'    => [
+            'company'      => [
                 'label'       => __( 'Company/Organization', $domain ),
                 'placeholder' => __( 'Company/Organization', $domain ),
+                'required'    => true,
+
             ],
-            'address1'   => [
+            'address1'     => [
+                'label'       => __( 'Address', $domain ),
+                'placeholder' => __( 'Address', $domain ),
+                'required'    => true,
+
+            ],
+            'address2'     => [
                 'label'       => __( 'Address', $domain ),
                 'placeholder' => __( 'Address', $domain ),
             ],
-            'address2'   => [
-                'label'       => __( 'Address', $domain ),
-                'placeholder' => __( 'Address', $domain ),
-            ],
-            'zip'        => [
+            'zip'          => [
                 'label'       => __( 'Zip', $domain ),
                 'placeholder' => __( 'Zip', $domain ),
+                'required'    => true,
+
             ],
-            'city'       => [
+            'city'         => [
                 'label'       => __( 'City', $domain ),
                 'placeholder' => __( 'City', $domain ),
+                'required'    => true,
+
             ],
-            'country'    => [
+            'user_country' => [
                 'label'       => __( 'Country', $domain ),
                 'placeholder' => __( '- Select country -', $domain ),
                 'type'        => 'select',
                 'options'     => Processor::txtfile2array( GEOMIFY_RESOURCE_PATH . 'countries.txt' ),
-            ],
-        ];
+                'required'    => true,
 
-        $this->schema['file_upload_description'] = [
-            'data_type'   => [
+            ],
+            'data_type'    => [
                 'label'       => __( 'Select data type' ),
                 'placeholder' => __( ' - Select data type - ' ),
                 'type'        => 'select',
                 'options'     => Processor::txtfile2array( GEOMIFY_RESOURCE_PATH . 'data_types.txt' ),
             ],
-            'country'     => [
+            'file_country' => [
                 'label'       => __( 'Select country' ),
                 'placeholder' => __( ' - Select country - ' ),
                 'type'        => 'select',
                 'options'     => Processor::txtfile2array( GEOMIFY_RESOURCE_PATH . 'countries.txt' ),
+                'required'    => true,
+
             ],
-            'location'    => [
+            'location'     => [
                 'label'       => __( 'Location' ),
                 'placeholder' => __( 'Type in location (Region, Municipality or City)' ),
+                'required'    => true,
+
             ],
-            'description' => [
+            'description'  => [
                 'label'       => __( 'Description' ),
                 'placeholder' => __( 'Why is this dataset of interest to other GEOMIFY users and what value to think it will bring to the public' ),
                 'type'        => 'textarea',
+                'required'    => true,
+
             ],
-            'contact_id'  => [
-                'label' => __( 'Contact ID' ),
-                'type'  => 'number',
+            'created_at'   => [
+                'label' => __( 'Created at' ),
+            ],
+            'user_id'      => [
+                'label' => __( 'User ID' ),
             ],
         ];
 
-        $this->schema['file_upload_files'] = [
+        $this->schema['geo_files'] = [
             'file_url'    => [
                 'label'       => __( 'File URL', $domain ),
                 'placeholder' => __( 'File URL', $domain ),
@@ -714,7 +747,7 @@ class Schema {
             'uploaded_at' => [
 
             ],
-            'contact_id'  => [
+            'geo_id'      => [
                 'label' => __( 'Contact ID' ),
                 'type'  => 'number',
             ],
@@ -726,8 +759,10 @@ class Schema {
                 'type'  => 'email',
             ],
             'date_activated' => [
-                'label' => __( 'Date activated', $domain ),
-                'type'  => 'datetime',
+                'label' => __( 'Date activated', $domain ),                
+            ],
+            'subscribed'     => [
+                'label' => __( 'Subscribed', GTD ),
             ],
         ];
 
@@ -755,52 +790,65 @@ class Schema {
 
         $this->schema['partner_programs_request'] = [
             'company'                 => [
-                'label' => __( 'Company name', $domain ),
+                'label'    => __( 'Company name', $domain ),
+                'required' => true,
             ],
             'location'                => [
-                'label'   => __( 'Location', $domain ),
-                'type'    => 'select',
-                'options' => Processor::txtfile2array( GEOMIFY_RESOURCE_PATH . 'countries.txt' ),
+                'label'    => __( 'Location', $domain ),
+                'type'     => 'select',
+                'options'  => Processor::txtfile2array( GEOMIFY_RESOURCE_PATH . 'countries.txt' ),
+                'required' => true,
             ],
             'street_address'          => [
-                'label' => __( 'Street address', $domain ),
+                'label'    => __( 'Street address', $domain ),
+                'required' => true,
             ],
             'zip_code'                => [
-                'label' => __( 'Zip code', $domain ),
+                'label'    => __( 'Zip code', $domain ),
+                'required' => true,
             ],
             'city'                    => [
-                'label' => __( 'City', $domain ),
+                'label'    => __( 'City', $domain ),
+                'required' => true,
             ],
             'first_name'              => [
                 'label'       => __( 'Name', $domain ),
                 'placeholder' => __( 'First', $domain ),
+                'required'    => true,
             ],
             'last_name'               => [
                 'placeholder' => __( 'Last', $domain ),
                 'use_label'   => false,
+                'required'    => true,
             ],
             'email'                   => [
                 'label'       => __( 'Email', $domain ),
                 'placeholder' => __( 'Institution email', $domain ),
+                'required'    => true,
             ],
             'mobile'                  => [
                 'label'       => __( 'Mobile phone', $domain ),
                 'placeholder' => __( 'Country code + mobile or direct number', $domain ),
+                'required'    => true,
             ],
             'interest'                => [
                 'label'       => __( "I'm interested in becoming" ),
                 'placeholder' => __( ' - Select partner type - ' ),
                 'type'        => 'select',
                 'options'     => [],
+                'required'    => true,
             ],
             'target_type_of_users'    => [
-                'label' => __( 'Specify target type of users' ),
+                'label'    => __( 'Specify target type of users' ),
+                'required' => true,
             ],
             'potential_reach'         => [
-                'label' => __( 'Potential reach with GEOMIFY' ),
+                'label'    => __( 'Potential reach with GEOMIFY' ),
+                'required' => true,
             ],
             'other_products_services' => [
-                'label' => __( 'Specify other products and services that you offer' ),
+                'label'    => __( 'Specify other products and services that you offer' ),
+                'required' => true,
             ],
             'already_have_prospects'  => [
                 'label'       => __( 'Indicate if you already have prospects for GEOMIFY' ),
@@ -810,6 +858,7 @@ class Schema {
                     'Yes' => __( 'Yes' ),
                     'No'  => __( 'No' ),
                 ],
+                'required'    => true,
             ],
             'planned_investments'     => [
                 'label'       => __( 'Planned investments in marketing and sales' ),
@@ -818,25 +867,18 @@ class Schema {
                 'options'     => [
 
                 ],
+                'required'    => true,
             ],
             'strategy'                => [
-                'label' => __( 'Share keywords ragarding your strategy' ),
-                'type'  => 'textarea',
+                'label'    => __( 'Share keywords ragarding your strategy' ),
+                'type'     => 'textarea',
+                'required' => true,
             ],
             'time'                    => [
-                'label' => __( 'Time' ),
+                'label'    => __( 'Time' ),
+                'required' => true,
             ],
         ];
-
-        // $this->schema['pending_registrations'] = [
-        //     'user_id'       => [
-
-        //     ],
-        //     'activation_id' => [
-
-        //     ],
-        // ];
-
     }
 
     /**

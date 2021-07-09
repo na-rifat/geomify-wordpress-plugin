@@ -12,6 +12,14 @@ class Data {
 
     }
 
+    /**
+     * Collect posted data from frontend
+     * 
+     * Works from schema paramter
+     *
+     * @param string $schema_name
+     * @return array
+     */
     public static function collect_posted( $schema_name ) {
         $schema = Schema::get( $schema_name );
 
@@ -26,12 +34,24 @@ class Data {
         return $schema;
     }
 
+    /**
+     * Generate data column type for database operations
+     * 
+     * Works from schema parameter
+     *
+     * @param string $schema_name
+     * @return array
+     */
     public static function generate_data_col_type( $schema_name ) {
         $schema = Schema::get( $schema_name );
 
         $result = [];
 
         foreach ( $schema as $key => $value ) {
+            if ( $value['hidden'] == true ) {
+                continue;
+            }
+            
             switch ( $value['data_type'] ) {
                 case 'longtext':
                 case 'text':

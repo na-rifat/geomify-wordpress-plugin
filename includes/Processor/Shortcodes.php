@@ -2,6 +2,7 @@
 
 namespace geomify\Processor;
 
+use geomify\Schema\CRUD;
 use \geomify\Processor\Multiform as Form;
 use \geomify\Processor\Templates as Templates;
 use \geomify\Schema\Schema as Schema;
@@ -19,6 +20,7 @@ class Shortcodes {
         add_shortcode( 'geomify-educational-institues-form', [$this, 'educational_instutues_form'] );
         add_shortcode( 'geomify-project-views', [$this, 'dashboard_project_views'] );
         add_shortcode( 'geomify-my-profile', [$this, 'dashboard_my_profile'] );
+        add_shortcode( 'geomify-billing', [$this, 'geomify_billing'] );
         add_shortcode( 'geomify-support', [$this, 'dashboard_support'] );
         add_shortcode( 'geomify-tutorials', [$this, 'dashboard_tutorials'] );
         add_shortcode( 'geomify-registration', [$this, 'geomify_registration'] );
@@ -36,7 +38,8 @@ class Shortcodes {
         add_shortcode( 'contact-phone', [$this, 'contact_phone'] );
         add_shortcode( 'newsletter-activation', [$this, 'newsletter_activation'] );
         add_shortcode( 'enterprise_get_quote', [$this, 'enterprise_get_quote'] );
-        add_shortcode('apply-partner-program', [$this, 'apply_partner_programs']);
+        add_shortcode( 'apply-partner-program', [$this, 'apply_partner_programs'] );
+        add_shortcode( 'newsltter_activate', [$this, 'newsltter_activate'] );
     }
 
     public function init() {
@@ -147,9 +150,8 @@ class Shortcodes {
     }
 
     public function unlock_basic_text() {
-        $subscriptions = (array) User::get_meta( 'stripe_subscriptions' );
 
-        if ( ! in_array( 'basic', $subscriptions ) ) {
+        if ( ! User::have_subscription( 'basic' ) ) {
             return '<i class="fas fa-lock"></i> UNLOCK BASIC';
         }
 
@@ -161,9 +163,7 @@ class Shortcodes {
     }
 
     public function unlock_basic_fu_title() {
-        $subscriptions = (array) User::get_meta( 'stripe_subscriptions' );
-
-        if ( ! in_array( 'basic', $subscriptions ) ) {
+        if ( ! User::have_subscription( 'basic' ) ) {
             return '<div class="upgrade-basic upgrade-not-complete"><i class="fas fa-lock"></i> UNLOCK BASIC</div>';
         }
 
@@ -234,8 +234,49 @@ class Shortcodes {
         return Templates::get( '/enterprise/get-quote' );
     }
 
-    public function apply_partner_programs(){
-        return Templates::get('partner-programs/apply');
-    }    
+    public function apply_partner_programs() {
+        return Templates::get( 'partner-programs/apply' );
+    }
+
+    public function geomify_billing() {
+        return Templates::get( 'dashboard/billing/index' );
+    }
+
+    public function newsltter_activate() {
+        geo_session();
+        $ns_text = '';
+
+        $db_prefix = CRUD::prefix();
+
+        $existed = CRUD::DB()->get_row(
+            CRUD::DB()->prepare(
+                'SELECT * ' . $db_prefix . 'newsletter WHERE email="%s"'
+            )
+        );
+
+        if ( $existed == NULL && isset( $_POST['newsletter_email'] ) ) {
+            CRUD::create(
+                'newsletter',
+                [
+                    'email'          => geomify_var( 'newsletter_email' ),
+                    'date_activated' => time(),
+                    'subscribed'     => 1,
+                ]
+            );
+
+            $ns_text = sprintf( 'Your email %s successfully activated for newsletter.', geomify_var( 'newsletter_email' ) );
+        } else {
+            $ns_text = sprintf(
+                '%s already activated for newsletter.',
+                geomify_var( 'newsletter_email' )
+            );
+        }
+
+        unset(
+            $_POST['newsletter_email']
+        );
+        $_SESSION['ns_text'] = $ns_text;
+        return Templates::get( 'newsletter/success' );
+    }
 
 }

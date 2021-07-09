@@ -99,6 +99,12 @@ class Processor {
         return false;
     }
 
+    /**
+     * Assign input fields name to schema 
+     *
+     * @param array $schema
+     * @return array
+     */
     public static function assign_names_to_schema( $schema ) {
         foreach ( $schema as $key => $props ) {
             $schema[$key]['name'] = $key;
@@ -113,6 +119,10 @@ class Processor {
         $data   = [];
 
         foreach ( $schema as $key => $props ) {
+            if ( $props['hidden'] == true ) {
+                continue;
+            }
+
             $data[$key] = geomify_var( $key );
         }
 
@@ -145,9 +155,20 @@ class Processor {
         return $result;
     }
 
+    /**
+     * Add additional key=>value pair to an existed schema
+     *
+     * @param array $schema
+     * @param array $values
+     * @return array
+     */
     public static function add_values_to_schema( $schema, $values = [] ) {
         if ( $values == false ) {
             return $schema;
+        }
+
+        if ( gettype( $values ) == 'object' ) {
+            $values = std2array( $values );
         }
 
         foreach ( $schema as $key => $props ) {
@@ -161,25 +182,24 @@ class Processor {
         return $schema;
     }
 
-    public static function get_user_package_info( $package_name ) {
-        $package_name = 'profile_' . $package_name;
 
-        return get_user_meta( User::current_user_id(), $package_name, true );
-    }
+    // public static function get_user_package_info( $package_name ) {
+    //     $package_name = 'profile_' . $package_name;
 
-    public static function merge_package_info( $package_name, $new ) {
-        $package_name = 'profile_' . $package_name;
+    //     return get_user_meta( User::current_user_id(), $package_name, true );
+    // }
 
-        $old = get_user_meta( User::current_user_id(), $package_name, true );
-        $old = $old == false ? [] : $old;
+    // public static function merge_package_info( $package_name, $new ) {
+    //     $package_name = 'profile_' . $package_name;
 
-        foreach ( $new as $key => $value ) {
-            $old[$key] = $value;
-        }
+    //     $old = get_user_meta( User::current_user_id(), $package_name, true );
+    //     $old = $old == false ? [] : $old;
 
-        return $old;
-    }
+    //     foreach ( $new as $key => $value ) {
+    //         $old[$key] = $value;
+    //     }
 
-    
+    //     return $old;
+    // }
 
 }

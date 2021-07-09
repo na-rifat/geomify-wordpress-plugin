@@ -9,6 +9,12 @@ class Input {
 
     }
 
+    /**
+     * Start the form
+     *
+     * @param [type] $args
+     * @return void
+     */
     public static function start( $args ) {
         $defaults = [
 
@@ -51,6 +57,11 @@ class Input {
         );
     }
 
+    /**
+     * End the form
+     *
+     * @return void
+     */
     public static function end() {
         printf( '</form>' );
     }
@@ -149,6 +160,15 @@ class Input {
         );
     }
 
+
+    /**
+     * Convert an array to html selectable options
+     *
+     * @param array $array
+     * @param mixed $placeholder
+     * @param string $selected
+     * @return string
+     */
     public static function array2options( $array, $placeholder = null, $selected = '' ) {
         $placeholder = $placeholder === null ? __( 'Choose an option', GTD ) : $placeholder;
         $result      = sprintf( '<option value="" selected disabled>%s</option>', $placeholder );
@@ -161,6 +181,14 @@ class Input {
         return $result;
     }
 
+    /**
+     * Echo version of array2options()
+     *
+     * @param array $array
+     * @param mixed $placeholder
+     * @param string $selected
+     * @return void
+     */
     public static function __array2options( $array, $placeholder = null, $selected = '' ) {
         printf( self::array2options( $array, $placeholder, $selected ) );
     }

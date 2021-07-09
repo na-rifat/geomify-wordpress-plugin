@@ -1,5 +1,5 @@
 <?php
-    $fields = \geomify\Schema\Schema::get( 'file_upload_description' );
+    $fields = \geomify\Schema\Schema::get( 'geo_files_info' );
     $fields = \geomify\Processor\Processor::add_name_to_inputs( $fields );
     $input  = new \geomify\Processor\Input();
 ?>
@@ -10,7 +10,7 @@
     <form action="#">
         <?php
             $input::create_field( $fields['data_type'] );
-            $input::create_field( $fields['country'] );
+            $input::create_field( $fields['file_country'] );
             $input::create_field( $fields['location'] );
             $input::create_field( $fields['description'] );
         ?>
