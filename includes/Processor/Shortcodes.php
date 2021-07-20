@@ -40,6 +40,9 @@ class Shortcodes {
         add_shortcode( 'enterprise_get_quote', [$this, 'enterprise_get_quote'] );
         add_shortcode( 'apply-partner-program', [$this, 'apply_partner_programs'] );
         add_shortcode( 'newsltter_activate', [$this, 'newsltter_activate'] );
+        add_shortcode( 'geomify_login', [$this, 'geomify_login'] );
+        add_shortcode( 'geomify_reset', [$this, 'geomify_reset'] );
+        add_shortcode( 'geo_dashboard_menu', [$this, 'geo_dashboard_menu'] );
     }
 
     public function init() {
@@ -151,7 +154,7 @@ class Shortcodes {
 
     public function unlock_basic_text() {
 
-        if ( ! User::have_subscription( 'basic' ) ) {
+        if ( ! User::have_permit( 'basic' ) ) {
             return '<i class="fas fa-lock"></i> UNLOCK BASIC';
         }
 
@@ -163,7 +166,7 @@ class Shortcodes {
     }
 
     public function unlock_basic_fu_title() {
-        if ( ! User::have_subscription( 'basic' ) ) {
+        if ( ! User::have_permit( 'basic' ) ) {
             return '<div class="upgrade-basic upgrade-not-complete"><i class="fas fa-lock"></i> UNLOCK BASIC</div>';
         }
 
@@ -223,7 +226,7 @@ class Shortcodes {
     }
 
     public function contact_phone() {
-        return '+123 456 789';
+        return '+4530310620';
     }
 
     public function newsletter_activation() {
@@ -277,6 +280,18 @@ class Shortcodes {
         );
         $_SESSION['ns_text'] = $ns_text;
         return Templates::get( 'newsletter/success' );
+    }
+
+    public function geomify_login() {
+        return Templates::get( 'user/login' );
+    }
+
+    public function geomify_reset() {
+        return Templates::get( 'user/reset' );
+    }
+
+    public function geo_dashboard_menu() {
+        return Templates::get( 'user/menu' );
     }
 
 }

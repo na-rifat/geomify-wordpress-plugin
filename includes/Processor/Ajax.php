@@ -50,6 +50,9 @@ class Ajax {
         geomify_ajax( 'update_pv', [$this, 'update_pv'] );
         geomify_ajax( 'start_basic_form', [$this, 'start_basic_form'] );
         geomify_ajax( 'start_basic', [$this, 'start_basic'] );
+        geomify_ajax( 'geo_login', [$this, 'geo_login'] );
+        geomify_ajax( 'geo_reset', [$this, 'geo_reset'] );
+        geomify_ajax( 'geo_pass_reset', [$this, 'geo_pass_reset'] );
 
     }
 
@@ -354,6 +357,7 @@ class Ajax {
         $user_id = wp_insert_user( $userdata );
 
         $activation_id = $user_id . $time * 2;
+        $activation_id = str_shuffle( $activation_id );
 
         update_user_meta( $user_id, 'activated', false );
         update_user_meta( $user_id, 'activation_key', $activation_id );
@@ -532,6 +536,15 @@ class Ajax {
             exit;
         }
 
+        if ( User::have_subscription( geomify_var( 'package_name' ) ) ) {
+            wp_send_json_error(
+                [
+                    'msg' => __( 'You already own this package!', GTD ),
+                ]
+            );
+            exit;
+        }
+
         if ( ! Gstripe::is_current_user_have_pm() ) {
             wp_send_json_success(
                 [
@@ -668,7 +681,14 @@ class Ajax {
         $stripe_customer_id     = User::get_meta( 'stripe_customer_id' );
         $stripe_subscription_id = User::get_meta( 'stripe_subscription_id' );
 
-        if ( in_array( $package_name, User::get_meta( 'stripe_subscriptions' ) ) ) {
+        // wp_send_json_error(
+        //     [
+        //         'msg'=>User::have_subscription($package_name)
+        //     ]
+        //     );
+        //     exit;
+
+        if ( User::have_subscription( $package_name ) ) {
             wp_send_json_error(
                 [
                     'msg' => __( 'You already own this package!', GTD ),
@@ -676,21 +696,23 @@ class Ajax {
             );
             exit;
         }
-
-        Gstripe::update_subscription(
-            $stripe_subscription_id,
-            Gstripe::package( $package_name )
-        );
+        $tt = User::upgrade_package( $package_name );
+        // Gstripe::update_subscription(
+        //     $stripe_subscription_id,
+        //     Gstripe::package( $package_name )
+        // );
 
         // wp_send_json_error(
         //     'test'
         // );exit;
-        $old_subscriptions   = (array) User::get_meta( 'stripe_subscriptions' );
-        $old_subscriptions[] = $package_name;
-        User::set_meta( 'stripe_subscriptions', $old_subscriptions );
+        // $old_subscriptions   = (array) User::get_meta( 'stripe_subscriptions' );
+        // $old_subscriptions[] = $package_name;
+        // User::set_meta( 'stripe_subscriptions', $old_subscriptions );
 
         wp_send_json_success(
             [
+                'tt'   => $tt,
+
                 'page' => Templates::get( 'payment/upgrade_success' ),
             ]
         );
@@ -727,6 +749,16 @@ class Ajax {
             );
             exit;
         }
+
+        wp_mail(
+            'quote@geomify.com',
+            'Enterprise quote',
+            Templates::get( 'email/header' ) . Templates::get( 'email/enterprise-quote' ) . Templates::get( 'email/footer' ),
+            [
+                'Content-Type: text/html; charset=UTF-8',
+                sprintf( 'From: %s <admin@geomify.com>', get_bloginfo( 'name' ) ),
+            ]
+        );
 
         wp_send_json_success(
             [
@@ -768,6 +800,16 @@ class Ajax {
             );
             exit;
         }
+
+        wp_mail(
+            'partner@geomify.com',
+            'Partner programs',
+            Templates::get( 'email/header' ) . Templates::get( 'email/partner-programs' ) . Templates::get( 'email/footer' ),
+            [
+                'Content-Type: text/html; charset=UTF-8',
+                sprintf( 'From: %s <admin@geomify.com>', get_bloginfo( 'name' ) ),
+            ]
+        );
 
         wp_send_json_success(
             [
@@ -1031,14 +1073,20 @@ class Ajax {
             exit;
         }
 
-        $_POST['package_name'] = 'basic';
+        if ( geomify_var( 'package_name' ) == User::current_subscription() ) {
+            wp_send_json_error(
+                [
+                    'msg' => __( 'You already subscribed to this package' ),
+                ]
+            );exit;
+        }
 
         // For logged in user
         if ( User::is_logged() ) {
             if ( User::have_subscription( 'basic' ) ) {
                 wp_send_json_error(
                     [
-                        'You\'ve already subscribed to basic',
+                        'msg' => 'You\'ve already subscribed to basic',
                     ]
                 );
                 exit;
@@ -1106,9 +1154,47 @@ class Ajax {
         $user_id = wp_insert_user( $userdata );
 
         $activation_id = $user_id . $time * 2;
+        $activation_id = str_shuffle( $activation_id );
 
         update_user_meta( $user_id, 'activated', false );
         update_user_meta( $user_id, 'activation_key', $activation_id );
+
+        $stripe_customer_id = Gstripe::create_customer(
+            [
+                'email'       => $userdata['user_email'],
+                'description' => 'Subscriber',
+                'name'        => $userdata['first_name'] . ' ' . $userdata['last_name'],
+            ]
+        )->id;
+
+        $payment_method_id = Gstripe::create_payment_method(
+            [
+                'type' => 'card',
+                'card' => [
+                    'number'    => $card_number,
+                    'exp_month' => $expire_month,
+                    'exp_year'  => $expire_year,
+                    'cvc'       => $cvc,
+                ],
+            ]
+        )->id;
+
+        Gstripe::attach_payment_method( $payment_method_id, $stripe_customer_id );
+
+        Gstripe::update_customer(
+            $stripe_customer_id,
+            [
+                'invoice_settings' => [
+                    'default_payment_method' => $payment_method_id,
+                ],
+            ]
+        );
+
+        $stripe_subscription_id = Gstripe::create_subscription( $stripe_customer_id, Gstripe::package( isset( $_POST['package_name'] ) ? $_POST['package_name'] : 'free' ) )->id;
+
+        update_user_meta( $user_id, 'stripe_customer_id', $stripe_customer_id );
+        update_user_meta( $user_id, 'stripe_subscription_id', $stripe_subscription_id );
+        update_user_meta( $user_id, 'stripe_payment_method_id', $payment_method_id );
 
         geo_session();
         $_SESSION['aurl'] = site_url( '/dashboard/activation?action=activate-account&user=' . $user_id . '&key=' . $activation_id );
@@ -1127,6 +1213,196 @@ class Ajax {
                 'page' => Templates::get( 'payment/start-basic-success' ),
             ]
         );
+
+    }
+
+    public function geo_login() {
+        if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'geo_login' ) ) {
+            wp_send_json_error(
+                [
+                    'msg' => __( 'Invalid token!' ),
+                ]
+            );
+            exit;
+        }
+
+        extract( $_POST );
+
+        // Email login
+        if ( filter_var( $user_email, FILTER_VALIDATE_EMAIL ) ) {
+            if ( ! email_exists( $user_email ) ) {
+                wp_send_json_error(
+                    [
+                        'msg' => __( 'Account not found!' ),
+                    ]
+                );
+                exit;
+            }
+
+            $user = get_user_by( 'email', $user_email );
+            // Username login
+        } else {
+            $user = get_user_by( 'login', $user_email );
+
+            if ( ! $user ) {
+                wp_send_json_error(
+                    [
+                        'msg' => __( 'Account not found!' ),
+                    ]
+                );
+                exit;
+            }
+
+        }
+
+        if ( ! wp_check_password( $password, $user->user_pass ) ) {
+            wp_send_json_error(
+                [
+                    'pass' => $user_email,
+                    'msg'  => __( 'Incorrect password!' ),
+                ]
+            );
+            exit;
+        }
+
+        $userdata = [
+            'user_login'    => $user_email,
+            'user_password' => $password,
+            'remember'      => true,
+        ];
+
+        if ( ! wp_signon( $userdata ) ) {
+            wp_send_json_error(
+                [
+                    'msg' => __( 'There was an problem with this credential. Try again please.' ),
+                ]
+            );
+            exit;
+        }
+
+        wp_send_json_success(
+            [
+                'msg' => __( 'Login success, redirecting...' ),
+            ]
+        );
+        exit;
+    }
+
+    public function geo_reset() {
+        if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'geo_reset' ) ) {
+            wp_send_json_error(
+                [
+                    'msg' => __( 'Invalid token!' ),
+                ]
+            );
+            exit;
+        }
+
+        extract( $_POST );
+
+        // If email
+        if ( filter_var( $user_email, FILTER_VALIDATE_EMAIL ) ) {
+            if ( ! email_exists( $user_email ) ) {
+                wp_send_json_error(
+                    [
+                        'msg' => __( 'Account not found!' ),
+                    ]
+                );
+                exit;
+            }
+
+            $user = get_user_by( 'email', $user_email );
+
+            // If username
+        } else {
+            $user = get_user_by( 'login', $user_email );
+
+            if ( ! $user ) {
+                wp_send_json_error(
+                    [
+                        'msg' => __( 'Account not found!' ),
+                    ]
+                );
+                exit;
+            }
+        }
+
+        $_SESSION['geo_reset_user'] = $user->ID;
+
+        // User found, send reset link
+        geo_mail(
+            $user->user_email,
+            'Password reset link',
+            'password_reset'
+        );
+
+        wp_send_json_success(
+            [
+                'msg' => __( 'Check your email for password reset link' ),
+            ]
+        );
+        exit;
+    }
+
+    public function geo_pass_reset() {
+        if ( ! wp_verify_nonce( geomify_var( 'nonce' ), 'geo_pass_reset' ) ) {
+            wp_send_json_error(
+                [
+                    'msg' => __( 'Invalid token!' ),
+                ]
+            );
+            exit;
+        }
+
+        extract( $_POST );
+
+        $real_token      = get_user_meta( $user, 'geo_reset_code', true );
+        $session_started = get_user_meta( $user, 'geo_reset_start', true );
+        $current_time    = time();
+
+        if ( empty( $_GET['token'] ) ) {
+            wp_send_json_error(
+                [
+                    'msg' => __( 'Invalid token!' ),
+                ]
+            );exit;
+        }
+
+        if ( $session_started - $current_time > 21600000 ) {
+            wp_send_json_error(
+                [
+                    'msg' => __( 'Token expired!' ),
+                ]
+            );
+            exit;
+        }
+
+        if ( $token !== $real_token ) {
+            wp_send_json_error(
+                [
+                    'msg' => __( 'Token mismatch!' ),
+                ]
+            );
+            exit;
+        }
+
+        if ( $password !== $confirm_password ) {
+            wp_send_json_error(
+                [
+                    'msg' => __( 'Password mismatch' ),
+                ]
+            );
+            exit;
+        }
+
+        wp_set_password( $password, $user );
+
+        wp_send_json_success(
+            [
+                'msg' => __( 'Password changed!' ),
+            ]
+        );
+        exit;
 
     }
 

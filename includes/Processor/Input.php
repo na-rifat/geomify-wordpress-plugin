@@ -265,5 +265,4 @@ class Input {
 
         return $result;
     }
-
 }

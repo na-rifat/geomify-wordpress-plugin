@@ -21,9 +21,8 @@
                 '<a href="%s" target="_blank" data-id="%s" >
                             <div class="project-view-item-col"><img src="%s" alt="%s"></div>
                             <div class="project-view-item-col des-col"><div>%s</div><div>%s</div></div>
-                            <div class="project-view-item-col">%s</div>
-                            <div class="project-view-item-col">%s</div>
-                            <div class="project-view-item-col">%s%s</div>
+                            <div class="project-view-item-col">%s</div>                            
+                            <div class="project-view-item-col">%s%s%s</div>
                         </a>',
                 $view->url,
                 $view->id,

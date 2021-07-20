@@ -123,6 +123,35 @@ class Button extends Base {
             ]
         );
 
+        $this->add_responsive_control(
+            'whitespace',
+            [
+                'label'           => __( 'White space' ),
+                'type'            => Controls::CHOOSE,
+                'options'         => [
+                    'normal' => [
+                        'title' => __( 'Normal' ),
+                        'icon'  => 'eicon-ellipsis-v',
+                    ],
+                    'nowrap' => [
+                        'title' => __( 'Nowrap' ),
+                        'icon'  => 'eicon-ellipsis-h',
+                    ],
+                ],
+                'devices'         => [
+                    'mobile',
+                    'tablet',
+                    'desktop',
+                ],
+                'mobile_default'  => 'nowrap',
+                'tablet_default'  => 'normal',
+                'desktop_default' => 'normal',
+                'selectors'       => [
+                    '{{WRAPPER}} a' => 'white-space: {{VALUE}};',
+                ],
+            ]
+        );
+
         // Background color
 
         $this->add_control(
@@ -438,8 +467,11 @@ class Button extends Base {
 
         $attr = $this->get_render_attribute_string( 'caption' );
 
+        // var_dump( $s['break_text'] );
+
         $element = sprintf( '<a %s >%s</a>',
             $attr,
+            // ' style="' . $s['break_text'] === 'yes' ? 'white-space: normal;' : 'white-space: nowrap;' . '"',
             do_shortcode( $s['caption'] ) );
 
         echo $element;

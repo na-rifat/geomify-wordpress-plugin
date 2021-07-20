@@ -57,14 +57,15 @@ class Schema {
 
         $this->schema['educational_institutes_requests'] = [
             'educational_institue' => [
-                'label'    => __( 'Educational institue', $domain ),
+                'label'    => __( 'Educational institute', $domain ),
                 'required' => true,
             ],
             'location'             => [
-                'label'    => __( 'Location', $domain ),
-                'type'     => 'select',
-                'options'  => Processor::txtfile2array( GEOMIFY_RESOURCE_PATH . 'countries.txt' ),
-                'required' => true,
+                'label'       => __( 'Location', $domain ),
+                'type'        => 'select',
+                'options'     => Processor::txtfile2array( GEOMIFY_RESOURCE_PATH . 'countries.txt' ),
+                'required'    => true,
+                'placeholder' => 'Select country',
             ],
             'street_address'       => [
                 'label'    => __( 'Street address', $domain ),
@@ -95,7 +96,7 @@ class Schema {
             ],
             'mobile'               => [
                 'label'       => __( 'Mobile phone', $domain ),
-                'placeholder' => __( 'Country code + mobile or direct number', $domain ),
+                'placeholder' => __( 'i.e. +45 XX XX XX XX', $domain ),
                 'required'    => true,
             ],
             'time'                 => [
@@ -759,7 +760,7 @@ class Schema {
                 'type'  => 'email',
             ],
             'date_activated' => [
-                'label' => __( 'Date activated', $domain ),                
+                'label' => __( 'Date activated', $domain ),
             ],
             'subscribed'     => [
                 'label' => __( 'Subscribed', GTD ),
@@ -768,20 +769,25 @@ class Schema {
 
         $this->schema['enterprise_quotes'] = [
             'email'        => [
-                'label' => __( 'Email address', $domain ),
-                'type'  => 'email',
+                'label'    => __( 'Email address', $domain ),
+                'type'     => 'email',
+                'required' => true,
             ],
             'first_name'   => [
-                'label' => __( 'First name' ),
+                'label'    => __( 'First name' ),
+                'required' => true,
             ],
             'last_name'    => [
-                'label' => __( 'Last name' ),
+                'label'    => __( 'Last name' ),
+                'required' => true,
             ],
             'office_phone' => [
-                'label' => __( 'Office phone +' ),
+                'label'    => __( 'Office phone +' ),
+                'required' => true,
             ],
             'mobile'       => [
-                'label' => __( 'Mobile +' ),
+                'label'    => __( 'Mobile +' ),
+                'required' => true,
             ],
             'time'         => [
                 'label' => __( 'Time' ),
@@ -794,10 +800,11 @@ class Schema {
                 'required' => true,
             ],
             'location'                => [
-                'label'    => __( 'Location', $domain ),
-                'type'     => 'select',
-                'options'  => Processor::txtfile2array( GEOMIFY_RESOURCE_PATH . 'countries.txt' ),
-                'required' => true,
+                'label'       => __( 'Location', $domain ),
+                'type'        => 'select',
+                'options'     => Processor::txtfile2array( GEOMIFY_RESOURCE_PATH . 'countries.txt' ),
+                'required'    => true,
+                'placeholder' => 'Select country',
             ],
             'street_address'          => [
                 'label'    => __( 'Street address', $domain ),
@@ -823,19 +830,22 @@ class Schema {
             ],
             'email'                   => [
                 'label'       => __( 'Email', $domain ),
-                'placeholder' => __( 'Institution email', $domain ),
+                'placeholder' => __( 'Business email', $domain ),
                 'required'    => true,
             ],
             'mobile'                  => [
                 'label'       => __( 'Mobile phone', $domain ),
-                'placeholder' => __( 'Country code + mobile or direct number', $domain ),
+                'placeholder' => __( 'i.e. +45 XX XX XX XX', $domain ),
                 'required'    => true,
             ],
             'interest'                => [
                 'label'       => __( "I'm interested in becoming" ),
                 'placeholder' => __( ' - Select partner type - ' ),
                 'type'        => 'select',
-                'options'     => [],
+                'options'     => [
+                    'Business Agent'    => __( 'Business Agent' ),
+                    'Solution Reseller' => __( 'Solution Reseller' ),
+                ],
                 'required'    => true,
             ],
             'target_type_of_users'    => [
@@ -843,8 +853,15 @@ class Schema {
                 'required' => true,
             ],
             'potential_reach'         => [
-                'label'    => __( 'Potential reach with GEOMIFY' ),
-                'required' => true,
+                'label'       => __( 'Potential reach with GEOMIFY' ),
+                'type'        => 'select',
+                'options'     => [
+                    'National Reach'          => 'National Reach',
+                    'Regional Reach'          => 'Regional Reach',
+                    'City and Suburban Reach' => 'City and Suburban Reach',
+                ],
+                'placeholder' => __( '- Select -' ),
+                'required'    => true,
             ],
             'other_products_services' => [
                 'label'    => __( 'Specify other products and services that you offer' ),

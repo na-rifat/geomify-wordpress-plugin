@@ -20,7 +20,7 @@
 //         ['price'=> \geomify\Processor\Geomify_stripe::package( 'free' )],
 //     ]
 // );
-use \geomify\Processor\Geomify_stripe as Gstripe;
+use \geomify\Processor\User;
 // exit( gettype( \geomify\Processor\User::stripe_subscriptions()->items ) );
 // var_dump( \geomify\Processor\User::paymentMethods() );
 // echo $latest_invoice_id = Gstripe::stripe()->customers->retrieve( 'cus_Je3H6MMtO6zZTv' );
@@ -37,8 +37,13 @@ use \geomify\Processor\Geomify_stripe as Gstripe;
 // \geomify\Processor\Templates::_get('email/account-activate');
 // \geomify\Processor\Templates::_get('email/footer');
 
-
-// 
+//
 // var_dump(\geomify\Processor\User::have_subscription('basic'));
-var_dump(\geomify\Processor\User::all_subscriptions());
-var_dump(\geomify\Processor\User::all_subscriptions());
+// var_dump(\geomify\Processor\User::all_subscriptions());
+// var_dump(\geomify\Processor\User::all_subscriptions());
+
+// echo User::stripe_subscription_id();
+// print_r( \geomify\Processor\Geomify_stripe::stripe()->subscriptions->retrieve(User::stripe_subscription_id(),[]) );
+// var_dump( \geomify\Processor\Geomify_stripe::stripe()->subscriptionItems->delete( 'si_Jpb1JfXwXcSfx8',[] ) );
+// var_dump( \geomify\Processor\User::have_permit( 'basic' ) );
+// var_dump(2 <= 2);

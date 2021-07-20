@@ -1,6 +1,8 @@
 <?php
     $package_name = geomify_var( 'package_name' );
     $package      = \geomify\Schema\Schema::get( 'packages' )[$package_name];
+    $is_down = \geomify\Processor\Geomify_stripe::pkg_val($package_name) < \geomify\Processor\Geomify_stripe::pkg_val($current_pkg);
+    $package      = \geomify\Schema\Schema::get( 'packages' )[$package_name];
 ?>
 
 <div class="payment-holder start-basic-holder">
@@ -68,6 +70,13 @@
                         <input type="submit" value="<?php printf( 'Pay € %s', $package['price'] )?>"
                             class="geomify-form-submit-btn">
                     </div>
+                    <div class="payment-input-group">
+                    <?php if($is_down){
+                        ?>
+                        <div style="color: red; font-size: 12px;">*Previously paid invoice(s) won't refund on downgrade*</div>
+                        <?php
+                    } ?>
+                </div>
                 </div>
                 <div class="method-option">
 

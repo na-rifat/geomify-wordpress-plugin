@@ -102,8 +102,11 @@ class Assets {
                 'remove_pm_nonce'                   => wp_create_nonce( 'remove_pm' ),
                 'dlt_pv_nonce'                      => wp_create_nonce( 'dlt_pv' ),
                 'update_pv_nonce'                   => wp_create_nonce( 'update_pv' ),
-                'start_basic_form_nonce'                   => wp_create_nonce( 'start_basic_form' ),
-                'start_basic_nonce'                   => wp_create_nonce( 'start_basic' ),
+                'start_basic_form_nonce'            => wp_create_nonce( 'start_basic_form' ),
+                'start_basic_nonce'                 => wp_create_nonce( 'start_basic' ),
+                'geo_login_nonce'                   => wp_create_nonce( 'geo_login' ),
+                'geo_reset_nonce'                   => wp_create_nonce( 'geo_reset' ),
+                'geo_pass_reset_nonce'              => wp_create_nonce( 'geo_pass_reset' ),
             ],
         ];
     }
@@ -202,7 +205,11 @@ class Assets {
 
         echo "<style>:root{{$vars}}</style>";
 
-        $subscriptions = (array) User::get_meta( 'stripe_subscriptions' );
+        if ( ! User::is_logged() ) {
+            return;
+        }
+
+        $subscriptions = User::all_subscriptions();
         $sub_styles    = '<style>';
         foreach ( $subscriptions as $subscription ) {
             $sub_styles .= sprintf( '.upgrade-panel-%s{display: none;}', $subscription );

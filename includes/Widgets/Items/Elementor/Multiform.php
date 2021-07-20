@@ -137,7 +137,7 @@ class Multiform extends Base {
                     'size' => 800,
                 ],
                 'selectors'       => [
-                    '{{WRAPPER}} .geomify-ms-form-wrapper' => 'min-width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}}, {{WRAPPER}} .geomify-ms-form-wrapper' => 'min-width: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
@@ -176,7 +176,7 @@ class Multiform extends Base {
                     'size' => 800,
                 ],
                 'selectors'       => [
-                    '{{WRAPPER}} .geomify-ms-form-wrapper' => 'max-width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}}, {{WRAPPER}} .geomify-ms-form-wrapper' => 'max-width: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );

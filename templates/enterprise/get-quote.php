@@ -26,6 +26,11 @@
         let data = form.serialize();
         data += `&action=submit_enterprise_quote&nonce=${geomify.submit_enterprise_quote_nonce}`;
 
+        if(geomifyValidateFields(form, `white`) == false){
+            return;
+        }
+
+
         $.ajax({
             type: "POST",
             url: geomify.ajax_url,

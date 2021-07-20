@@ -175,7 +175,7 @@ class Multiform {
                 );
                 break;
             case 'select':
-                $options = '';
+                $options = ! empty( $args['placeholder'] ) ? '<option value="" selected disabled>' . $args['placeholder'] . '</option>' : '';
 
                 foreach ( $args['options'] as $key => $title ) {
                     $selected = $key == $args['default'] ? ' selected ' : '';

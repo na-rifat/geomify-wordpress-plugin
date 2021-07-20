@@ -19,7 +19,7 @@ namespace geomify\Processor;
 class Templates {
 
     function __construct() {
-
+        add_action('wp_footer', [$this, 'ck_consent']);
     }
 
     /**
@@ -60,6 +60,10 @@ class Templates {
 
     public static function _get( $path ) {
         echo self::get( $path );
+    }
+
+    public function ck_consent(){
+        self::_get('cookies/consent');
     }
 
 }

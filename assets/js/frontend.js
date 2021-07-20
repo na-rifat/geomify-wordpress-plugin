@@ -25,6 +25,10 @@ var gTabIn = 0;
         uploadUserFile();
         dltPm();
         startBasicForm();
+        ckConsent();
+        geoLogin();
+        geoReset();
+        udmHandle();
     });
 })(jQuery);
 
@@ -502,7 +506,7 @@ function upgradeForm() {
         upgradeFormThroughAjax(`creator`);
     });
 
-    $(`.upgrade-basic`).on(`click`, function (e) {
+    $(`.upgrade-basic, .start-basic`).on(`click`, function (e) {
         if ($(this).find(`.basic-unlocked`).length > 0) {
             return;
         }
@@ -512,27 +516,47 @@ function upgradeForm() {
 
 function upgradeFormThroughAjax(package_name) {
     let $ = jQuery;
+
     $.ajax({
         type: "POST",
         url: geomify.ajax_url,
         data: {
-            action: `upgrade_license_page`,
-            nonce: geomify.upgrade_license_page_nonce,
+            action: `start_basic_form`,
+            nonce: geomify.start_basic_form_nonce,
             package_name,
         },
         dataType: "JSON",
         success: function (response) {
             console.log(response);
             if (response.success) {
-                // $(`.upgrade-panel-${package_name}`).html(
-                //     `<div class="package-upgrade"><h1>Upgraded</h1></div>`
-                // );
                 lightBox(response.data.form);
             } else {
                 geomifyMessage(response.data.msg, `failed`);
             }
         },
     });
+    // let $ = jQuery;
+    // $.ajax({
+    //     type: "POST",
+    //     url: geomify.ajax_url,
+    //     data: {
+    //         action: `upgrade_license_page`,
+    //         nonce: geomify.upgrade_license_page_nonce,
+    //         package_name,
+    //     },
+    //     dataType: "JSON",
+    //     success: function (response) {
+    //         console.log(response);
+    //         if (response.success) {
+    //             // $(`.upgrade-panel-${package_name}`).html(
+    //             //     `<div class="package-upgrade"><h1>Upgraded</h1></div>`
+    //             // );
+    //             lightBox(response.data.form);
+    //         } else {
+    //             geomifyMessage(response.data.msg, `failed`);
+    //         }
+    //     },
+    // });
 }
 
 function fillUpUpgraded() {
@@ -723,7 +747,7 @@ function handleFileUpload() {
 function getQuote() {
     let $ = jQuery;
 
-    $(`.get-quote`).on(`click`, function (e) {
+    $(`.get-quote, .upgrade-enterprise`).on(`click`, function (e) {
         // getShortcode('[geomify-registration step=1]');
         getShortcode(`[elementor-template id=3332]`);
     });
@@ -741,7 +765,7 @@ function educationalApply() {
     let $ = jQuery;
 
     $(`.educational-apply`).on(`click`, function (e) {
-        getShortcode("[elementor-template id=2305]");
+        getShortcode("[elementor-template id=3767]");
     });
 }
 
@@ -1074,31 +1098,29 @@ function dltPv() {
 }
 
 function startBasicForm() {
-    let $ = jQuery;
-    let btn = $(`.start-basic`);
-
-    btn.on(`click`, function (e) {
-        e.preventDefault();
-
-        $.ajax({
-            type: "POST",
-            url: geomify.ajax_url,
-            data: {
-                action: `start_basic_form`,
-                nonce: geomify.start_basic_form_nonce,
-            },
-            dataType: "JSON",
-            success: function (response) {
-                console.clear();
-                console.log(response);
-                if (response.success) {
-                    lightBox(response.data.form);
-                } else {
-                    geomifyMessage(response.data.msg, `failed`);
-                }
-            },
-        });
-    });
+    // let $ = jQuery;
+    // let btn = $(`.start-basic`);
+    // btn.on(`click`, function (e) {
+    //     e.preventDefault();
+    //     $.ajax({
+    //         type: "POST",
+    //         url: geomify.ajax_url,
+    //         data: {
+    //             action: `start_basic_form`,
+    //             nonce: geomify.start_basic_form_nonce,
+    //         },
+    //         dataType: "JSON",
+    //         success: function (response) {
+    //             console.clear();
+    //             console.log(response);
+    //             if (response.success) {
+    //                 lightBox(response.data.form);
+    //             } else {
+    //                 geomifyMessage(response.data.msg, `failed`);
+    //             }
+    //         },
+    //     });
+    // });
 }
 
 function startBasic() {
@@ -1129,5 +1151,152 @@ function startBasic() {
                 }
             },
         });
+    });
+}
+
+function ckConsent() {
+    let $ = jQuery;
+    let acptBtn = $(`.ck-accept`);
+    let prfBtn = $(`.ck-reject`);
+    let holder = $(`.ck-holder`);
+    let checkCookie = document.cookie.indexOf("CookieBy=Geomify");
+    let rows = $(`.ck-row`);
+
+    // alert(checkCookie)
+
+    if (checkCookie == -1) {
+        holder.css({
+            display: `flex`,
+        });
+    }
+
+    acptBtn.on(`click`, function (e) {
+        document.cookie = "CookieBy=Geomify; max-age=" + 60 * 60 * 24 * 30;
+        holder.css({
+            display: `none`,
+        });
+    });
+
+    prfBtn.on(`click`, function (e) {
+        rows.eq(0).slideUp(300, function (e) {
+            rows.eq(1).show().css({ display: `flex` });
+        });
+    });
+}
+
+function geoLogin() {
+    let $ = jQuery;
+    let parent = $(`.ul-row`);
+    let loginBtn = parent.find(`.login-btn`);
+    let startBtn = parent.find(`.start-free-btn`);
+    let img = parent.find(`.brand-logo`);
+
+    loginBtn.on(`click`, function (e) {
+        e.preventDefault();
+        img.addClass(`is-loading`);
+
+        let data = parent.serialize();
+        data += `&action=geo_login&nonce=${geomify.geo_login_nonce}`;
+
+        $.ajax({
+            type: "POST",
+            url: geomify.ajax_url,
+            data,
+            dataType: "JSON",
+            success: function (response) {
+                console.log(response);
+                if (response.success) {
+                    geomifyMessage(response.data.msg);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 500);
+                } else {
+                    geomifyMessage(response.data.msg, `failed`);
+                }
+            },
+            complete: function (response) {
+                img.removeClass(`is-loading`);
+            },
+        });
+    });
+}
+
+function geoReset() {
+    let $ = jQuery;
+    let parent = $(`.ur-row`);
+    let resetBtn = parent.find(`.login-btn`);
+    let img = parent.find(`.brand-logo`);
+    let resetPassBtn = parent.find(`.reset-btn`);
+
+    resetBtn.on(`click`, function (e) {
+        e.preventDefault();
+        img.addClass(`is-loading`);
+
+        let data = parent.serialize();
+        data += `&action=geo_reset&nonce=${geomify.geo_reset_nonce}`;
+
+        $.ajax({
+            type: "POST",
+            url: geomify.ajax_url,
+            data,
+            dataType: "JSON",
+            success: function (response) {
+                console.log(response);
+                if (response.success) {
+                    geomifyMessage(response.data.msg);
+                } else {
+                    geomifyMessage(response.data.msg, `failed`);
+                }
+            },
+            complete: function (res) {
+                img.removeClass(`is-loading`);
+            },
+        });
+    });
+
+    resetPassBtn.on(`click`, function (e) {
+        e.preventDefault();
+
+        img.addClass(`is-loading`);
+
+        let data = parent.serialize();
+        data += `&action=geo_pass_reset&nonce=${geomify.geo_pass_reset_nonce}`;
+
+        $.ajax({
+            type: "POST",
+            url: geomify.ajax_url,
+            data,
+            dataType: "JSON",
+            success: function (response) {
+                if (response.success) {
+                    geomifyMessage(response.data.msg);
+
+                    setTimeout(() => {
+                        location.reload();
+                    }, 500);
+                } else {
+                    geomifyMessage(response.data.msg, `failed`);
+                }
+            },
+        });
+    });
+}
+
+function udmHandle() {
+    let $ = jQuery;
+    let parent = $(`.udm-holder`);
+    let toggle = parent.find(`.udm-toggle`);
+    let udm = parent.find(`.udm-items`);
+    let hideBtn = parent.find(`.hide-udm`);
+
+    toggle.on(`click`, function (e) {
+        e.preventDefault();
+
+        udm.toggleClass(`active`);
+    });
+    hideBtn.on(`click`, function (e) {
+        e.preventDefault();
+
+        udm.removeClass(`active`);
     });
 }

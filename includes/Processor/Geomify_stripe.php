@@ -306,6 +306,31 @@ class Geomify_stripe {
         return self::invoices()->retrieve( $id );
     }
 
-    
+    public static function upgrade_subscription( $subscription_id, $package_name ) {
+        // var_dump($subscription_id);exit;
+        return self::subscription()->update(
+            User::stripe_subscription_id(),
+            [
+                'items' => [
+                    [
+                        'id'    => $subscription_id,
+                        'price' => self::package( $package_name ),
+                    ],
+                ],
+            ]
+        );
+    }
+
+    public static function pkg_val( $package_name ) {
+        $pkg = [
+            'free'        => 0,
+            'basic'       => 1,
+            'facilitator' => 2,
+            'creator'     => 3,
+            'enterprise'  => 4,
+        ];
+
+        return $pkg[$package_name];
+    }
 
 }

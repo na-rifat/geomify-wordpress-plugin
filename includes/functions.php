@@ -386,3 +386,18 @@ if ( ! function_exists( 'geo_unique_username' ) ) {
         }
     }
 }
+
+if ( ! function_exists( 'geo_mail' ) ) {
+    function geo_mail( $to, $subject, $template_name ) {
+        $templates = new \geomify\Processor\Templates;
+        wp_mail(
+            $to,
+            $subject, 
+            $templates::get( 'email/header' ) . $templates::get("email/{$template_name}") . $templates::get( 'email/footer' ),
+            [
+                'Content-Type: text/html; charset=UTF-8',
+                sprintf( 'From: %s <noreply@geomify.com>', get_bloginfo( 'name' ) ),
+            ] );
+
+    }
+}

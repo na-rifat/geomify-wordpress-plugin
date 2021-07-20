@@ -56,5 +56,8 @@ class Redirect {
         if ( isset( $_GET['action'] ) && $_GET['action'] == 'activate-user' && $current_page != 'activation' && isset( $_GET['user'] ) && isset( $_GET['key'] ) ) {
             Power::go( sprintf( 'activation?action=activate-user&user=%s&key=%s', $_GET['user'], $_GET['key'] ) );
         }
+        if ( $is_logged_in && ( $current_page == 'sign-in' || $current_page == 'reset-password' ) ) {
+            Power::go( 'dashboard' );
+        }
     }
 }

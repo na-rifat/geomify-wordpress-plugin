@@ -267,6 +267,8 @@ class User {
             $result = [];
             foreach ( $items as $key => $value ) {
                 $result[] = strtolower( $value );
+                unset( $items[$key] );
+                $items[] = strtolower( $value );
             }
         } else {
             $result = $items;
@@ -277,6 +279,10 @@ class User {
 
     public static function have_sub( $name ) {
         return in_array( $name, self::all_subscriptions() == null ? [] : self::all_subscriptions() );
+    }
+
+    public static function current_subscription() {
+        return self::all_subscriptions()[0];
     }
 
     public static function have_subscription( $name ) {
@@ -335,6 +341,28 @@ class User {
                 return false;
                 break;
         }
+    }
+
+    public static function subscribed() {
+        if ( sizeof( self::stripe_subscriptions() ) == 0 ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static function upgrade_package( $package_name ) {
+        return Gstripe::upgrade_subscription( self::stripe_subscriptions()[0]->id, $package_name );
+    }
+
+    public static function have_permit( $package_name ) {
+        $current_sub = self::current_subscription();
+
+        return ( Gstripe::pkg_val( $package_name ) <= Gstripe::pkg_val( $current_sub ) );
+    }
+
+    public static function avatar_name() {
+        return substr( self::first_name(), 0, 1 ) . substr( self::last_name(), 0, 1 );
     }
 
 }

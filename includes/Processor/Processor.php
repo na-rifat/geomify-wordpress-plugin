@@ -183,23 +183,23 @@ class Processor {
     }
 
 
-    // public static function get_user_package_info( $package_name ) {
-    //     $package_name = 'profile_' . $package_name;
+    public static function get_user_package_info( $package_name ) {
+        $package_name = 'profile_' . $package_name;
 
-    //     return get_user_meta( User::current_user_id(), $package_name, true );
-    // }
+        return get_user_meta( User::current_user_id(), $package_name, true );
+    }
 
-    // public static function merge_package_info( $package_name, $new ) {
-    //     $package_name = 'profile_' . $package_name;
+    public static function merge_package_info( $package_name, $new ) {
+        $package_name = 'profile_' . $package_name;
 
-    //     $old = get_user_meta( User::current_user_id(), $package_name, true );
-    //     $old = $old == false ? [] : $old;
+        $old = get_user_meta( User::current_user_id(), $package_name, true );
+        $old = $old == false ? [] : $old;
 
-    //     foreach ( $new as $key => $value ) {
-    //         $old[$key] = $value;
-    //     }
+        foreach ( $new as $key => $value ) {
+            $old[$key] = $value;
+        }
 
-    //     return $old;
-    // }
+        return $old;
+    }
 
 }

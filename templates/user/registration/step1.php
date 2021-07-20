@@ -11,7 +11,7 @@
             <div class="geomify-form-submit-btn create-space">
                 Create space
             </div>
-            <a href="<?php site_url( '/privacy-policy' )?>">View privacy policy</a>
+            <a href="<?php echo site_url( '/terms-of-use-privacy' )?>">View privacy policy</a>
         </div>
     </form>
     <script>
