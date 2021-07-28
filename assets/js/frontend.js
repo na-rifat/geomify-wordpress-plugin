@@ -472,7 +472,6 @@ function saveAcInfo() {
 
         let parent = $(this).parents(`.profile-section`);
 
-        let package = parent.data(`profile_package`);
         let form = $(this).parents(`form`);
         let data = form.serialize();
 
@@ -481,7 +480,7 @@ function saveAcInfo() {
             url: geomify.ajax_url,
             data:
                 data +
-                `&nonce=${geomify.save_ac_info_nonce}&action=save_ac_info&package=${package}`,
+                `&nonce=${geomify.save_ac_info_nonce}&action=save_ac_info`,
             dataType: `JSON`,
             success: function (response) {
                 console.log(response);
@@ -511,6 +510,10 @@ function upgradeForm() {
             return;
         }
         upgradeFormThroughAjax("basic");
+    });
+
+    $(`.upgrade-free`).on(`click`, function (e) {
+        upgradeFormThroughAjax(`free`);
     });
 }
 
@@ -656,8 +659,7 @@ function handlePayment() {
                         // $(`.upgrade-basic`).html(
                         //     `<i class="fas fa-lock-open"></i> BASIC <span class="blue-text">UNCLOKED</span>`
                         // );
-                        window.location.reload();
-                        return;
+                        // window.location.reload();
                     }
                     $(`.pay-section`).html(response.data.page);
                 } else {
@@ -772,12 +774,13 @@ function educationalApply() {
 function dragnDropUploader() {
     let $ = jQuery;
     var dropArea = $(".geomify-file-uploader"),
-        drpa = document.querySelector(".geomify-file-uploader");
-    (button = dropArea.find(".choose-file")),
-        (input = document.createElement("input"));
+        drpa = document.querySelector(".geomify-file-uploader"),
+        button = dropArea.find(".choose-file"),
+        input = document.createElement("input");
     input.name = "files[]";
     input.id = "files";
     input.type = "file";
+
     if (drpa == null) {
         return;
     }
@@ -808,18 +811,51 @@ function dragnDropUploader() {
         // dropArea.classList.remove("active");
     });
 
-    drpa.drop = (event) => {
-        event.preventDefault();
-        event.dataTransfer.files.forEach((file) => {
+    dropArea.on(`drop`, function (e) {        
+        e.originalEvent.dataTransfer.files.forEach((file) => {
             addFileToQue(file);
         });
-        dropArea.classList.remove("active");
-    };
+        dropArea.removeClass("active");
+    });
+
+    // drpa.drop = (event) => {
+    //     alert(123);
+    //     event.preventDefault();
+    //     event.dataTransfer.files.forEach((file) => {
+    //         addFileToQue(file);
+    //     });
+    //     dropArea.classList.remove("active");
+    // };
 }
 
 function addFileToQue(file) {
     let $ = jQuery;
     let queHolder = $(`.file-que`);
+    let supportedExt = [
+        "geo",
+        "gis",
+        "cad",
+        "ifc",
+        "bim",
+        "pointclouds",
+        "jpg",
+        "jpeg",
+        "png",
+        "bmp",
+        "gif",
+        "json",
+        "geo-json",
+    ];
+
+    let ext = file.name.split(".")[file.name.split(".").length - 1];
+
+    alert(123);
+
+    if (supportedExt.indexOf(ext) == -1) {
+        alert(`Unsupported file format!`);
+        return;
+    }
+
     let fileName =
         file.name.length > 12
             ? file.name.slice(0, 8) +
@@ -1160,13 +1196,18 @@ function ckConsent() {
     let prfBtn = $(`.ck-reject`);
     let holder = $(`.ck-holder`);
     let checkCookie = document.cookie.indexOf("CookieBy=Geomify");
+    let geoCk = document.cookie.indexOf("geoCookie=false");
     let rows = $(`.ck-row`);
-
-    // alert(checkCookie)
 
     if (checkCookie == -1) {
         holder.css({
             display: `flex`,
+        });
+    }
+
+    if (geoCk > -1) {
+        holder.css({
+            display: `none`,
         });
     }
 
@@ -1178,9 +1219,13 @@ function ckConsent() {
     });
 
     prfBtn.on(`click`, function (e) {
-        rows.eq(0).slideUp(300, function (e) {
-            rows.eq(1).show().css({ display: `flex` });
+        document.cookie = "geoCookie=false; max-age=" + 60 * 60 * 24 * 30;
+        holder.css({
+            display: `none`,
         });
+        // rows.eq(0).slideUp(300, function (e) {
+        //     rows.eq(1).show().css({ display: `flex` });
+        // });
     });
 }
 

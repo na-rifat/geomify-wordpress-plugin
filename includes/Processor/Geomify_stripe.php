@@ -333,4 +333,13 @@ class Geomify_stripe {
         return $pkg[$package_name];
     }
 
+    public static function user_invoice_list( $user_id ) {
+        return self::invoices()->all(
+            [
+                'customer' => get_user_meta( $user_id, 'stripe_customer_id', true ),
+                'limit'    => 20,
+            ]
+        )->data;
+    }
+
 }

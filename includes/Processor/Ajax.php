@@ -489,10 +489,44 @@ class Ajax {
             exit;
         }
 
-        $package_name = 'profile_' . geomify_var( 'package' );
-        $fields       = Schema::get( $package_name );
+        $info = [
+            'first_name',
+            'last_name',
+            'personal_code',
+            'address1',
+            'address2',
+            'city',
+            'company',
+            'country',
+            'mobile',
+            'zip',
+            'phone',
+            'invoice_email',
+            'ean_number',
+            'company_number',
+            'vat_number',
+        ];
 
-        $values = Processor::seperate_values_from_schema( $fields, $_POST );
+        foreach ( $info as $single ) {
+            isset( $_POST[$single] ) ? User::set_meta( $single, $_POST[$single] ) : '';
+        }
+
+        // wp_send_json_error(
+
+        //     [
+        //         $_POST,
+        //     ]
+        // );
+        // exit;
+
+        if ( isset( $_POST['user_email'] ) ) {
+            wp_update_user(
+                [
+                    'ID'         => User::id(),
+                    'user_email' => sanitize_email( $_POST['user_email'] ),
+                ]
+            );
+        }
 
         if ( ! empty( $_POST['new_password'] ) && ! empty( $_POST['confirm_password'] ) ) {
             if ( $_POST['new_password'] !== $_POST['confirm_password'] ) {
@@ -508,16 +542,33 @@ class Ajax {
 
         }
 
-        // update_user_meta( User::current_user_id(), $package_name, Processor::merge_package_info( geomify_var( 'package' ), $values ) );
-
         wp_send_json_success(
             [
-                'wp_s' => $package_name,
-                'd'    => $values,
-                'msg'  => __( 'Settings saved', GTD ),
+                'msg' => __( 'Settings saved' ),
             ]
         );
         exit;
+
+        // wp_send_json_error(
+        //     $_POST
+        // );
+        // exit;
+
+        // $package_name = 'profile_' . geomify_var( 'package' );
+        // $fields       = Schema::get( $package_name );
+
+        // $values = Processor::seperate_values_from_schema( $fields, $_POST );
+
+        // // update_user_meta( User::current_user_id(), $package_name, Processor::merge_package_info( geomify_var( 'package' ), $values ) );
+
+        // wp_send_json_success(
+        //     [
+        //         'wp_s' => $package_name,
+        //         'd'    => $values,
+        //         'msg'  => __( 'Settings saved', GTD ),
+        //     ]
+        // );
+        // exit;
     }
 
     /**
@@ -1073,6 +1124,8 @@ class Ajax {
             exit;
         }
 
+        $package_name = geomify_var( 'package_name' );
+
         if ( geomify_var( 'package_name' ) == User::current_subscription() ) {
             wp_send_json_error(
                 [
@@ -1083,10 +1136,10 @@ class Ajax {
 
         // For logged in user
         if ( User::is_logged() ) {
-            if ( User::have_subscription( 'basic' ) ) {
+            if ( User::have_subscription( $package_name ) ) {
                 wp_send_json_error(
                     [
-                        'msg' => 'You\'ve already subscribed to basic',
+                        'msg' => 'You\'ve already subscribed to ' . $package_name,
                     ]
                 );
                 exit;

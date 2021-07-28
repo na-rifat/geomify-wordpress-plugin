@@ -188,3 +188,12 @@ function deleteTutorial() {
 //         });
 //     });
 // }
+
+function save_geo_options() {
+    let $ = jQuery;
+    let form = $(`.geo-options`);
+
+    form.on(`submit`, function (e) {
+        e.preventDefault();
+    });
+}

@@ -2,8 +2,13 @@
     <div class="ck-consent">
         <div class="ck-row">
             <div class="ck-col">
-                We use cookie to optimize your website experience and our services. <a
-                    href="<?php echo site_url( 'terms-of-use-privacy' ) ?>">Cookies Policy</a>
+                <h6>GEOMIFY</h6>
+                <h4>How we use cookies and why</h4>
+                <br>
+                We mainly use cookies to optimize your website experience
+                and to ensure the best possible service. Cookies are also used
+                for survey’s, user journeys, news and updates, etc. To know all
+                details, read our <a href="<?php echo site_url( 'terms-of-use-privacy' ) ?>">Cookies Policy</a>
             </div>
             <div class="ck-col">
                 <div class="ck-accept">
@@ -12,14 +17,9 @@
             </div>
             <div class="ck-col">
                 <div class="ck-reject">
-                    PREFERENCES
+                    DECLINE
                 </div>
             </div>
-        </div>
-        <div class="ck-row">
-            <div class="ck-col"><div class="geomify-form-submit-btn">Select 1</div></div>
-            <div class="ck-col"><div class="geomify-form-submit-btn">Select 2</div></div>
-            <div class="ck-col"><div class="geomify-form-submit-btn">Select 3</div></div>
         </div>
     </div>
 </div>

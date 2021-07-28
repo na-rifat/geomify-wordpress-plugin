@@ -6,7 +6,7 @@
 
 <div class="file-upload-form">
     <h3>Describe your data</h3>
-    <p>Data tpye, location and public value</p>
+    <p>Data type, location and public value description</p>
     <form action="#">
         <?php
             $input::create_field( $fields['data_type'] );

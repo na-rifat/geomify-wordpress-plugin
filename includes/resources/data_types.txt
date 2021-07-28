@@ -1,0 +1,7 @@
+GEO data
+GIS data
+CAD data (2D & 3D)
+IFC/BIM data
+LiDAR data
+PointCloud scanning
+Other

@@ -30,7 +30,7 @@
         </div>
         <div class="udmi-row">
             <ul class="udmi-links">
-                <li><a href="<?php echo site_url('upgrade') ?>">Upgrade</a></li>
+                <li><a href="<?php echo site_url('upgrade') ?>" class="upgrade-link">Upgrade</a></li>
             </ul>
         </div>
         <hr>

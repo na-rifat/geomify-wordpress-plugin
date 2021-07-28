@@ -1545,7 +1545,6 @@ table.invoice-info tr td:last-child {
 .ns-input-group {
     display: inline-flex;
     margin: 4px 0;
-    border: 1px solid #51a7f9;
     width: 100%;
 }
 .ns-input-group input[type="email"]::placeholder {
@@ -1556,6 +1555,8 @@ table.invoice-info tr td:last-child {
     font-size: 14px;
     background-color: white;
     flex: 70%;
+    margin-right: 10px;
+    border: 1px solid #51a7f9;
 }
 .ns-input-group input[type="submit"] {
     background-color: #51a7f9;
@@ -1564,6 +1565,8 @@ table.invoice-info tr td:last-child {
     font-size: 14px;
     transition: 0.3s all linear;
     flex: 30%;
+    border: 2px solid #51a7f9;
+    cursor: pointer;
 }
 .ns-input-group input[type="submit"]:hover {
     background-color: white;
@@ -1575,6 +1578,15 @@ table.invoice-info tr td:last-child {
     margin: 20px;
     background-color: white;
     text-align: center;
+}
+@media only screen and (max-width: 768px) {
+    .ns-input-group {
+        flex-flow: column;
+    }
+    .ns-input-group input[type="submit"] {
+        margin-top: 10px;
+        width: 200px;
+    }
 }
 /* Newsletter end */
 
@@ -1739,7 +1751,7 @@ h4.billing-subheader {
 /* Cookie consent */
 @media only screen and (min-width: 768px) {
     .ck-row:last-child {
-        min-width: 50vw;
+        /* min-width: 50vw; */
     }
 }
 
@@ -1751,10 +1763,11 @@ h4.billing-subheader {
 .ck-row:first-child {
     justify-content: space-between;
 }
-.ck-row:last-child {
+/* .ck-row:last-child {
     justify-content: center;
     display: none;
-}
+} */
+
 .ck-holder {
     position: fixed;
     bottom: 20px;
@@ -1765,15 +1778,22 @@ h4.billing-subheader {
     z-index: 99999999999;
 }
 .ck-consent {
-    margin-left: auto;
-    margin-right: auto;
-    background-color: #fff;
+    /* margin-left: auto;
+    margin-right: auto; */
+    margin-left: 30px;
+    background-color: #000;
     border: 4px solid #51a7f9;
     padding: 30px 60px;
     box-shadow: 0 0 8px #ccc;
+    max-width: 600px;
 }
 .ck-col {
     margin: 10px;
+}
+.ck-col,
+.ck-col h6,
+.ck-col h4 {
+    color: white;
 }
 .ck-accept,
 .ck-reject {
@@ -1799,9 +1819,9 @@ h4.billing-subheader {
     color: white;
 }
 /* Cookie consent end */
-.grecaptcha-badge {
+/* .grecaptcha-badge {
     display: none !important;
-}
+} */
 
 /* User login */
 .ul-row,
@@ -1986,6 +2006,9 @@ h4.billing-subheader {
     height: 50px;
     width: 50px;
     border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .udm-col {
     padding: 0 10px;
@@ -1995,8 +2018,11 @@ h4.billing-subheader {
     color: white;
     cursor: pointer;
 }
-.udm-col:nth-child(2) > div:nth-child(2) {
+.udm-col:nth-child(2) > div:nth-child(1) {
     color: white;
+}
+.udm-col:nth-child(2) > div:nth-child(2) {
+    color: #ccc;
     font-size: 14px;
     font-weight: 400;
 }
@@ -2034,6 +2060,10 @@ h4.billing-subheader {
     color: #aaa;
     font-size: 14px;
 }
+.upgrade-link {
+    color: black !important;
+    text-decoration: underline !important;
+}
 .udmi-col {
     padding: 5px 10px;
 }
@@ -2041,3 +2071,13 @@ h4.billing-subheader {
     font-size: 12px;
 }
 /* User dashboard menu end */
+
+.license-login-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+}
+.upgrade-free{
+    cursor: pointer;
+}

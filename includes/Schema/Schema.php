@@ -690,7 +690,7 @@ class Schema {
                 'required'    => true,
 
             ],
-            'user_country' => [
+            'country'      => [
                 'label'       => __( 'Country', $domain ),
                 'placeholder' => __( '- Select country -', $domain ),
                 'type'        => 'select',
@@ -703,6 +703,7 @@ class Schema {
                 'placeholder' => __( ' - Select data type - ' ),
                 'type'        => 'select',
                 'options'     => Processor::txtfile2array( GEOMIFY_RESOURCE_PATH . 'data_types.txt' ),
+                'required'    => true,
             ],
             'file_country' => [
                 'label'       => __( 'Select country' ),
@@ -882,7 +883,9 @@ class Schema {
                 'placeholder' => __( ' - Select budget in EUR' ),
                 'type'        => 'select',
                 'options'     => [
-
+                    'Euro 10.000-20.000'  => 'Euro 10.000-20.000',
+                    'Euro 20.000-50.000'  => 'Euro 20.000-50.000',
+                    'Euro 50.000-100.000' => 'Euro 50.000-100.000',
                 ],
                 'required'    => true,
             ],
@@ -895,6 +898,10 @@ class Schema {
                 'label'    => __( 'Time' ),
                 'required' => true,
             ],
+        ];
+
+        $this->schema['my_profile'] = [
+
         ];
     }
 

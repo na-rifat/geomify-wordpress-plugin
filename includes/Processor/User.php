@@ -365,4 +365,10 @@ class User {
         return substr( self::first_name(), 0, 1 ) . substr( self::last_name(), 0, 1 );
     }
 
+    public static function stripe_invoices() {
+        return Gstripe::user_invoice_list( self::id() );
+    }
+
+    
+
 }

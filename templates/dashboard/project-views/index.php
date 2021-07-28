@@ -10,8 +10,8 @@
                     <p>The selected project view will open in new browser tab</p>
                 </div>
                 <div class="title-item">
-                    <h2>Upload project fiels</h2>
-                    <p>Together we empower sutainable Urban Planning</p>
+                    <h2>Upload project files</h2>
+                    <p>Together we empower sustainable urban planning</p>
                 </div>
             </div>
         </div>

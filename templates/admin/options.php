@@ -1,49 +1,51 @@
+<h1>Geomify - options</h1>
+<hr>
+<br>
+<br>
+
+<form action="#" method="POST" class="geo-options">
+    <h3>Stripe settings</h3>
+    <table class="form-table">
+        <tr>
+            <th><label for="stripe_api_key">API key</label></th>
+            <td><input type="text" class="regular-text" name="stripe_api_key" id="stripe_api_key"></td>
+        </tr>
+        <tr>
+            <th><label for="stripe_secret_key">Secret key</label></th>
+            <td><input type="text" class="regular-text" name="stripe_secret_key" id="stripe_secret_key"></td>
+        </tr>
+        <tr>
+            <th><label for="free_subscription_key">Free subscription key</label></th>
+            <td><input type="text" class="regular-text" name="free_subscription_key" id="free_subscription_key"></td>
+        </tr>
+        <tr>
+            <th><label for="basic_subscription_key">Basic subscription key</label></th>
+            <td><input type="text" class="regular-text" name="basic_subscription_key" id="basic_subscription_key"></td>
+        </tr>
+        <tr>
+            <th><label for="facilitator_subscription_key">Facilitator subscription key</label></th>
+            <td><input type="text" class="regular-text" name="facilitator_subscription_key"
+                    id="facilitator_subscription_key"></td>
+        </tr>
+        <tr>
+            <th><label for="creator_subscription_key">Creator subscription key</label></th>
+            <td><input type="text" class="regular-text" name="creator_subscription_key" id="creator_subscription_key">
+            </td>
+        </tr>
+        <tr>
+            <th><label for="enterprise_subscription_key">Enterprise subscription key</label></th>
+            <td><input type="text" class="regular-text" name="enterprise_subscription_key"
+                    id="enterprise_subscription_key"></td>
+        </tr>
+        <tr>
+            <th></th>
+            <td><input type="submit" value="Save" class="geomify-form-submit-btn save-geo-options"></td>
+        </tr>
+    </table>
+</form>
+
+
 <?php
-// $gs = new \geomify\Processor\Geomify_stripe();
-// $gs->stripe->paymentMethods->attach(
-//     'pm_13',
-//     [
-//         'customer'=>'cus_JZqwkofDHU9mCE'
-//     ]
-// );
-// \geomify\Processor\Geomify_stripe::update_subscription(
-//     [
-//         'subscription_id'=>'sub_JZqwjjqlhd7lyb',
-//         'subscription'=>\geomify\Processor\Geomify_stripe::packages()['facilitator']
-//     ]
-//     );
-
-// var_dump(\geomify\Processor\Geomify_stripe::package( 'free' ));
-// echo \geomify\Processor\Geomify_stripe::create_subscription(
-//     'cus_JbXk8WqjiC3GPz',
-//     [
-//         ['price'=> \geomify\Processor\Geomify_stripe::package( 'free' )],
-//     ]
-// );
-use \geomify\Processor\User;
-// exit( gettype( \geomify\Processor\User::stripe_subscriptions()->items ) );
-// var_dump( \geomify\Processor\User::paymentMethods() );
-// echo $latest_invoice_id = Gstripe::stripe()->customers->retrieve( 'cus_Je3H6MMtO6zZTv' );
-// echo  Gstripe::get_customer( 'cus_Je3H6MMtO6zZTv' );
-// $latest_invoice_id = Gstripe::get_customer( 'cus_Je3H6MMtO6zZTv' )->latest_invoice;
-// echo $latest_invoice = Gstripe::get_invoice($latest_invoice_id);
-// $latest_invoice_id = Gstripe::get_subscription( 'sub_Je3Hsu0i5YCv4n' )->latest_invoice;
-//             $latest_invoice    = Gstripe::get_invoice( $latest_invoice_id );
-//             printf('<script>console.log(%s)</script>',json_encode($latest_invoice));
-
-// echo Gstripe::update_subscription('sub_Je3Hsu0i5YCv4n', "price_1IxbXxJzUoZfpUOB22keNbKC");
-
-// \geomify\Processor\Templates::_get('email/header');
-// \geomify\Processor\Templates::_get('email/account-activate');
-// \geomify\Processor\Templates::_get('email/footer');
-
-//
-// var_dump(\geomify\Processor\User::have_subscription('basic'));
-// var_dump(\geomify\Processor\User::all_subscriptions());
-// var_dump(\geomify\Processor\User::all_subscriptions());
-
-// echo User::stripe_subscription_id();
-// print_r( \geomify\Processor\Geomify_stripe::stripe()->subscriptions->retrieve(User::stripe_subscription_id(),[]) );
-// var_dump( \geomify\Processor\Geomify_stripe::stripe()->subscriptionItems->delete( 'si_Jpb1JfXwXcSfx8',[] ) );
-// var_dump( \geomify\Processor\User::have_permit( 'basic' ) );
-// var_dump(2 <= 2);
+    // echo sizeof((\geomify\Processor\User::stripe_invoices()));
+//  print_r(\geomify\Processor\User::stripe_invoices());
+?>

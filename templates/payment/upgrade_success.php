@@ -83,4 +83,9 @@
         <a href="<?php echo $latest_invoice->invoice_pdf ?>" class="geomify-form-submit-btn" target="_blank">Download
             invioce</a>
     </div>
+    <script>
+          jQuery(`.lightbox-close`).on(`click`, function (e) {
+            location.reload();
+         })
+    </script>
 </div>

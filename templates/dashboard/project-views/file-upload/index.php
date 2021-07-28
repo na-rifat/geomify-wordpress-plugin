@@ -5,9 +5,9 @@
             process below to describe your data and why you thing public access creates value to others.
             <br> <br>
             Examples of datasets useful for others: <br>
-            - GIS & GEO data
-            - City models and Urban environments in 3D
-            - LiDAR and PointCloud Scans
+            -GEO & GIS data sets<br>-CAD data in 2D and 3D<br>
+            -IFC and BIM models<br>
+            -City Models and Urban Environments in 3D<br>
         </p>
     </div>
     <div class="gtab-toolbar">
@@ -27,13 +27,12 @@
         <div class="gtab-item">
             <?php include 'description.php'?>
         </div>
-        
         <div class="gtab-item">
             <?php include 'files.php'?>
         </div>
         <div class="gtab-item">
             <?php include 'receipt.php'?>
-        </div>       
+        </div>
     </div>
     <div class="geomify-form-submit-btn start-file-upload-session" data-step="-1">
         <i class="fas fa-sign-in-alt"></i> <span class="uppercase">Get started</span>

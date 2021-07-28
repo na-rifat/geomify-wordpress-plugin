@@ -12,6 +12,9 @@
     <script>
     jQuery(document).ready(() => {
         jQuery(`.geomify-form-submit-btn.reset-create-space-form`).on(`click`, hideLightbox)
+        jQuery(`.lightbox-close`).on(`click`, function (e) {
+            location.reload();
+         })
     });
     </script>
 </div>

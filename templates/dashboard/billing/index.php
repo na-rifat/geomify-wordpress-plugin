@@ -1,5 +1,4 @@
 <?php
-    // $subscriptions   = \geomify\Processor\User::stripe_subscriptions_caption();
     $subscriptions        = \geomify\Processor\Geomify_stripe::packages();
     $payment_methods      = \geomify\Processor\User::stripe_payment_methods_caption();
     $current_subscription = \geomify\Processor\User::current_subscription();
@@ -9,25 +8,17 @@
     <h2 class="billing-header">Billing</h2>
     <div class="billing-row">
         <h4 class="billing-subheader">
-            Your subscriptions
+            Your subscription
         </h4>
         <div class="subscription-list-holder">
-            <?php
-                foreach ( $subscriptions as $key => $val ) {
-                ?>
-            <div data-id="<?php echo $val ?>" data-name="<?php echo $key ?>" class="upgrade-<?php echo $key ?>">
-                <?php echo ucfirst( $key ) ?><?php
-    if ( $key == $current_subscription ) {
-        ?>
-                            <i class="fas fa-check-circle"></i>
-                        <?php
-                        }
-                            ?></div>
-            <?php
-                }
-            ?>
+            <div>
+                <?php echo ucwords( $current_subscription ) ?>
+                <i class="fas fa-check-circle"></i>
+            </div>
         </div>
     </div>
+    <?php if ( \geomify\Processor\User::have_permit( 'basic' ) ) {
+        ?>
     <div class="billing-row">
         <h4 class="billing-subheader">
             Your payment methods
@@ -35,22 +26,22 @@
         <div class="payment-methods-holder">
             <?php
                 foreach ( $payment_methods as $method ) {
-                ?>
+                    ?>
             <div class="billing-method-item" data-id="<?php echo $method['id'] ?>">
                 <div class="bmi-col">
                     <div class="bmi-row">
-                        Type:                              <?php echo $method['type'] ?>
+                        Type: <?php echo $method['type'] ?>
                     </div>
                     <div class="bmi-row">
-                        Brand:                               <?php echo $method['brand'] ?>
+                        Brand: <?php echo $method['brand'] ?>
                     </div>
                 </div>
                 <div class="bmi-col">
                     <div class="bmi-row">
-                        **** **** ****                                       <?php echo $method['last4'] ?>
+                        **** **** **** <?php echo $method['last4'] ?>
                     </div>
                     <div class="bmi-row">
-                        Exp:                             <?php echo $method['exp_month'] ?>/<?php echo $method['exp_year'] ?>
+                        Exp: <?php echo $method['exp_month'] ?>/<?php echo $method['exp_year'] ?>
                     </div>
                 </div>
                 <div class="bmi-col">
@@ -59,7 +50,18 @@
             </div>
             <?php
                 }
-            ?>
+                ?>
         </div>
     </div>
+    <?php
+    }?>
+    <div class="billing-row">
+        <h4 class="billing-subheader">
+            Your invoices
+        </h4>
+        <div class="invoices-holder">
+            <?php include 'invoices.php' ?>
+        </div>
+    </div>
+
 </div>

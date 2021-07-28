@@ -43,6 +43,8 @@ class Shortcodes {
         add_shortcode( 'geomify_login', [$this, 'geomify_login'] );
         add_shortcode( 'geomify_reset', [$this, 'geomify_reset'] );
         add_shortcode( 'geo_dashboard_menu', [$this, 'geo_dashboard_menu'] );
+        add_shortcode( 'basic_unlock_info', [$this, 'basic_unlock_info'] );
+        add_shortcode( 'basic_lock_status', [$this, 'basic_lock_status'] );
     }
 
     public function init() {
@@ -292,6 +294,30 @@ class Shortcodes {
 
     public function geo_dashboard_menu() {
         return Templates::get( 'user/menu' );
+    }
+
+    public function basic_unlock_info() {
+        if ( User::have_permit( 'basic' ) ) {
+            return '<b>Public data is our future</b><br>
+            <span style="color: #4682b4;"><b>START TO SHARE DATA</b></span><br>
+            that you believe is usefull and create value to others<br><br>
+            <b style="color: #4682b4;" class="upgrade-free">Unsubscribe any time</b>';
+
+        } else {
+            return '<b>Public data is our future</b><br>
+            <span style="color: #4682b4;"><b>Unlock BASIC</b></span><br>
+            and share data<br><br>
+            <h5 style="font-weight: bold; margin: 0;">ONLY 9 €/mo</h5>
+            <b style="color: #4682b4;" class="upgrade-free">Unsubscribe any time</b>';
+        }
+    }
+
+    public function basic_lock_status() {
+        if ( User::have_permit( 'basic' ) ) {
+            return 'Basic unlocked';
+        } else {
+            return 'Upgrade to basic';
+        }
     }
 
 }
