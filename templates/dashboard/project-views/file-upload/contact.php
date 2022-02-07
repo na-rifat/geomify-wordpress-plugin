@@ -1,3 +1,5 @@
+<?php \geomify\Processor\User::is_logged() or exit; defined('ABSPATH') or exit; ?>
+
 <?php
     $fields = \geomify\Schema\Schema::get( 'geo_files_info' );
     $fields = \geomify\Processor\Processor::add_name_to_inputs( $fields );

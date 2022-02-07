@@ -9,16 +9,20 @@ use Stripe\Subscription;
 use \Stripe\Stripe as Stripe;
 
 class Geomify_stripe {
+    const tax_rates = [
+        'txr_1KLn5dJzUoZfpUOByh5AnTw2',
+    ];
+
     function __construct() {
-        $this->api['secret_key']      = 'sk_test_51IsOwqJzUoZfpUOBKQQ1KZFbkONpQW1i6q0xeYRsEIkoX1uKgtYarw7PfAu3qTE2QhRjr5vWPofHjYrojXHFGCVJ00VL17Uuvh';
-        $this->api['publishable_key'] = 'pk_test_51IsOwqJzUoZfpUOBfjac0gn4zeKQLPbDrbSRjYx6VoyRc29vLjmeBUMmpsU8fRjuObPPD8R4jDGV7ZrrFkF8wqVs00JdMzCP1x';
+        $this->api['publishable_key'] = get_option( 'stripe_api_key' );
+        $this->api['secret_key']      = get_option( 'stripe_secret_key' );
         $this->api['stripe_account']  = 'acct_1IsOwqJzUoZfpUOB';
         $this->packages               = [
-            'free'        => 'price_1IxbXJJzUoZfpUOBhBrSfqxl',
-            'basic'       => 'price_1IxbXbJzUoZfpUOBnCK9Yb07',
-            'facilitator' => 'price_1IxbXxJzUoZfpUOB22keNbKC',
-            'creator'     => 'price_1Ixp22JzUoZfpUOBWT8YWfSc',
-            'enterprise'  => 'price_1Ixp5kJzUoZfpUOBgpXq5GWp',
+            'free'        => get_option( 'free_subscription_key' ),
+            'basic'       => get_option( 'basic_subscription_key' ),
+            'facilitator' => get_option( 'facilitator_subscription_key' ),
+            'creator'     => get_option( 'creator_subscription_key' ),
+            'enterprise'  => get_option( 'enterprise_subscription_key' ),
         ];
 
         Stripe::setApiKey( $this->api['secret_key'] );
@@ -30,7 +34,9 @@ class Geomify_stripe {
 
         $this->stripe       = new StripeClient( $this->api['secret_key'] );
         $this->subscription = new Subscription();
-
+        $this->tax_rates    = [
+            'txr_1KLn5dJzUoZfpUOByh5AnTw2',
+        ];
     }
 
     /**
@@ -150,10 +156,14 @@ class Geomify_stripe {
     public static function create_subscription( $customer_id, $price ) {
         return self::subscription()->create(
             [
-                'customer' => $customer_id,
-                'items'    => [
+                'customer'      => $customer_id,
+                'items'         => [
                     ['price' => $price],
                 ],
+                // 'automatic_tax' => [
+                //     'enabled' => false,
+                // ],
+                // 'tax' => ['ip_address' => getUserIP()]
             ]
         );
     }
@@ -307,16 +317,19 @@ class Geomify_stripe {
     }
 
     public static function upgrade_subscription( $subscription_id, $package_name ) {
-        // var_dump($subscription_id);exit;
         return self::subscription()->update(
             User::stripe_subscription_id(),
             [
-                'items' => [
+                'items'             => [
                     [
                         'id'    => $subscription_id,
                         'price' => self::package( $package_name ),
                     ],
                 ],
+                'default_tax_rates' => Processor::country_code( User::get_meta( 'country' ) ) == 'DK' ? self::tax_rates : '',
+                // 'automatic_tax'     => [
+                //     'enabled' => true,
+                // ],
             ]
         );
     }
@@ -342,4 +355,7 @@ class Geomify_stripe {
         )->data;
     }
 
+    public static function get_product( $product_id ) {
+        return self::stripe()->products->retrieve( $product_id );
+    }
 }

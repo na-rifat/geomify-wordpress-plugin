@@ -45,10 +45,28 @@ class Shortcodes {
         add_shortcode( 'geo_dashboard_menu', [$this, 'geo_dashboard_menu'] );
         add_shortcode( 'basic_unlock_info', [$this, 'basic_unlock_info'] );
         add_shortcode( 'basic_lock_status', [$this, 'basic_lock_status'] );
+        add_shortcode( 'current_geo_sub', [$this, 'current_geo_sub'] );
+        add_shortcode( 'geo_admin_login', [$this, 'geo_admin_login'] );
+        add_shortcode( 'site_url', [$this, 'geo_site_url'] );
     }
 
     public function init() {
         $this->register();
+    }
+
+    /**
+     * Return site url with suffix
+     *
+     * @param  string   $atts
+     * @return string
+     */
+    public function geo_site_url( $atts ) {
+        $atts = wp_parse_args( $atts,
+            [
+                'suffix' => '',
+            ]
+        );
+        return site_url( $atts['suffix'] );
     }
 
     /**
@@ -160,7 +178,7 @@ class Shortcodes {
             return '<i class="fas fa-lock"></i> UNLOCK BASIC';
         }
 
-        return '<div class="basic-unlocked"><i class="fas fa-lock-open"></i> BASIC <span class="blue-text">&nbsp;UNCLOKED</span></div>';
+        return '<div class="basic-unlocked"><i class="fas fa-lock-open"></i> BASIC <span class="blue-text">&nbsp;UNLOCKED</span></div>';
     }
 
     public function license_login_page() {
@@ -251,11 +269,13 @@ class Shortcodes {
         geo_session();
         $ns_text = '';
 
-        $db_prefix = CRUD::prefix();
+        $db_prefix  = CRUD::prefix();
+        $table_name = $db_prefix . 'newsletter';
 
         $existed = CRUD::DB()->get_row(
             CRUD::DB()->prepare(
-                'SELECT * ' . $db_prefix . 'newsletter WHERE email="%s"'
+                "SELECT * FROM $table_name WHERE email=%s",
+                $_POST['newsletter_email']
             )
         );
 
@@ -297,18 +317,28 @@ class Shortcodes {
     }
 
     public function basic_unlock_info() {
+        $txt = '<b style="color: #51A7F9;" >Unsubscribe any time</b>';
+
         if ( User::have_permit( 'basic' ) ) {
-            return '<b>Public data is our future</b><br>
-            <span style="color: #4682b4;"><b>START TO SHARE DATA</b></span><br>
-            that you believe is usefull and create value to others<br><br>
-            <b style="color: #4682b4;" class="upgrade-free">Unsubscribe any time</b>';
+            $txt = '<b style="color: #51A7F9;" class="upgrade-free">Unsubscribe any time</b>';
+        }
+
+        if ( User::have_permit( 'facilitator' ) ) {
+            $txt = sprintf( '<b style="color: #51A7F9;" >License renewal: %s</b>', date( 'M d, Y', Geomify_stripe::get_subscription( User::stripe_subscription_id() )->current_period_end ) );
+        }
+
+        if ( User::have_permit( 'basic' ) ) {
+            return sprintf( '<b>Public data is our future</b><br>
+            <span style="color: #51A7F9;"><b>START SHARING</b></span><br>
+            Share the data that you believe is useful and creates value to others<br><br>
+            %s', $txt );
 
         } else {
-            return '<b>Public data is our future</b><br>
-            <span style="color: #4682b4;"><b>Unlock BASIC</b></span><br>
-            and share data<br><br>
+            return sprintf( '<b>Public data is our future</b><br>
+            <div style=" margin-bottom: 10px;"><span style="color: #51A7F9;"><b>Unlock BASIC</b></span><br>
+            and data sharing<br></div>
             <h5 style="font-weight: bold; margin: 0;">ONLY 9 €/mo</h5>
-            <b style="color: #4682b4;" class="upgrade-free">Unsubscribe any time</b>';
+            %s', $txt );
         }
     }
 
@@ -318,6 +348,15 @@ class Shortcodes {
         } else {
             return 'Upgrade to basic';
         }
+    }
+
+    public function current_geo_sub() {
+
+        return '<div style="font-size: 2rem;">' . ucfirst( User::current_subscription() ) . '</div>';
+    }
+
+    public function geo_admin_login() {
+        return Templates::get( 'admin/login' );
     }
 
 }

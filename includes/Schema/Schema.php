@@ -109,29 +109,39 @@ class Schema {
             'project_view_name' => [
                 'label'       => __( 'Project View Nmae', $domain ),
                 'placeholder' => __( 'Project View', $domain ),
+                'required'    => true,
             ],
             'description'       => [
                 'label'       => __( 'Project view description' ),
                 'placeholder' => __( 'Project view description' ),
+                'required'    => true,
             ],
             'url'               => [
                 'label'       => __( 'URL', $domain ),
                 'placeholder' => __( 'URL', $domain ),
                 'type'        => 'url',
+                'required'    => true,
             ],
             'industry'          => [
                 'label'       => __( 'Industry', $domain ),
                 'placeholder' => __( '- Select Industry -', $domain ),
                 'type'        => 'select',
                 'options'     => [
-                    'a' => 'a',
+                    'Architecture, Engineering & Construction' => 'Architecture, Engineering & Construction',
+                    'Facilities Operations'                    => 'Facilities Operations',
+                    'Plant & Process'                          => 'Plant & Process',
+                    'Transport & Infrastructure'               => 'Transport & Infrastructure',
+                    'Urban Planning'                           => 'Urban Planning',
+                    'Enterprise'                               => 'Enterprise',
                 ],
+                'required'    => true,
             ],
             'country'           => [
                 'label'       => __( 'Country', $domain ),
                 'placeholder' => __( '- Select Country -', $domain ),
                 'type'        => 'select',
                 'options'     => Processor::txtfile2array( GEOMIFY_RESOURCE_PATH . 'countries.txt' ),
+                'required'    => true,
             ],
             'user_id'           => [
                 'label'       => __( 'User ID', $domain ),
@@ -139,6 +149,22 @@ class Schema {
                 'type'        => 'number',
                 'data_type'   => 'bigint',
                 'hidden'      => true,
+            ],
+            'list_free'         => [
+                'label'       => __( 'List in FREE' ),
+                'placeholder' => __( 'List in FREE' ),
+                'type'        => 'checkbox',
+                'use_label'   => 1,
+                'required'    => false,
+                'value'       => true,
+            ],
+            'list_basic'        => [
+                'label'       => __( 'List in BASIC' ),
+                'placeholder' => __( 'List in BASIC' ),
+                'type'        => 'checkbox',
+                'use_label'   => 1,
+                'required'    => false,
+                'value'       => true,
             ],
         ];
 
@@ -210,8 +236,8 @@ class Schema {
                 'placeholder' => __( 'EAN number', $domain ),
             ],
             'company_number' => [
-                'label'       => __( 'Comapny number', $domain ),
-                'placeholder' => __( 'Comapny number', $domain ),
+                'label'       => __( 'Company number', $domain ),
+                'placeholder' => __( 'Company number', $domain ),
             ],
             'invoice_email'  => [
                 'label'       => __( 'Invoice email', $domain ),
@@ -286,8 +312,8 @@ class Schema {
                 'placeholder' => __( 'EAN number', $domain ),
             ],
             'company_number' => [
-                'label'       => __( 'Comapny number', $domain ),
-                'placeholder' => __( 'Comapny number', $domain ),
+                'label'       => __( 'Company number', $domain ),
+                'placeholder' => __( 'Company number', $domain ),
             ],
             'invoice_email'  => [
                 'label'       => __( 'Invoice email', $domain ),
@@ -362,8 +388,8 @@ class Schema {
                 'placeholder' => __( 'EAN number', $domain ),
             ],
             'company_number' => [
-                'label'       => __( 'Comapny number', $domain ),
-                'placeholder' => __( 'Comapny number', $domain ),
+                'label'       => __( 'Company number', $domain ),
+                'placeholder' => __( 'Company number', $domain ),
             ],
             'invoice_email'  => [
                 'label'       => __( 'Invoice email', $domain ),
@@ -438,8 +464,8 @@ class Schema {
                 'placeholder' => __( 'EAN number', $domain ),
             ],
             'company_number' => [
-                'label'       => __( 'Comapny number', $domain ),
-                'placeholder' => __( 'Comapny number', $domain ),
+                'label'       => __( 'Company number', $domain ),
+                'placeholder' => __( 'Company number', $domain ),
             ],
             'invoice_email'  => [
                 'label'       => __( 'Invoice email', $domain ),
@@ -514,8 +540,8 @@ class Schema {
                 'placeholder' => __( 'EAN number', $domain ),
             ],
             'company_number' => [
-                'label'       => __( 'Comapny number', $domain ),
-                'placeholder' => __( 'Comapny number', $domain ),
+                'label'       => __( 'Company number', $domain ),
+                'placeholder' => __( 'Company number', $domain ),
             ],
             'invoice_email'  => [
                 'label'       => __( 'Invoice email', $domain ),
@@ -527,13 +553,13 @@ class Schema {
         $this->schema['tutorials'] = [
             'caption'     => [
                 'label'       => __( 'Caption', $domain ),
-                'placeholder' => __( 'Caption', $domain ),
-                'use_label'   => true,
+                'placeholder' => __( 'Tutorial Name', $domain ),
+                'use_label'   => false,
                 'required'    => true,
             ],
             'license'     => [
                 'label'       => __( 'License', $domain ),
-                'placeholder' => __( 'License', $domain ),
+                'placeholder' => __( '- Select License Category -', $domain ),
                 'type'        => 'select',
                 'options'     => [
                     'Free'        => __( 'Free', $domain ),
@@ -542,20 +568,20 @@ class Schema {
                     'Creator'     => __( 'Creator', $domain ),
                     'Enterprise'  => __( 'Enterprise', $domain ),
                 ],
-                'use_label'   => true,
+                'use_label'   => false,
                 'required'    => true,
             ],
             'file_url'    => [
                 'label'       => __( 'File URL', $domain ),
-                'placeholder' => __( 'File URL', $domain ),
+                'placeholder' => __( 'URL', $domain ),
             ],
-            'file_path'   => [
-                'label'       => __( 'File path', $domain ),
-                'placeholder' => __( 'File path', $domain ),
-            ],
-            'file_info'   => [
+            // 'file_path'   => [
+            //     'label'       => __( 'File path', $domain ),
+            //     'placeholder' => __( 'File path', $domain ),
+            // ],
+            // 'file_info'   => [
 
-            ],
+            // ],
             'uploader_id' => [
 
             ],
@@ -721,7 +747,7 @@ class Schema {
             ],
             'description'  => [
                 'label'       => __( 'Description' ),
-                'placeholder' => __( 'Why is this dataset of interest to other GEOMIFY users and what value to think it will bring to the public' ),
+                'placeholder' => __( 'Why is this dataset of interest to other GEOMIFY users and what value do you think it will bring to the public' ),
                 'type'        => 'textarea',
                 'required'    => true,
 
@@ -757,14 +783,20 @@ class Schema {
 
         $this->schema['newsletter'] = [
             'email'          => [
-                'label' => __( 'Email', $domain ),
-                'type'  => 'email',
+                'label'     => __( 'Email', $domain ),
+                'type'      => 'email',
+                'hidden'    => false,
+                'data_type' => 'string',
             ],
             'date_activated' => [
-                'label' => __( 'Date activated', $domain ),
+                'label'     => __( 'Date activated', $domain ),
+                'hidden'    => false,
+                'data_type' => 'string',
             ],
             'subscribed'     => [
-                'label' => __( 'Subscribed', GTD ),
+                'label'     => __( 'Subscribed', GTD ),
+                'hidden'    => false,
+                'data_type' => 'string',
             ],
         ];
 

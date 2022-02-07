@@ -304,7 +304,7 @@
 
         ?>
 <div class="geomify-video-button-container">
-    <a href="<?php echo $s['button_url']['url'] ?>"
+    <a class="tt" href="<?php echo $s['button_url']['url'] ?>"
         <?php echo $this->get_render_attribute_string( 'button_caption' ) ?>><?php echo $s['button_caption'] ?></a>
     <div                                 <?php echo $this->get_render_attribute_string( 'video_caption' ) ?>><?php echo $s['video_caption'] ?> <i
             class="far fa-play-circle"></i> </div>

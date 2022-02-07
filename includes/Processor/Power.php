@@ -92,7 +92,8 @@ class Power {
 
     public static function current_parent() {
         global $post;
-        return $post->post_parent;
+        $parent = get_post( $post->post_parent );
+        return $parent !== null && $parent->post_name !== self::current_page() ? $parent->post_name : null;
     }
 
 }

@@ -1,3 +1,5 @@
+<?php \geomify\Processor\User::is_logged() or exit; defined('ABSPATH') or exit; ?>
+
 <?php
     $views = \geomify\Schema\CRUD::retrieve( 'project_views' );
 ?>

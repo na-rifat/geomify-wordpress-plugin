@@ -55,7 +55,7 @@ class Data {
             switch ( $value['data_type'] ) {
                 case 'longtext':
                 case 'text':
-                case 'varchar':
+                case 'varchar':                    
                     $result[] = '%s';
                     break;
                 case 'integer':

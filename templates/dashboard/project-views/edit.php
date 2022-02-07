@@ -1,14 +1,22 @@
+<?php \geomify\Processor\User::is_logged() or exit; defined('ABSPATH') or exit; ?>
+
 <?php
     $schema = \geomify\Schema\Schema::get( 'project_views' );
     $schema = \geomify\Processor\Processor::add_name_to_inputs( $schema );
-    $schema = \geomify\Processor\Input::add_global_props( $schema, [
-        'required' => true,
-    ] );
-    $form = new \geomify\Processor\Form();
-    // $values = \geomify\Schema\CRUD::retrieve( 'project_views', $_POST['id'] );
-    $values = \geomify\Schema\CRUD::get_row( 'project_views', $_POST['id'] );
+    $form   = new \geomify\Processor\Form();
+    $values = \geomify\Schema\CRUD::get_row( 'project_views', geomify_var( 'id' ) );
     $schema = \geomify\Processor\Processor::add_values_to_schema( $schema, $values );
 
+    if ( $schema['list_free']['value'] ) {
+        $schema['list_free']['checked'] = true;
+    }
+
+    if ( $schema['list_basic']['value'] ) {
+        $schema['list_basic']['checked'] = true;
+    }
+
+    $schema['list_free']['value']  = true;
+    $schema['list_basic']['value'] = true;
     // var_dump( $schema );
 
     $form->create_field( $schema['project_view_name'] );
@@ -16,12 +24,13 @@
     $form->create_field( $schema['url'] );
     $form->create_field( $schema['industry'] );
     $form->create_field( $schema['country'] );
+    $form->create_field_pair( $schema['list_free'], $schema['list_basic'] );
     $form->create_field(
         [
             'name'  => 'submit',
             'type'  => 'button',
             'value' => __( 'Update', $domain ),
-            'class' => ['new-pv-update'],
+            'class' => ['new-pv-update', 'geomify-form-submit-btn'],
         ]
     );
 
@@ -80,15 +89,16 @@
                 url: geomify.ajax_url,
                 data,
                 dataType: "JSON",
-                success: function(response) {
-                    console.log(response)
+                success: function(response) {                    
                     if (response.success) {
                         let formView = $(`.new-pv-holder`);
                         formView.find(`.new-project-view`).hide(300, function(e) {
                             formView.remove();
-                            geomifyMessage(response.data.message);
+                            geomifyMessage(response.data.msg);
                             getPv();
                         });
+                    }else{
+                        geomifyMessage(response.data.msg, `failed`);
                     }
                 },
                 error: function(response) {},

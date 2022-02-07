@@ -35,3 +35,42 @@
     justify-content: space-around;
 }
 /* Tutorials list end */
+
+/* Geo files */
+.geo-file-list-holder {
+    width: 50vw;
+    height: 60vw;
+}
+.gfl-row {
+    display: flex;
+}
+.gfl-col {
+    border-radius: 10px;
+    box-shadow: 0 0 3px #ccc;
+    margin: 10px;
+    padding: 20px;
+    /* max-width: 400px;
+    min-width: 300px; */
+    /* width: 300px; */
+    width: 300px;
+}
+.f-row table tr th {
+    text-align: right;
+}
+.f-row table tr td {
+    text-align: left;
+}
+.f-row th,
+.f-row td {
+    padding: 5px;
+}
+.gfl-row .displaying-num {
+    display: none !important;
+}
+.column-action {
+    width: 100px !important;
+}
+/* .gfl-row .manage-column {
+    text-align: left;
+} */
+/* Geo files end */

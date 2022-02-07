@@ -388,16 +388,48 @@ if ( ! function_exists( 'geo_unique_username' ) ) {
 }
 
 if ( ! function_exists( 'geo_mail' ) ) {
-    function geo_mail( $to, $subject, $template_name ) {
-        $templates = new \geomify\Processor\Templates;
+    function geo_mail( $to, $subject, $template_name, $header = 'header', $footer = 'footer' ) {
+        $templates = new \geomify\Processor\Templates();
         wp_mail(
             $to,
-            $subject, 
-            $templates::get( 'email/header' ) . $templates::get("email/{$template_name}") . $templates::get( 'email/footer' ),
+            $subject,
+            $templates::get( "email/{$header}" ) . $templates::get( "email/{$template_name}" ) . $templates::get( "email/{$footer}" ),
             [
                 'Content-Type: text/html; charset=UTF-8',
                 sprintf( 'From: %s <noreply@geomify.com>', get_bloginfo( 'name' ) ),
             ] );
 
     }
+}
+
+
+
+if(!function_exists('getUserIP')){
+    
+function getUserIP()
+{
+    // Get real visitor IP behind CloudFlare network
+    if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
+              $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+              $_SERVER['HTTP_CLIENT_IP'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+    }
+    $client  = @$_SERVER['HTTP_CLIENT_IP'];
+    $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+    $remote  = $_SERVER['REMOTE_ADDR'];
+
+    if(filter_var($client, FILTER_VALIDATE_IP))
+    {
+        $ip = $client;
+    }
+    elseif(filter_var($forward, FILTER_VALIDATE_IP))
+    {
+        $ip = $forward;
+    }
+    else
+    {
+        $ip = $remote;
+    }
+
+    return $ip;
+}
 }

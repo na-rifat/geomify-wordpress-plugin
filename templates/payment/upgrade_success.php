@@ -1,11 +1,12 @@
 <?php
-    $latest_invoice = \geomify\Processor\User::latest_stripe_invoice();
+    // $latest_invoice = \geomify\Processor\User::latest_stripe_invoice();
     $package        = \geomify\Schema\Schema::get( 'packages' )[geomify_var( 'package_name' )];
+    $latest_invoice = $_SESSION['latest_stripe_invoice'];
 ?>
 
 <div class="upgrade-success">
     <div class="success-header">
-        <div class="InvoiceThumbnail"><svg class="InlineSVG InvoiceThumbnail-image" focusable="false" width="131"
+        <div class="InvoiceThumbnail" style="margin-top: -60px"><svg class="InlineSVG InvoiceThumbnail-image" focusable="false" width="131"
                 height="145" viewBox="0 0 131 145" fill="none">
                 <g filter="url(#filter0_ddd)">
                     <rect x="35" y="25" width="60.5902" height="74.8467" rx="4" fill="white"></rect>
@@ -65,7 +66,7 @@
                 </svg></div>
         </div>
         <h6>Invoice paid</h6>
-        <h2><?php printf( '€ %s', $package['price'] )?></h2>
+        <h2><?php printf( '€ %s', $latest_invoice->amount_paid / 100.00 )?></h2>
     </div>
     <table class="invoice-info">
         <tr>
@@ -83,9 +84,17 @@
         <a href="<?php echo $latest_invoice->invoice_pdf ?>" class="geomify-form-submit-btn" target="_blank">Download
             invioce</a>
     </div>
+    <div class="invoice-buttons">
+        <a href="#" style="    background: #aaa;
+    color: red!important;
+    border: 2px solid black!important;
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;" class="geomify-form-submit-btn cls-wdw" target="_blank">Close window</a>
+    </div>
     <script>
-          jQuery(`.lightbox-close`).on(`click`, function (e) {
-            location.reload();
-         })
+    jQuery(`.lightbox-close, .cls-wdw`).on(`click`, function(e) {
+        location.reload();
+    })
     </script>
 </div>

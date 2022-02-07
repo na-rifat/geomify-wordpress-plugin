@@ -137,3 +137,27 @@
 .geomify-iframe #wpadminbar{
     display: none;
 }
+
+@media screen and (max-width: 600px){
+.geomify-video-button > div{
+	display: none;
+}
+.geomify-video-button iframe{
+	display: inline-block!important;
+}
+}
+
+.elementor-widget-geomify_video_button,
+.elementor-widget-geomify_video_button .elementor-widget-container,
+.geomify-video-button,
+.geomify-video-button iframe{
+	height: 100%;
+}
+.geomify-video-button iframe{
+	display: none;
+}
+.geomify-video-button{
+	display: flex;
+    justify-content: center;
+    align-items: center;
+}

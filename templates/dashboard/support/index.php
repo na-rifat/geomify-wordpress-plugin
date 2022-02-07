@@ -1,8 +1,10 @@
+<?php \geomify\Processor\User::is_logged() or exit; defined('ABSPATH') or exit; ?>
+
 <div class="gtab-holder">
     <div class="gtab-header">
         <div class="header-item">
             <h2>Write to our support team</h2>
-            <p>We respond to usport request within 48 hours, Monday to Friday</p>
+            <p>We respond to support request within 48 hours, Monday to Friday</p>
             <br>
         </div>
     </div>

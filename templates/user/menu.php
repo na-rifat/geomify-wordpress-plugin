@@ -16,6 +16,22 @@
             <i class="fas fa-bars udm-toggle"></i>
         </div>
     </div>
+    <?php
+        if($user::is_current_user_admin()){
+            ?>
+    <div class="udm-items admin"> 
+        <div class="udmi-row">
+            <ul class="udmi-links udmi-btop">
+                <li><a href="<?php echo site_url('dashboard/project-views') ?>"><span class="admin-green">Admin</span>Project views <i class="fas fa-desktop"></i></a></li>
+                <li><a href="<?php echo admin_url('users.php') ?>"><span class="admin-green">Admin</span>Profiles <i class="far fa-user"></i></a></li>
+                <li><a href="<?php echo site_url('dashboard/tutorials') ?>"><span class="admin-green">Admin</span>Tutorials <i class="fab fa-youtube"></i></a></li>
+                <li><a href="<?php echo site_url('logout') ?>">Logout <i class="fas fa-sign-out-alt"></i></a></li>
+            </ul>
+        </div>      
+    </div>
+    <?php
+        }else{
+            ?>
     <div class="udm-items">
         <div class="udmi-row">
             <div class="udmi-col">
@@ -30,7 +46,7 @@
         </div>
         <div class="udmi-row">
             <ul class="udmi-links">
-                <li><a href="<?php echo site_url('upgrade') ?>" class="upgrade-link">Upgrade</a></li>
+                <li><a href="<?php echo site_url('upgrade') ?>" class="upgrade-link">License Subscriptions</a></li>
             </ul>
         </div>
         <hr>
@@ -49,4 +65,7 @@
             </ul>
         </div>
     </div>
+    <?php
+        }
+    ?>
 </div>

@@ -108,6 +108,19 @@ class Form {
                 );
 
                 break;
+            case 'checkbox':
+                $element = sprintf( '<input type="%s" name="%s" id="%s" placeholder="%s" value="%s" class="%s" %s %s %s/>',
+                    $args['type'],
+                    $args['name'],
+                    $args['name'],
+                    $args['placeholder'],
+                    $args['value'],
+                    implode( ' ', $args['class'] ),
+                    $attributes,
+                    $args['required'] ? ' required ' : '',
+                    $args['checked'] ? ' checked ' : 'a'
+                );
+                break;
             default:
                 $element = sprintf( '<input type="%s" name="%s" id="%s" placeholder="%s" value="%s" class="%s" %s %s/>',
                     $args['type'],
@@ -126,7 +139,8 @@ class Form {
             return sprintf( '<div class="geomify-form-input-wrapper">%s</div>', $element );
         }
 
-        return sprintf( '<div class="geomify-form-input-wrapper"><label for="%s">%s</label>%s</div>',
+        return sprintf( '<div class="geomify-form-input-wrapper %s"><label for="%s">%s</label>%s</div>',
+            'geo-input-type-' . $args['type'],
             $args['name'],
             $args['label'],
             $element

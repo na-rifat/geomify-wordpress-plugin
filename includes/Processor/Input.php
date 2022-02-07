@@ -12,7 +12,7 @@ class Input {
     /**
      * Start the form
      *
-     * @param [type] $args
+     * @param  [type] $args
      * @return void
      */
     public static function start( $args ) {
@@ -84,6 +84,7 @@ class Input {
             'value'       => '',
             'rows'        => 10,
             'cols'        => 30,
+            'default'     => '',
         ];
 
         $args = wp_parse_args( $args, $defaults );
@@ -104,7 +105,7 @@ class Input {
                     $args['cols'],
                     implode( $args['class'] ),
                     $attributes,
-                    $args['required'] ? 'required' : '',
+                    isset( $args['required'] ) && $args['required'] ? 'required' : '',
                     $args['value'],
                 );
                 break;
@@ -122,15 +123,17 @@ class Input {
                 $options = ! empty( $args['placeholder'] ) ? '<option value="" selected disabled>' . $args['placeholder'] . '</option>' : '';
 
                 foreach ( $args['options'] as $key => $title ) {
-                    $selected = $key == $args['default'] || $key == $args['value'] ? ' selected ' : '';
-                    $options .= sprintf( '<option value="%s" %s>%s</option>', $key, $selected, $title );
+                    $key      = trim( $key );
+                    $selected = isset( $args['default'] ) && $key == $args['default'] || $key == $args['value'] ? ' selected ' : '';
+                    // $selected = $key == $args['value'] ? ' selected ' : '';
+                    $options .= sprintf( '<option value="%s" %s>%s</option>', $key, $selected, trim( $title ) );
                 }
 
                 $element = sprintf(
                     '<select id="%s" name="%s" %s>%s</select>',
                     $args['name'],
                     $args['name'],
-                    $args['required'] ? 'required' : '',
+                    isset( $args['required'] ) && $args['required'] ? 'required' : '',
                     $options
                 );
 
@@ -144,7 +147,7 @@ class Input {
                     $args['value'],
                     implode( ' ', $args['class'] ),
                     $attributes,
-                    $args['required'] ? 'required' : '',
+                    isset( $args['required'] ) && $args['required'] ? 'required' : '',
                 );
                 break;
         }
@@ -160,13 +163,12 @@ class Input {
         );
     }
 
-
     /**
      * Convert an array to html selectable options
      *
-     * @param array $array
-     * @param mixed $placeholder
-     * @param string $selected
+     * @param  array    $array
+     * @param  mixed    $placeholder
+     * @param  string   $selected
      * @return string
      */
     public static function array2options( $array, $placeholder = null, $selected = '' ) {
@@ -184,9 +186,9 @@ class Input {
     /**
      * Echo version of array2options()
      *
-     * @param array $array
-     * @param mixed $placeholder
-     * @param string $selected
+     * @param  array  $array
+     * @param  mixed  $placeholder
+     * @param  string $selected
      * @return void
      */
     public static function __array2options( $array, $placeholder = null, $selected = '' ) {

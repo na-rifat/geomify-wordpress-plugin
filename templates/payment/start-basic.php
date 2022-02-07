@@ -1,8 +1,10 @@
 <?php
     $package_name = geomify_var( 'package_name' );
     $package      = \geomify\Schema\Schema::get( 'packages' )[$package_name];
-    $is_down = \geomify\Processor\Geomify_stripe::pkg_val($package_name) < \geomify\Processor\Geomify_stripe::pkg_val($current_pkg);
+    // $is_down = \geomify\Processor\Geomify_stripe::pkg_val($package_name) < \geomify\Processor\Geomify_stripe::pkg_val($current_pkg);
     $package      = \geomify\Schema\Schema::get( 'packages' )[$package_name];
+    $user = new  \geomify\Processor\User();
+    $bal =$user::is_logged() ? $user::stripe_balance() : 0;
 ?>
 
 <div class="payment-holder start-basic-holder">
@@ -12,7 +14,7 @@
         </div>
         <div class="payment-col">
             <h4 class="blue-text uppercase">Start with</h4>
-            <h2><?php echo $package['label'] ?></h2>
+            <h2 style="font-size: 2rem;"><?php echo $package['label'] ?></h2>
             <br>
             <h2><?php printf( '%s €/mo', geomify_monthly_price( $package['price'] ) )?></h2>
             <h4 class="blue-text">Billed annually</h4>
@@ -71,11 +73,11 @@
                             class="geomify-form-submit-btn">
                     </div>
                     <div class="payment-input-group">
-                    <?php if($is_down){
+                    <?php //if($is_down){
                         ?>
-                        <div style="color: red; font-size: 12px;">*Previously paid invoice(s) won't refund on downgrade*</div>
+                        <!-- <div style="color: red; font-size: 12px;">*Previously paid invoice(s) won't refund on downgrade*</div> -->
                         <?php
-                    } ?>
+                   // } ?>
                 </div>
                 </div>
                 <div class="method-option">

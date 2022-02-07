@@ -181,7 +181,7 @@ class Video_button extends Base {
         );
         $attr = $this->get_render_attribute_string( 'title' );
 
-        printf( '<div %s >%s <i class="far fa-play-circle"></i></i></div>', $attr, $s['title'] );
+        printf( '<div %s ><div>%s <i class="far fa-play-circle"></i></div></i>%s</div>', $attr, $s['title'],
+        '<iframe src="' . geomify_y2embed( $s['youtube_video_url'] ) . '?rel=0&modestbranding=1&autohide=1&showinfo=0&controls=1' . '"></iframe>');
     }
-
 }

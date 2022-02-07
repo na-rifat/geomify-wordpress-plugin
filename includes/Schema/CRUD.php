@@ -79,19 +79,17 @@ class CRUD {
         if ( $id != null ) {
             return self::DB()->get_results(
                 self::DB()->prepare(
-                    sprintf( 'SELECT * FROM %s WHERE %s=%s', $table_name, $indentity_col, $id )
+                    sprintf( "SELECT * FROM $table_name WHERE $indentity_col=%s", $id )
                 )
             );
         }
 
         return self::DB()->get_results(
-            self::DB()->prepare(
-                sprintf( 'SELECT * FROM %s', $table_name )
-            )
+            "SELECT * FROM $table_name"
         );
     }
 
-    public static function get_row( $table_name, $id, $id_col_name = 'id') {
+    public static function get_row( $table_name, $id, $id_col_name = 'id' ) {
         $table_name = self::prefix() . $table_name;
 
         return self::DB()->get_row(
@@ -118,14 +116,17 @@ class CRUD {
         $schema_name = $table_name;
         $table_name  = self::prefix() . $table_name;
         $format      = Data::generate_data_col_type( $schema_name );
-        $data        = Processor::collect_posted_data( $schema_name );        
+        $data        = Processor::collect_posted_data( $schema_name );
 
         $updated = self::DB()->update(
             $table_name,
             $data,
             [$id_col_name => $id],
-            $format
+            $format,
+            ['%d']
         );
+
+        // wp_send_json_error( $updated );exit;
 
         if ( ! $updated ) {
             return new \WP_Error( 'update-failed', __( 'Failed to update', GTD ) );
@@ -216,4 +217,5 @@ class CRUD {
 
         return wp_parse_args( $schema, $defaults );
     }
+
 }

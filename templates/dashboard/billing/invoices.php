@@ -1,3 +1,5 @@
+<?php \geomify\Processor\User::is_logged() or exit; defined('ABSPATH') or exit; ?>
+
 <?php
     $user     = new \geomify\Processor\User();
     $invoices = $user::stripe_invoices();

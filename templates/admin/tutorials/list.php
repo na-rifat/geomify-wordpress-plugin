@@ -1,4 +1,6 @@
 
+<?php \geomify\Processor\User::is_logged() or exit; defined('ABSPATH') or exit; ?>
+
 <?php
     $tutorials = \geomify\Schema\CRUD::retrieve( 'tutorials' );
 ?>
@@ -26,7 +28,7 @@
                     sprintf( '<a href="%s" target="_blank"><i class="fas fa-external-link-alt"></i></a>', $tutorial->file_url ),
                     date( 'd/m/Y', $tutorial->uploaded_at ),
                     sprintf(
-                        '<a class="geomify-delete-turoial" href="%s"><i class="far fa-trash-alt"></i></a>',
+                        '<a class="geomify-delete-turoial" href="%s" data-video-source-type="youtube"><i class="far fa-trash-alt"></i></a>',
                         admin_url( '?action=geomify_edit_tutorial&id=' . $tutorial->id ),
                         admin_url( '?action=geomify_delete_tutorial&id=' . $tutorial->id )
                     )

@@ -1,8 +1,10 @@
+<?php \geomify\Processor\User::is_logged() or exit; defined('ABSPATH') or exit; ?>
+
 <div class="file-upload-section">
     <div class="gtab-holder">
         <p class="file-description">With your BASIC account you can share data with other GEOMIFY users. Follow the
             quick and easy 4 step
-            process below to describe your data and why you thing public access creates value to others.
+            process below to describe your data and why you think public access creates value to others.
             <br> <br>
             Examples of datasets useful for others: <br>
             -GEO & GIS data sets<br>-CAD data in 2D and 3D<br>

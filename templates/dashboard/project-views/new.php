@@ -1,9 +1,11 @@
+<?php \geomify\Processor\User::is_logged() or exit; defined('ABSPATH') or exit; ?>
+
 <?php
     $schema = \geomify\Schema\Schema::get( 'project_views' );
     $schema = \geomify\Processor\Processor::add_name_to_inputs( $schema );
-    $schema = \geomify\Processor\Input::add_global_props( $schema, [
-        'required' => true,
-    ] );
+    // $schema = \geomify\Processor\Input::add_global_props( $schema, [
+    //     'required' => true,
+    // ] );
     $form = new \geomify\Processor\Form();
 
     $form->create_field( $schema['project_view_name'] );
@@ -11,12 +13,13 @@
     $form->create_field( $schema['url'] );
     $form->create_field( $schema['industry'] );
     $form->create_field( $schema['country'] );
+    $form->create_field_pair($schema['list_free'], $schema['list_basic']);
     $form->create_field(
         [
             'name'  => 'submit',
             'type'  => 'button',
-            'value' => __( 'Add', $domain ),
-            'class' => ['new-pv-submit'],
+            'value' => __( 'SAVE & ADD TO PROJECT VIEW LIST', $domain ),
+            'class' => ['new-pv-submit', 'geomify-form-submit-btn'],
         ]
     );
 

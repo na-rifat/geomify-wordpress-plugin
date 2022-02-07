@@ -24,11 +24,13 @@ var gTabIn = 0;
         dragnDropUploader();
         uploadUserFile();
         dltPm();
-        startBasicForm();
         ckConsent();
         geoLogin();
         geoReset();
         udmHandle();
+        // playUVideo();
+        handleMobileLoginAlert();
+        geoAdminLogin();
     });
 })(jQuery);
 
@@ -156,17 +158,11 @@ function multiStepForm() {
             backgroundColor: parent.css(`background-color`),
         });
         let jsForm = document.querySelector(`form[data-name="${formName}"]`);
-
-        // console.log(jsForm);return;
-
         let data = new FormData(jsForm);
 
         data.append(`shortcode`, success_shortcode);
         data.append(`form_name`, formName);
         data.append(`action`, `${formName}_submit`);
-
-        // console.log(data.get('action'))
-        // return
 
         $.ajax({
             url: geomify.ajax_url,
@@ -175,8 +171,6 @@ function multiStepForm() {
             processData: false,
             data,
             success: (res) => {
-                console.clear();
-                console.log(res);
                 if (res.success) {
                     parent.html(res.data.template);
                     $(`.close-window`).on(`click`, hideLightbox);
@@ -184,7 +178,7 @@ function multiStepForm() {
                     geomifyAlert(res.data.msg, `failed`);
                 }
             },
-            error: (res) => {},
+            error: (res) => { },
             complete: (res) => {
                 parent.find(`.brand-loading`).remove();
             },
@@ -198,7 +192,7 @@ function multiStepForm() {
  * @param {string} text
  * @param {string} type
  */
-function geomifyAlert(text, type = "success") {}
+function geomifyAlert(text, type = "success") { }
 
 function geomifyTabNavigation() {
     return;
@@ -243,6 +237,7 @@ function getPv() {
     let data = {
         action: `get_pv`,
         nonce: geomify.get_pv_nonce,
+        sort: $(`#pv-search`).val()
     };
 
     let parent = $(`.pv-list`);
@@ -270,17 +265,6 @@ function geomifyContactForm() {
 
     $(`#submit-cf7`).on(`click`, function (e) {
         $(`.geomify-cf7-btn`).trigger(`click`);
-    });
-}
-
-function viewTutorial() {
-    let $ = jQuery;
-
-    $(`.watch-tutorial`).on(`click`, function (e) {
-        e.preventDefault();
-
-        let src = $(this).attr(`href`);
-        lightboxVideo(src);
     });
 }
 
@@ -340,6 +324,7 @@ function createSpace() {
                 `&nonce=${geomify.create_space_nonce}&step=${step}&action=create_space`,
             dataType: "JSON",
             success: function (response) {
+                console.log(response)
                 if (response.success) {
                     parent.html(response.data.page);
                 } else {
@@ -397,7 +382,6 @@ function activateUser() {
                 `&nonce=${geomify.activate_user_nonce}&action=activate_user_finally&key=${key}&user_id=${userId}`,
             dataType: "JSON",
             success: function (response) {
-                console.log(response);
                 if (response.success) {
                     window.location.reload();
                 } else {
@@ -483,7 +467,6 @@ function saveAcInfo() {
                 `&nonce=${geomify.save_ac_info_nonce}&action=save_ac_info`,
             dataType: `JSON`,
             success: function (response) {
-                console.log(response);
                 if (response.success) {
                     geomifyMessage(response.data.msg);
                 } else {
@@ -530,7 +513,6 @@ function upgradeFormThroughAjax(package_name) {
         },
         dataType: "JSON",
         success: function (response) {
-            console.log(response);
             if (response.success) {
                 lightBox(response.data.form);
             } else {
@@ -538,31 +520,10 @@ function upgradeFormThroughAjax(package_name) {
             }
         },
     });
-    // let $ = jQuery;
-    // $.ajax({
-    //     type: "POST",
-    //     url: geomify.ajax_url,
-    //     data: {
-    //         action: `upgrade_license_page`,
-    //         nonce: geomify.upgrade_license_page_nonce,
-    //         package_name,
-    //     },
-    //     dataType: "JSON",
-    //     success: function (response) {
-    //         console.log(response);
-    //         if (response.success) {
-    //             // $(`.upgrade-panel-${package_name}`).html(
-    //             //     `<div class="package-upgrade"><h1>Upgraded</h1></div>`
-    //             // );
-    //             lightBox(response.data.form);
-    //         } else {
-    //             geomifyMessage(response.data.msg, `failed`);
-    //         }
-    //     },
-    // });
 }
 
 function fillUpUpgraded() {
+    return;
     let $ = jQuery;
 
     if (geomify.is_logged_in && geomify.subscriptions.length > 0) {
@@ -592,6 +553,7 @@ function handlePayment() {
     let options = $(`.method-option`);
     let payment_card = $(`.payment-form`);
     let upgradeForm = $(`.upgrade-form`);
+    let paySection = $(`.pay-section`);
 
     items.on(`click`, function (e) {
         if ($(this).hasClass(`active-item`)) {
@@ -615,6 +577,16 @@ function handlePayment() {
 
         let self = $(this);
         let data = self.serialize();
+        let btn = self.find(`.geomify-form-submit-btn`).eq(0);
+
+        btn.on(`click`, function (e) {
+            e.preventDefault();
+        });
+
+        btn.prop(`disabled`, true);
+
+        brandLoading(paySection);
+
         data += `&action=stripe_payment&nonce=${geomify.stripe_payment_nonce}`;
         let package_name = $(`#package_name`).val();
 
@@ -625,16 +597,11 @@ function handlePayment() {
             dataType: "JSON",
             success: function (response) {
                 if (response.success) {
-                    if (package_name == `basic`) {
-                        $(`.upgrade-basic`).html(
-                            `<i class="fas fa-lock-open"></i> BASIC <span class="blue-text">UNCLOKED</span>`
-                        );
-                        return;
-                    }
                     $(`.pay-section`).html(response.data.page);
                 } else {
                     geomifyMessage(response.data.msg, `failed`);
                 }
+                endBrandLoading(paySection);
             },
         });
     });
@@ -644,6 +611,14 @@ function handlePayment() {
 
         let self = $(this);
         let data = self.serialize();
+        let btn = self.find(`.geomify-form-submit-btn`).eq(0);
+
+        btn.on(`click`, function (e) {
+            e.preventDefault();
+        });
+        btn.prop(`disabled`, true);
+        brandLoading(paySection);
+
         data += `&action=stripe_upgrade&nonce=${geomify.stripe_upgrade_nonce}`;
         let package_name = $(`#package_name`).val();
 
@@ -653,18 +628,15 @@ function handlePayment() {
             data,
             dataType: "JSON",
             success: function (response) {
-                console.log(response);
                 if (response.success) {
-                    if (package_name == `basic`) {
-                        // $(`.upgrade-basic`).html(
-                        //     `<i class="fas fa-lock-open"></i> BASIC <span class="blue-text">UNCLOKED</span>`
-                        // );
-                        // window.location.reload();
-                    }
                     $(`.pay-section`).html(response.data.page);
                 } else {
                     geomifyMessage(response.data.msg, `failed`);
                 }
+                endBrandLoading(paySection);
+            },
+            error: function (res) {
+                alert(`Failed`);
             },
         });
     });
@@ -714,8 +686,6 @@ function handleFileUpload() {
     });
 
     $(`.file-upload-submit-btn`).on(`click`, function (e) {
-        // e.preventDefault();
-
         let currentIndex = start;
         let nextIndex = currentIndex + 1;
 
@@ -730,8 +700,6 @@ function handleFileUpload() {
         if (nextIndex == 4) {
             return;
         }
-
-        // nextBtn.eq(0).css({ "background-color": `red` });
         if (tabs.eq(currentIndex).find(`form`).length == 0) {
             tabs.eq(nextIndex).toggleClass(`active-item`);
             tabs.eq(nextIndex - 1).toggleClass(`active-item`);
@@ -750,7 +718,6 @@ function getQuote() {
     let $ = jQuery;
 
     $(`.get-quote, .upgrade-enterprise`).on(`click`, function (e) {
-        // getShortcode('[geomify-registration step=1]');
         getShortcode(`[elementor-template id=3332]`);
     });
 }
@@ -775,8 +742,9 @@ function dragnDropUploader() {
     let $ = jQuery;
     var dropArea = $(".geomify-file-uploader"),
         drpa = document.querySelector(".geomify-file-uploader"),
-        button = dropArea.find(".choose-file"),
-        input = document.createElement("input");
+        button = dropArea.find(".choose-file");
+
+    input = document.createElement("input");
     input.name = "files[]";
     input.id = "files";
     input.type = "file";
@@ -787,69 +755,85 @@ function dragnDropUploader() {
 
     let files_input = $(`#files`);
 
-    let file;
-
-    button.on(`click`, () => {
+    button.on(`click`, (e) => {
+        e.preventDefault();
         input.click();
     });
 
-    files_input.on("change", function () {
+    input.onchange = function () {
         this.files.forEach((file) => {
             addFileToQue(file);
         });
         dropArea.classList.add("active");
-    });
+    };
 
     dropArea.on("dragover", (event) => {
         event.preventDefault();
         dropArea.addClass(`active`);
-        // dropArea.classList.add("active");
     });
 
     dropArea.on("dragleave", () => {
         dropArea.removeClass(`active`);
-        // dropArea.classList.remove("active");
     });
 
-    dropArea.on(`drop`, function (e) {        
+    dropArea.on(`drop`, function (e) {
+        e.preventDefault();
         e.originalEvent.dataTransfer.files.forEach((file) => {
             addFileToQue(file);
         });
         dropArea.removeClass("active");
     });
-
-    // drpa.drop = (event) => {
-    //     alert(123);
-    //     event.preventDefault();
-    //     event.dataTransfer.files.forEach((file) => {
-    //         addFileToQue(file);
-    //     });
-    //     dropArea.classList.remove("active");
-    // };
 }
 
 function addFileToQue(file) {
     let $ = jQuery;
     let queHolder = $(`.file-que`);
     let supportedExt = [
-        "geo",
-        "gis",
-        "cad",
-        "ifc",
-        "bim",
-        "pointclouds",
-        "jpg",
-        "jpeg",
-        "png",
-        "bmp",
-        "gif",
-        "json",
-        "geo-json",
+        `jpg`,
+        `png`,
+        `tif`,
+        `bmp`,
+        `psd`,
+        `tga`,
+        `epx`,
+        `pdf`,
+        `eps`,
+        `mp4`,
+        `m4p`,
+        `m4v`,
+        `ifc`,
+        `ifcxml`,
+        `rvt`,
+        `pln`,
+        `nwf`,
+        `dwg`,
+        `dxf`,
+        `dgn`,
+        `stl`,
+        `geo`,
+        `step`,
+        `csv`,
+        `jso`,
+        `dae`,
+        `pts`,
+        `las`,
+        `laz`,
+        `klm`,
+        `kmz`,
+        `gltf`,
+        `glb`,
+        `geojson`,
+        `json`,
+        `obj`,
+        `dwg`,
+        `shp`,
+        `shx`,
+        `dbf`,
+        `shx`,
+        `gml`,
     ];
 
     let ext = file.name.split(".")[file.name.split(".").length - 1];
-
-    alert(123);
 
     if (supportedExt.indexOf(ext) == -1) {
         alert(`Unsupported file format!`);
@@ -859,8 +843,8 @@ function addFileToQue(file) {
     let fileName =
         file.name.length > 12
             ? file.name.slice(0, 8) +
-              "..." +
-              file.name.split(".")[file.name.split(".").length - 1]
+            "..." +
+            file.name.split(".")[file.name.split(".").length - 1]
             : file.name;
 
     queHolder.append(`
@@ -948,8 +932,8 @@ function uploadUserFile() {
                     beginFileUpload();
                 }
             },
-            error: function (res) {},
-            complete: function (res) {},
+            error: function (res) { },
+            complete: function (res) { },
         });
     });
 }
@@ -1025,8 +1009,8 @@ function beginFileUpload() {
                     gTabIn = nextIndex;
                 }
             },
-            error: function (res) {},
-            complete: function (res) {},
+            error: function (res) { },
+            complete: function (res) { },
         });
     });
 }
@@ -1133,32 +1117,6 @@ function dltPv() {
     });
 }
 
-function startBasicForm() {
-    // let $ = jQuery;
-    // let btn = $(`.start-basic`);
-    // btn.on(`click`, function (e) {
-    //     e.preventDefault();
-    //     $.ajax({
-    //         type: "POST",
-    //         url: geomify.ajax_url,
-    //         data: {
-    //             action: `start_basic_form`,
-    //             nonce: geomify.start_basic_form_nonce,
-    //         },
-    //         dataType: "JSON",
-    //         success: function (response) {
-    //             console.clear();
-    //             console.log(response);
-    //             if (response.success) {
-    //                 lightBox(response.data.form);
-    //             } else {
-    //                 geomifyMessage(response.data.msg, `failed`);
-    //             }
-    //         },
-    //     });
-    // });
-}
-
 function startBasic() {
     let $ = jQuery;
     let parent = $(`.start-basic-holder`);
@@ -1170,6 +1128,17 @@ function startBasic() {
             return;
         }
 
+        let self = $(this);
+        let btn = self.find(`.geomify-form-submit-btn`).eq(0);
+
+        btn.on(`click`, function (e) {
+            e.preventDefault();
+        });
+
+        btn.prop(`disabled`, true);
+
+        brandLoading(parent);
+
         let data = $(this).serialize();
         data += `&action=start_basic&nonce=${geomify.start_basic_nonce}`;
 
@@ -1179,12 +1148,12 @@ function startBasic() {
             data,
             dataType: "JSON",
             success: function (response) {
-                console.log(response);
                 if (response.success) {
                     parent.html(response.data.page);
                 } else {
                     geomifyMessage(response.data.msg, `failed`);
                 }
+                endBrandLoading(parent);
             },
         });
     });
@@ -1305,7 +1274,7 @@ function geoReset() {
         img.addClass(`is-loading`);
 
         let data = parent.serialize();
-        data += `&action=geo_pass_reset&nonce=${geomify.geo_pass_reset_nonce}`;
+        data += `&action=geo_pass_reset&nonce=${geomify.geo_pass_reset_nonce}&u_token=${geomify.geo_reset_token}`;
 
         $.ajax({
             type: "POST",
@@ -1317,7 +1286,7 @@ function geoReset() {
                     geomifyMessage(response.data.msg);
 
                     setTimeout(() => {
-                        location.reload();
+                        location.replace(geomify.site_url + `/dashboard/project-views`);
                     }, 500);
                 } else {
                     geomifyMessage(response.data.msg, `failed`);
@@ -1343,5 +1312,92 @@ function udmHandle() {
         e.preventDefault();
 
         udm.removeClass(`active`);
+    });
+}
+
+function playUVideo() {
+    let $ = jQuery;
+    let playBtn = $(`.watch-tutorial`);
+    playBtn.on(`click`, function (e) {
+        e.preventDefault();
+        let self = $(this);
+
+        let video_source_type = self.data(`video-source-type`);
+        let url = self.attr(`href`);
+        let player = ``;
+
+        switch (video_source_type) {
+            case `youtube`:
+                player = `<iframe src="${url}"></iframe>"`;
+                break;
+            case `self_hosted`:
+                player = `<video><source src="${url}" type="video/mp4"></video>`;
+                break;
+            default:
+                break;
+        }
+        lightBox(`<div class="geomify-lightbox-video">${player}</div>`);
+    });
+}
+
+// Sign in from mobile alert
+
+function handleMobileLoginAlert() {
+    if (geomify.current_page !== "sign-in") {
+        return;
+    }
+
+    const $ = jQuery;
+    const disclaimer = $(`.user-login-holder form > div:nth-child(3)`);
+    const inputs = $(`.ul-hd`);
+    const showBtn = $(`.mobile-disclaimer .geomify-form-submit-btn`);
+
+    if ($(document).width() < 768) {
+        inputs.hide();
+    } else {
+        disclaimer.hide();
+    }
+
+    showBtn.on(`click`, function (e) {
+        e.preventDefault();
+
+        inputs.show();
+        disclaimer.hide();
+    });
+}
+
+function geoAdminLogin() {
+    let $ = jQuery;
+    let parent = $(`.gau-form`);
+    let loginBtn = parent.find(`.login-admin`);
+
+    loginBtn.on(`click`, function (e) {
+        e.preventDefault();
+
+        let data = parent.serialize();
+        data += `&action=geo_admin_login&nonce=${geomify.geo_admin_login_nonce}`;
+
+        $.ajax({
+            type: "POST",
+            url: geomify.ajax_url,
+            data,
+            dataType: "JSON",
+            success: function (response) {
+                console.log(response)
+                if (response.success) {
+                    // console.log(response);
+                    geomifyMessage(response.data.msg);
+                    setTimeout(() => {
+                        if (response.data.is_admin) {
+                            location.replace(`${geomify.site_url}/dashboard/project-views`);
+                        } else {
+                            location.replace(geomify.admin_url);
+                        }
+                    }, 500);
+                } else {
+                    geomifyMessage(response.data.msg, `failed`);
+                }
+            },
+        });
     });
 }

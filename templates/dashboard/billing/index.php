@@ -1,3 +1,4 @@
+<?php \geomify\Processor\User::is_logged() or exit; defined('ABSPATH') or exit; ?>
 <?php
     $subscriptions        = \geomify\Processor\Geomify_stripe::packages();
     $payment_methods      = \geomify\Processor\User::stripe_payment_methods_caption();
@@ -55,6 +56,14 @@
     </div>
     <?php
     }?>
+    <div class="billing-row">
+        <h4 class="billing-subheader">
+            Balance
+        </h4>
+        <div class="invoices-holder">
+        € <?php echo \geomify\Processor\User::stripe_balance()  ?>            
+        </div>
+    </div>
     <div class="billing-row">
         <h4 class="billing-subheader">
             Your invoices

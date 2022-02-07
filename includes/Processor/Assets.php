@@ -76,11 +76,18 @@ class Assets {
                 'new_tutorial_nonce'        => wp_create_nonce( 'new_tutorial' ),
                 'get_admin_tutorials_nonce' => wp_create_nonce( 'get_admin_tutorials' ),
                 'delete_tutorial_nonce'     => wp_create_nonce( 'delete_tutorial' ),
+                'save_geo_options_nonce'    => wp_create_nonce( 'save_geo_options' ),
+                'dlt_geo_file_nonce'        => wp_create_nonce( 'dlt_geo_file' ),
+                'view_geo_file_nonce'       => wp_create_nonce( 'view_geo_file' ),
             ],
             'geomify-frontend-script' => [
+                'new_tutorial_nonce'                => wp_create_nonce( 'new_tutorial' ),
+                'new_tutorial_page_nonce'           => wp_create_nonce( 'new_tutorial_page' ),
+                'delete_tutorial_nonce'             => wp_create_nonce( 'delete_tutorial' ),
                 'site_url'                          => site_url(),
                 'is_user_logged'                    => User::is_logged(),
                 'ajax_url'                          => admin_url( 'admin-ajax.php' ),
+                'admin_url'                         => admin_url(),
                 'logo_url'                          => GEOMIFY_ASSETS_URL . '/img/logo.png',
                 'went_wrong'                        => __( 'Something went wrong', 'geomify' ),
                 'new_pv_form_page_nonce'            => wp_create_nonce( 'get_new_pv_form' ),
@@ -91,7 +98,7 @@ class Assets {
                 'activate_user_nonce'               => wp_create_nonce( 'activate_user_finally' ),
                 'get_registration_form_nonce'       => wp_create_nonce( 'get_registration_form' ),
                 'save_ac_info_nonce'                => wp_create_nonce( 'save_ac_info' ),
-                'subscriptions'                     => User::current_user_meta( 'stripe_subscriptions' ),
+                // 'subscriptions'                     => User::current_user_meta( 'stripe_subscriptions' ),
                 'is_logged_in'                      => User::is_logged(),
                 'upgrade_license_page_nonce'        => wp_create_nonce( 'upgrade_license_page' ),
                 'stripe_payment_nonce'              => wp_create_nonce( 'stripe_payment' ),
@@ -107,8 +114,11 @@ class Assets {
                 'geo_login_nonce'                   => wp_create_nonce( 'geo_login' ),
                 'geo_reset_nonce'                   => wp_create_nonce( 'geo_reset' ),
                 'geo_pass_reset_nonce'              => wp_create_nonce( 'geo_pass_reset' ),
+                'geo_admin_login_nonce'             => wp_create_nonce( 'geo_admin_login' ),
+                'current_page'                      => ! is_admin() ? Power::current_page() : '',
+                'geo_reset_token'                   => isset( $_GET['token'] ) && isset( $_GET['user'] ) ? $_GET['token'] : '',
             ],
-        ];
+        ];        
     }
 
     /**
@@ -205,14 +215,16 @@ class Assets {
 
         echo "<style>:root{{$vars}}</style>";
 
-        if ( ! User::is_logged() ) {
+        if ( is_user_logged_in() !== true ) {
             return;
         }
 
-        $subscriptions = User::all_subscriptions();
+        $subscriptions = Geomify_stripe::packages();
         $sub_styles    = '<style>';
-        foreach ( $subscriptions as $subscription ) {
-            $sub_styles .= sprintf( '.upgrade-panel-%s{display: none;}', $subscription );
+        foreach ( $subscriptions as $subscription => $key ) {
+            if ( User::have_permit( $subscription ) ) {
+                $sub_styles .= sprintf( '.upgrade-panel-%s{display: none;}', $subscription );
+            }
         }
         $sub_styles .= '</style>';
 

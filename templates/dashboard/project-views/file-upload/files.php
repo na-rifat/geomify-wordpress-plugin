@@ -1,3 +1,5 @@
+<?php \geomify\Processor\User::is_logged() or exit; defined('ABSPATH') or exit; ?>
+
 <?php
     $fields = \geomify\Schema\Schema::get( 'geo_files_info' );
     $fields = \geomify\Processor\Processor::add_name_to_inputs( $fields );
@@ -11,6 +13,7 @@
         <div class="geomify-file-uploader">
             <h4>Drag and drop file here</h4>
             <p>or <a href="#" class="choose-file">Choose file</a> </p>
+            <p class="blue-text">Files will upload when clicking UPLOAD & SUBMIT</p>
         </div>
         <div class="file-que">
             <!-- <div class="que-row">
@@ -49,6 +52,6 @@
         </div>
         <br>
         <div class="geomify-form-submit-btn file-upload-submit-btn final-submission"> <i
-                class="fas fa-sign-in-alt"></i>SUBMIT</div>
+                class="fas fa-sign-in-alt"></i>UPLOAD & SUBMIT</div>
     </form>
 </div>

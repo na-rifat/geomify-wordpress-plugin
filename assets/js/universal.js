@@ -132,11 +132,13 @@ function geomifyValidateFields(selector, textColor = `#fff`) {
         // });
         // result = false;
         // return;
+        // alert($(this).attr(`type`));
         if (
-            ($(this).prop("tagName") == "INPUT" ||
-                $(this).prop("tagName") == "TEXTAREA") &&
-            $(this).attr(`required`) == `required` &&
-            $(this).val().length == 0
+            ($(this).prop("tagName") === "INPUT" ||
+                $(this).prop("tagName") === "TEXTAREA") &&
+            $(this).attr(`required`) === `required` &&
+            $(this).val().length === 0 &&
+            $(this).attr(`type`) !== `checkbox`
         ) {
             $(this).after(
                 `<div class="geomify-empty-input" style="color: ${textColor};">This field is required</div>`
@@ -147,10 +149,23 @@ function geomifyValidateFields(selector, textColor = `#fff`) {
         }
 
         if (
-            $(this).prop("tagName") == "SELECT" &&
-            $(this).attr(`required`) == `required` &&
-            $(this).parent().find("option:selected").text() ==
+            $(this).prop("tagName") === "SELECT" &&
+            $(this).attr(`required`) === `required` &&
+            $(this).parent().find("option:selected").text() ===
                 $(this).parent().find("option:first").text()
+        ) {
+            $(this).after(
+                `<div class="geomify-empty-input" style="color: ${textColor};">This field is required</div>`
+            );
+            result = false;
+            return;
+        }
+
+        if (
+            $(this).prop(`tagName`) === `INPUT` &&
+            $(this).attr(`required`) === `required` &&
+            $(this).prop(`checked`) !== true && 
+            $(this).attr(`type`)  ===`checkbox`
         ) {
             $(this).after(
                 `<div class="geomify-empty-input" style="color: ${textColor};">This field is required</div>`
@@ -199,3 +214,157 @@ function endBrandLoading(selector) {
         .find(`.brand-loading`)
         .remove();
 }
+
+function newTutorial() {
+    let $ = jQuery;
+
+    $(`.new-tutorial`).on(`click`, function (e) {
+        e.preventDefault();
+
+        if (geomifyValidateFields(`#new_tutorial_form`, `red`) == false) {
+            return;
+        }
+
+        let btn = $(this);
+        let loader = btn.parent().find(`.progress-loader`);
+        loader.css({ display: `block` });
+
+        let data = new FormData(document.getElementById(`new_tutorial_form`));
+        data.append(`nonce`, geomify.new_tutorial_nonce);
+        data.append(`action`, `new_tutorial`);
+
+        jQuery.ajax({
+            xhr: function () {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener(
+                    "progress",
+                    function (evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete =
+                                (evt.loaded / evt.total) * 100;
+                            loaderProgress(loader, percentComplete);
+                        }
+                    },
+                    false
+                );
+                return xhr;
+            },
+            type: "POST",
+            url: geomify.ajax_url,
+            data,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.success) {
+                    $(`.tutorials-list-holder`).html(response.data.list);
+                    geomifyMessage(response.data.msg);
+                    tutorialList();
+                    // getTutorials();
+                } else {
+                }
+            },
+            error: function (res) {
+                geomifyMessage(
+                    `There was an error adding new tutorial`,
+                    "failed"
+                );
+            },
+            complete: function (res) {
+                $(`.new-pv-holder`).remove();
+            },
+        });
+    });
+}
+
+function getTutorials() {
+    let $ = jQuery;
+
+    $.ajax({
+        type: "POST",
+        url: geomify.ajax_url,
+        data: {
+            action: `get_admin_tutorials`,
+            nonce: geomify.get_admin_tutorials_nonce,
+        },
+        dataType: "JSON",
+        success: function (response) {
+            if (response.success) {
+                $(`.tutorials-list-holder`).html(response.data.list);
+            } else {
+                geomifyMessage(response.data.msg, "failed");
+            }
+        },
+    });
+}
+
+function deleteTutorial() {
+    let $ = jQuery;
+
+    $(`.geomify-delete-turoial`).on(`click`, function (e) {
+        e.preventDefault();
+        let parent = $(this).parents(`.tutorial-item`);
+
+        if (!confirm(`Are you sure to delete this tutorial?`)) {
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: geomify.ajax_url,
+            data: {
+                action: `delete_tutorial`,
+                nonce: geomify.delete_tutorial_nonce,
+                id: $(this).data(`id`),
+            },
+            dataType: "JSON",
+            success: function (response) {
+                if (response.success) {
+                    parent
+                        .css({
+                            backgroundColor: `red`,
+                        })
+                        .hide(500, function (e) {
+                            parent.remove();
+                        });
+                } else {
+                    geomifyMessage(response.data.msg, `failed`);
+                }
+            },
+        });
+    });
+}
+
+function newTutorialPage() {
+    let $ = jQuery;
+
+    $(`.new-tutorial-page`).on(`click`, function (e) {
+        $.ajax({
+            type: "POST",
+            url: geomify.ajax_url,
+            data: {
+                action: `new_tutorial_page`,
+                nonce: geomify.new_tutorial_page_nonce,
+            },
+            dataType: `JSON`,
+            success: function (response) {
+                console.clear();
+                console.log(response);
+                if (response.success) {
+                    // lightBox(response.data.form);
+                    $(`body`).append(response.data.form);
+                    newTutorial();
+                } else {
+                    geomifyMessage(response.data.msg, "failed");
+                }
+            },
+            error: function (res) {},
+            complete: function (res) {},
+        });
+    });
+}
+
+(($) => {
+    $(document).ready(() => {
+        newTutorialPage();
+    });
+})(jQuery);
